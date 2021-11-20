@@ -8,7 +8,26 @@
     --color-text-primary-2: #181818;
     --color-bg-primary-1: #ffffff;
     --color-bg-primary-2: #F5F5F5;
+    --color-bg-secondary-1: #121212;
     --color-border-1: #121212;
+  }
+
+  body{
+    -webkit-user-select: none; 
+    -ms-user-select: none;
+    user-select: none; 
+  }
+
+  
+ 
+}
+
+@layer utilities {
+.split-screen-parent{
+    height:calc(100vh - 4rem);
+  }
+  .cursor-ew-resize{
+    cursor:ew-resize;
   }
 }
 
