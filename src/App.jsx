@@ -1,13 +1,12 @@
-import React from 'react'
-import {useStoreState} from "easy-peasy"
+import React from "react";
+import Header from "./components/header";
 
 function App() {
-  const {text} = useStoreState(state => state)
-  return (
-    <div className="bg-red-500 font-sniglet font-bold">
-     {text}
-    </div>
-  )
+	return (
+		<div>
+			<Header />
+		</div>
+	);
 }
 
-export default App
+export default App;

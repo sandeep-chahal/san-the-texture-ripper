@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base{
+  :root{
+    --color-text-primary-1: #121212;
+    --color-text-primary-2: #181818;
+    --color-bg-primary-1: #ffffff;
+    --color-bg-primary-2: #F5F5F5;
+    --color-border-1: #121212;
+  }
 }
-
 
