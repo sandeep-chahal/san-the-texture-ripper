@@ -16,6 +16,7 @@ function SplitScreen({ children, limit = 100 }) {
 			document.body.style.cursor = "ew-resize";
 			window.addEventListener("mousemove", onDrag);
 			window.addEventListener("mouseup", onMouseUp);
+			window.addEventListener("blur", onMouseUp);
 		};
 		const onMouseUp = (e) => {
 			console.log("mouse up");
@@ -30,6 +31,7 @@ function SplitScreen({ children, limit = 100 }) {
 			spliter.current.removeEventListener("mousedown", listenForDrag);
 			spliter.current.removeEventListener("mouseup", onMouseUp);
 			window.removeEventListener("mousemove", onDrag);
+			window.removeEventListener("blur", onMouseUp);
 		};
 	}, [width]);
 	return (

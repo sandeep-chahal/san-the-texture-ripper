@@ -1,5 +1,8 @@
 import { createStore, action } from "easy-peasy";
 
 export default createStore({
-	text: "Hello There! It's easy peasy",
+	file: null,
+	setFile: action((state, payload) => {
+		state.file = payload;
+	}),
 });

@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./components/header";
 import SplitScreen from "./components/split-screen";
 import ActionBar from "./components/action-bar";
+import Editor from "./components/editor";
 
 function App() {
 	return (
@@ -10,7 +11,7 @@ function App() {
 			<section className="split-screen-parent">
 				<SplitScreen split="vertical">
 					<div className="bg-primary2 h-full">1</div>
-					<div className="h-full dot-pattern">2</div>
+					<Editor />
 				</SplitScreen>
 			</section>
 			<ActionBar />
