@@ -1,17 +1,19 @@
 import React from "react";
 import Header from "./components/header";
 import SplitScreen from "./components/split-screen";
+import ActionBar from "./components/action-bar";
 
 function App() {
 	return (
-		<div>
+		<div className="font-squada">
 			<Header />
 			<section className="split-screen-parent">
 				<SplitScreen split="vertical">
-					<div className="bg-red-700 h-full">1</div>
-					<div className="bg-blue-900 h-full">2</div>
+					<div className="bg-primary2 h-full">1</div>
+					<div className="h-full dot-pattern">2</div>
 				</SplitScreen>
 			</section>
+			<ActionBar />
 		</div>
 	);
 }
