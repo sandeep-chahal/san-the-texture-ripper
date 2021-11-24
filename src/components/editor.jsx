@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, {
+	useRef,
+	useEffect,
+	useState,
+	useImperativeHandle,
+	forwardRef,
+} from "react";
 import { useStore } from "../store";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as d3 from "d3";
@@ -8,17 +14,21 @@ import { uniqueId } from "../utils";
 const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
 
-function Editor() {
+const Editor = forwardRef((props, ref) => {
 	const svg = useRef(null);
 	const [disabled, setDisabled] = useState(true);
 	const canvas = useRef();
 	const scale = useRef(1);
 	const line = useRef(null);
-	const { file, setResults } = useStore();
+	const { file, setResults, warpRealTime } = useStore();
 	const layers = useRef({});
 	const [activeLayer, setActiveLayer] = useState(null);
 	const glfxCanvas = useRef(null);
 	const texture = useRef(null);
+
+	useImperativeHandle(ref, () => ({
+		warp: updateResultGLFX,
+	}));
 
 	useEffect(() => {
 		if (file && canvas.current) {
@@ -84,7 +94,7 @@ function Editor() {
 
 	useEffect(() => {
 		drawCropBox();
-	}, [file, activeLayer]);
+	}, [file, activeLayer, warpRealTime]);
 
 	const drawCropBox = () => {
 		if (activeLayer == null) return;
@@ -130,13 +140,14 @@ function Editor() {
 							d3.select(this).attr("data-index")
 						] = [d.x, d.y];
 						updatePerspectiveGrid();
+						if (!warpRealTime) return;
+						updateResultGLFX();
 					}
 				})
 			);
 
 		updatePerspectiveGrid();
 		function updatePerspectiveGrid() {
-			updateResultGLFX();
 			const points = layers.current[activeLayer].points;
 			const verticalLines1 = getMidPointArray(points[0], points[3]);
 			const verticalLines2 = getMidPointArray(points[1], points[2]);
@@ -166,9 +177,13 @@ function Editor() {
 			return points;
 		}
 	};
+	useEffect(() => {
+		// alert(warpRealTime);
+	}, [warpRealTime]);
 
-	function updateResultGLFX() {
+	const updateResultGLFX = () => {
 		// lazy implementation
+		if (!activeLayer || !layers.current[activeLayer]) return;
 		let points = layers.current[activeLayer].points;
 		let width = Math.max(
 			points[1][0] - points[0][0],
@@ -214,7 +229,7 @@ function Editor() {
 			};
 			return newState;
 		});
-	}
+	};
 	const handleDeleteLayer = (id) => {
 		const keys = Object.keys(layers.current);
 		if (keys.length === 1) return;
@@ -297,6 +312,5 @@ function Editor() {
 			</TransformWrapper>
 		</div>
 	);
-}
-
+});
 export default Editor;

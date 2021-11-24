@@ -4,6 +4,7 @@ export const context = createContext();
 
 export default ({ children }) => {
 	const [file, setFile] = useState(null);
+	const [warpRealTime, setWarpRealTime] = useState(false);
 	const [results, setResults] = useState({});
 	return (
 		<context.Provider
@@ -12,6 +13,8 @@ export default ({ children }) => {
 				setFile,
 				results,
 				setResults,
+				warpRealTime,
+				setWarpRealTime,
 			}}
 		>
 			{children}

@@ -5,18 +5,22 @@ import ActionBar from "./components/action-bar";
 import Editor from "./components/editor";
 import Board from "./components/board";
 function App() {
-	const childRef = useRef();
+	const boardRef = useRef();
+	const editorRef = useRef();
 
 	return (
 		<div className="font-squada">
 			<Header />
 			<section className="split-screen-parent overflow-hidden">
 				<SplitScreen split="vertical">
-					<Board ref={childRef} />
-					<Editor />
+					<Board ref={boardRef} />
+					<Editor ref={editorRef} />
 				</SplitScreen>
 			</section>
-			<ActionBar onExport={() => childRef.current.handleExport()} />
+			<ActionBar
+				onExport={() => boardRef.current.handleExport()}
+				warp={() => editorRef.current.warp()}
+			/>
 		</div>
 	);
 }
