@@ -50,6 +50,19 @@ const Editor = forwardRef((props, ref) => {
 				addLayer();
 				drawCropBox();
 			};
+		} else {
+			// reset everything
+			canvas.current
+				.getContext("2d")
+				.clearRect(0, 0, canvas.current.width, canvas.current.height);
+			canvas.current.width = 0;
+			canvas.current.height = 0;
+			glfxCanvas.current = null;
+			texture.current = null;
+			layers.current = {};
+			line.current = null;
+			setActiveLayer(null);
+			setDisabled(true);
 		}
 	}, [file]);
 	useEffect(() => {
@@ -97,7 +110,7 @@ const Editor = forwardRef((props, ref) => {
 	}, [file, activeLayer, warpRealTime]);
 
 	const drawCropBox = () => {
-		if (activeLayer == null) return;
+		if (file === null || activeLayer == null) return;
 		svg.current.selectAll("*").remove();
 		const { radius, strokeWidth } = getSvgSize();
 		line.current = svg.current
@@ -290,6 +303,7 @@ const Editor = forwardRef((props, ref) => {
 				</div>
 			) : null}
 			<TransformWrapper
+				scale={scale}
 				minScale={0.1}
 				limitToBounds={false}
 				disabled={disabled}

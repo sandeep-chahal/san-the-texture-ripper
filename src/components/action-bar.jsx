@@ -17,6 +17,11 @@ function ActionBar({ onExport, warp }) {
 		}
 	};
 
+	const handleReset = () => {
+		setFile(null);
+		setWarpRealTime(false);
+	};
+
 	return (
 		<div className="absolute w-full h-16 bottom-12 flex justify-center ">
 			<ul className="w-2/4 h-full bg-primary2 border-4 border-primary1 rounded-2xl flex items-center overflow-hidden">
@@ -62,6 +67,12 @@ function ActionBar({ onExport, warp }) {
 					} w-min-20 px-4 h-full border-r-4 border-primary1 flex items-center justify-center`}
 				>
 					Warp
+				</li>
+				<li
+					onClick={handleReset}
+					className="w-min-20 px-4 h-full border-r-4 border-primary1 cursor-pointer flex items-center justify-center"
+				>
+					Reset
 				</li>
 			</ul>
 		</div>
