@@ -3,6 +3,7 @@ import { useStore } from "../store";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as d3 from "d3";
 import fx from "glfx";
+import { uniqueId } from "../utils";
 
 const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
@@ -14,7 +15,7 @@ function Editor() {
 	const scale = useRef(1);
 	const line = useRef(null);
 	const { file, setResults } = useStore();
-	const layers = useRef([]);
+	const layers = useRef({});
 	const [activeLayer, setActiveLayer] = useState(null);
 	const glfxCanvas = useRef(null);
 	const texture = useRef(null);
@@ -33,10 +34,9 @@ function Editor() {
 				canvas.current.width = img.width;
 				canvas.current.height = img.height;
 				canvas.current.getContext("2d").drawImage(img, 0, 0);
-				layers.current = [getDefaultLayerConfig()];
 				glfxCanvas.current = fx.canvas();
 				texture.current = glfxCanvas.current.texture(img);
-				setActiveLayer(0);
+				addLayer();
 				drawCropBox();
 			};
 		}
@@ -61,13 +61,23 @@ function Editor() {
 		};
 	}, []);
 
+	const addLayer = () => {
+		const newLayer = getDefaultLayerConfig();
+		layers.current[newLayer.id] = newLayer;
+		setActiveLayer(newLayer.id);
+	};
+
 	const getDefaultLayerConfig = () => {
-		return [
-			[20, 20],
-			[canvas.current.width - 20, 20],
-			[canvas.current.width - 20, canvas.current.height - 20],
-			[20, canvas.current.height - 20],
-		];
+		return {
+			name: `Layer ${Object.keys(layers.current).length + 1}`,
+			id: uniqueId(),
+			points: [
+				[20, 20],
+				[canvas.current.width - 20, 20],
+				[canvas.current.width - 20, canvas.current.height - 20],
+				[20, canvas.current.height - 20],
+			],
+		};
 	};
 
 	useEffect(() => {
@@ -75,7 +85,7 @@ function Editor() {
 	}, [file, activeLayer]);
 
 	const drawCropBox = () => {
-		if (layers.current.length === 0 || activeLayer == null) return;
+		if (activeLayer == null) return;
 		svg.current.selectAll("*").remove();
 
 		line.current = svg.current
@@ -89,7 +99,7 @@ function Editor() {
 
 		svg.current
 			.selectAll(".handle")
-			.data(layers.current[activeLayer])
+			.data(layers.current[activeLayer].points)
 			.enter()
 			.append("circle")
 			.attr("class", "handle")
@@ -113,10 +123,9 @@ function Editor() {
 							"transform",
 							"translate(" + d.x + "," + d.y + ")"
 						);
-						layers.current[activeLayer][d3.select(this).attr("data-index")] = [
-							d.x,
-							d.y,
-						];
+						layers.current[activeLayer].points[
+							d3.select(this).attr("data-index")
+						] = [d.x, d.y];
 						updatePerspectiveGrid();
 					}
 				})
@@ -125,7 +134,7 @@ function Editor() {
 		updatePerspectiveGrid();
 		function updatePerspectiveGrid() {
 			updateResultGLFX();
-			const points = layers.current[activeLayer];
+			const points = layers.current[activeLayer].points;
 			const verticalLines1 = getMidPointArray(points[0], points[3]);
 			const verticalLines2 = getMidPointArray(points[1], points[2]);
 			const horizontalLines1 = getMidPointArray(points[0], points[1]);
@@ -157,7 +166,7 @@ function Editor() {
 
 	function updateResultGLFX() {
 		// lazy implementation
-		let points = layers.current[activeLayer];
+		let points = layers.current[activeLayer].points;
 		let width = Math.max(
 			points[1][0] - points[0][0],
 			points[2][0] - points[3][0]
@@ -203,6 +212,20 @@ function Editor() {
 			return newState;
 		});
 	}
+	const handleDeleteLayer = (id) => {
+		const keys = Object.keys(layers.current);
+		if (keys.length === 1) return;
+		console.log("deleting", id);
+		delete layers.current[id];
+		setResults((state) => {
+			const newState = { ...state };
+			delete newState[id];
+			return newState;
+		});
+		if (activeLayer === id) {
+			setActiveLayer(keys[0]);
+		}
+	};
 
 	return (
 		<div
@@ -210,26 +233,31 @@ function Editor() {
 				disabled ? "cursor-default" : "cursor-grab"
 			}`}
 		>
-			{layers.current && layers.current.length ? (
+			{Object.keys(layers.current).length ? (
 				<div className="p-1 px-2 flex">
-					{layers.current.map((layer, index) => (
+					{Object.keys(layers.current).map((key, index) => (
 						<div
-							key={index}
-							onClick={() => setActiveLayer(index)}
-							className={`px-3 cursor-pointer ${
-								activeLayer === index ? "border-b-2 border-primary1" : ""
+							key={key}
+							className={`px-3 group ${
+								activeLayer === key ? "border-b-2 border-primary1" : ""
 							}`}
 						>
-							Layer {index + 1}
+							<span
+								className="cursor-pointer"
+								onClick={() => setActiveLayer(key)}
+							>
+								{layers.current[key].name}
+							</span>
+							<span
+								title="Delete"
+								className="cursor-pointer text-red-600 text-sm ml-3 opacity-0 group-hover:opacity-100"
+								onClick={() => handleDeleteLayer(key)}
+							>
+								X
+							</span>
 						</div>
 					))}
-					<div
-						className="px-3 cursor-pointer"
-						onClick={() => {
-							layers.current = [...layers.current, getDefaultLayerConfig()];
-							setActiveLayer((currentActiveLayer) => currentActiveLayer + 1);
-						}}
-					>
+					<div className="px-3 cursor-pointer" onClick={addLayer}>
 						+
 					</div>
 				</div>
