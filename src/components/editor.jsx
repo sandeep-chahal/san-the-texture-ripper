@@ -36,6 +36,7 @@ function Editor() {
 				canvas.current.getContext("2d").drawImage(img, 0, 0);
 				glfxCanvas.current = fx.canvas();
 				texture.current = glfxCanvas.current.texture(img);
+				layers.current = {};
 				addLayer();
 				drawCropBox();
 			};
@@ -68,14 +69,15 @@ function Editor() {
 	};
 
 	const getDefaultLayerConfig = () => {
+		const { radius } = getSvgSize();
 		return {
 			name: `Layer ${Object.keys(layers.current).length + 1}`,
 			id: uniqueId(),
 			points: [
-				[20, 20],
-				[canvas.current.width - 20, 20],
-				[canvas.current.width - 20, canvas.current.height - 20],
-				[20, canvas.current.height - 20],
+				[radius * 2, radius * 2],
+				[canvas.current.width - radius * 2, radius * 2],
+				[canvas.current.width - radius * 2, canvas.current.height - radius * 2],
+				[radius * 2, canvas.current.height - radius * 2],
 			],
 		};
 	};
@@ -87,14 +89,14 @@ function Editor() {
 	const drawCropBox = () => {
 		if (activeLayer == null) return;
 		svg.current.selectAll("*").remove();
-
+		const { radius, strokeWidth } = getSvgSize();
 		line.current = svg.current
 			.selectAll(".line")
 			.data(new Array(10).fill(null))
 			.enter()
 			.append("path")
 			.attr("class", "line")
-			.attr("stroke-dasharray", "5,10,5")
+			.attr("stroke-width", strokeWidth * 0.7)
 			.attr("stroke", "#77172A");
 
 		svg.current
@@ -104,13 +106,14 @@ function Editor() {
 			.append("circle")
 			.attr("class", "handle")
 			.attr("fill", "transparent")
-			.attr("stroke-width", "2")
+			.attr("stroke-width", strokeWidth)
+			.attr("r", radius)
+			.attr("filter", "invert(1)")
 			.attr("stroke", "#fff")
 			.attr("data-index", (d, i) => i)
 			.attr("transform", function (d) {
 				return "translate(" + d + ")";
 			})
-			.attr("r", 7)
 			.call(
 				d3.drag().on("drag", function (d) {
 					if (
@@ -225,6 +228,15 @@ function Editor() {
 		if (activeLayer === id) {
 			setActiveLayer(keys[0]);
 		}
+	};
+
+	const getSvgSize = () => {
+		const rMinSize = 3;
+		const rMaxSize = 30;
+		const size = Math.min(canvas.current.width, canvas.current.height);
+		let radius = size / 45;
+		radius = Math.max(rMinSize, Math.min(rMaxSize, radius));
+		return { radius, strokeWidth: radius / 2 };
 	};
 
 	return (
