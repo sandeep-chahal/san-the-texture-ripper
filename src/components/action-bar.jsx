@@ -1,11 +1,11 @@
-import React from "react";
-import { useStoreActions } from "easy-peasy";
+import React, { useEffect } from "react";
 import { readImage } from "../utils";
+import { useStore } from "../store";
 
 const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
 function ActionBar({ onExport }) {
-	const setFile = useStoreActions((actions) => actions.setFile);
+	const { setFile } = useStore();
 
 	const handleFileChange = async (e) => {
 		const file = e.target.files[0];
@@ -47,4 +47,4 @@ function ActionBar({ onExport }) {
 	);
 }
 
-export default ActionBar;
+export default React.memo(ActionBar);

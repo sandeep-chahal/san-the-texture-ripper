@@ -1,10 +1,10 @@
 import React, { useRef, forwardRef, useImperativeHandle } from "react";
-import { useStoreState } from "easy-peasy";
 import { toPng } from "html-to-image";
+import { useStore } from "../store";
 
 const Board = forwardRef((props, ref) => {
 	const printComponent = useRef(null);
-	const result = useStoreState((state) => state.results);
+	const { results } = useStore();
 
 	const handleExport = () => {
 		toPng(printComponent.current)
@@ -31,7 +31,7 @@ const Board = forwardRef((props, ref) => {
 				className="flex items-start flex-wrap h-max max-w-full"
 				ref={printComponent}
 			>
-				{Object.values(result).map((data, index) => (
+				{Object.values(results || {}).map((data, index) => (
 					<img
 						style={{
 							width: data.width,

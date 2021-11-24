@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import Header from "./components/header";
 import SplitScreen from "./components/split-screen";
 import ActionBar from "./components/action-bar";

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
+import { useStore } from "../store";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as d3 from "d3";
 import fx from "glfx";
@@ -13,11 +13,7 @@ function Editor() {
 	const canvas = useRef();
 	const scale = useRef(1);
 	const line = useRef(null);
-	const file = useStoreState((state) => state.file);
-	const [setResult, removeResult] = useStoreActions((actions) => [
-		actions.setResult,
-		actions.removeResult,
-	]);
+	const { file, setResults } = useStore();
 	const layers = useRef([]);
 	const [activeLayer, setActiveLayer] = useState(null);
 	const glfxCanvas = useRef(null);
@@ -196,11 +192,15 @@ function Editor() {
 			fakeDim,
 			fakeDim
 		);
-		setResult({
-			result: tempCanvas.toDataURL(),
-			width,
-			height,
-			id: activeLayer,
+		setResults((state) => {
+			const newState = { ...state };
+			newState[activeLayer] = {
+				result: tempCanvas.toDataURL(),
+				width,
+				height,
+				id: activeLayer,
+			};
+			return newState;
 		});
 	}
 
