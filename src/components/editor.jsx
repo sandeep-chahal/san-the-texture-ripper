@@ -1,30 +1,47 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useStoreState } from "easy-peasy";
+import { useStoreState, useStoreActions } from "easy-peasy";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as d3 from "d3";
-// import solve from "../utils/numeric";
+import fx from "glfx";
+
+const tempCanvas = document.createElement("canvas");
+const tempCanvasCtx = tempCanvas.getContext("2d");
+
 function Editor() {
 	const svg = useRef(null);
 	const [disabled, setDisabled] = useState(true);
 	const canvas = useRef();
-	const image = useRef();
 	const scale = useRef(1);
 	const line = useRef(null);
 	const file = useStoreState((state) => state.file);
+	const [setResult, removeResult] = useStoreActions((actions) => [
+		actions.setResult,
+		actions.removeResult,
+	]);
 	const layers = useRef([]);
 	const [activeLayer, setActiveLayer] = useState(null);
+	const glfxCanvas = useRef(null);
+	const texture = useRef(null);
 
 	useEffect(() => {
 		if (file && canvas.current) {
+			console.log("got new image");
 			const img = new Image();
 			img.src = file;
 			img.onload = () => {
-				image.current = img;
+				console.log("read new Image");
+				canvas.current
+					.getContext("2d")
+					.clearRect(0, 0, canvas.current.width, canvas.current.height);
+
 				canvas.current.width = img.width;
 				canvas.current.height = img.height;
-				canvas.current.getContext("2d").drawImage(image.current, 0, 0);
+				canvas.current.getContext("2d").drawImage(img, 0, 0);
 				layers.current = [getDefaultLayerConfig()];
+				glfxCanvas.current = fx.canvas();
+				texture.current = glfxCanvas.current.texture(img);
 				setActiveLayer(0);
+				drawCropBox();
 			};
 		}
 	}, [file]);
@@ -39,17 +56,12 @@ function Editor() {
 				setDisabled(true);
 			}
 		};
-		const onWheel = (e) => {
-			e.preventDefault();
-		};
 
 		window.addEventListener("keydown", onKeyDown);
 		window.addEventListener("keyup", onKeyUp);
-		window.addEventListener("wheel", onWheel, { passive: false });
 		return () => {
 			window.removeEventListener("keydown", onKeyDown);
 			window.removeEventListener("keyup", onKeyUp);
-			window.removeEventListener("wheel", onWheel);
 		};
 	}, []);
 
@@ -109,13 +121,14 @@ function Editor() {
 							d.x,
 							d.y,
 						];
-						updateLines();
+						updatePerspectiveGrid();
 					}
 				})
 			);
 
-		updateLines();
-		function updateLines() {
+		updatePerspectiveGrid();
+		function updatePerspectiveGrid() {
+			updateResultGLFX();
 			const points = layers.current[activeLayer];
 			const verticalLines1 = getMidPointArray(points[0], points[3]);
 			const verticalLines2 = getMidPointArray(points[1], points[2]);
@@ -145,6 +158,51 @@ function Editor() {
 			return points;
 		}
 	};
+
+	function updateResultGLFX() {
+		// lazy implementation
+		let points = layers.current[activeLayer];
+		let width = Math.max(
+			points[1][0] - points[0][0],
+			points[2][0] - points[3][0]
+		);
+		let height = Math.max(
+			points[3][1] - points[0][1],
+			points[2][1] - points[1][1]
+		);
+		if (width < 200 || height < 200) {
+			let diff = Math.max(200 - width, 200 - height);
+			width += diff;
+			height += diff;
+		}
+		const fakeDim = Math.max(width, height);
+		points = points.reduce((pV, cV) => [...pV, ...cV], []);
+		const dstPoints = [0, 0, fakeDim, 0, fakeDim, fakeDim, 0, fakeDim];
+		glfxCanvas.current
+			.draw(texture.current)
+			.perspective(points, dstPoints)
+			.update();
+		tempCanvas.width = fakeDim;
+		tempCanvas.height = fakeDim;
+		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
+		tempCanvasCtx.drawImage(
+			glfxCanvas.current,
+			0,
+			0,
+			fakeDim,
+			fakeDim,
+			0,
+			0,
+			fakeDim,
+			fakeDim
+		);
+		setResult({
+			result: tempCanvas.toDataURL(),
+			width,
+			height,
+			id: activeLayer,
+		});
+	}
 
 	return (
 		<div

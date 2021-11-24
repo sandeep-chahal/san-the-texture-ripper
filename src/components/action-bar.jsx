@@ -2,15 +2,18 @@ import React from "react";
 import { useStoreActions } from "easy-peasy";
 import { readImage } from "../utils";
 
-const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg,", "image/webp"];
+const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
-function ActionBar() {
+function ActionBar({ onExport }) {
 	const setFile = useStoreActions((actions) => actions.setFile);
 
 	const handleFileChange = async (e) => {
 		const file = e.target.files[0];
 		if (IMAGE_FORMATS.includes(file.type)) {
-			setFile(await readImage(file));
+			const base64File = await readImage(file);
+			setFile(base64File);
+		} else {
+			console.log("FILE TYPE NOT SUPPORTED", file.type);
 		}
 	};
 
@@ -32,6 +35,12 @@ function ActionBar() {
 					>
 						Import
 					</label>
+				</li>
+				<li
+					onClick={onExport}
+					className="w-20 h-full border-r-4 border-primary1 cursor-pointer flex items-center justify-center"
+				>
+					Export
 				</li>
 			</ul>
 		</div>
