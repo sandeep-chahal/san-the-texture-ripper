@@ -22,6 +22,7 @@ const Editor = forwardRef((props, ref) => {
 	const line = useRef(null);
 	const { file, setResults, warpRealTime } = useStore();
 	const layers = useRef({});
+	const totalLayerCount = useRef(0);
 	const [activeLayer, setActiveLayer] = useState(null);
 	const glfxCanvas = useRef(null);
 	const texture = useRef(null);
@@ -61,6 +62,7 @@ const Editor = forwardRef((props, ref) => {
 			texture.current = null;
 			layers.current = {};
 			line.current = null;
+			totalLayerCount.current = 0;
 			setActiveLayer(null);
 			setDisabled(true);
 		}
@@ -94,7 +96,7 @@ const Editor = forwardRef((props, ref) => {
 	const getDefaultLayerConfig = () => {
 		const { radius } = getSvgSize();
 		return {
-			name: `Layer ${Object.keys(layers.current).length + 1}`,
+			name: `Layer ${++totalLayerCount.current}`,
 			id: uniqueId(),
 			points: [
 				[radius * 2, radius * 2],
