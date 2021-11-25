@@ -6,7 +6,6 @@ import Editor from "./components/editor";
 import Board from "./components/board";
 function App() {
 	const boardRef = useRef();
-	const editorRef = useRef();
 
 	return (
 		<div className="font-squada">
@@ -14,13 +13,10 @@ function App() {
 			<section className="split-screen-parent overflow-hidden">
 				<SplitScreen split="vertical">
 					<Board ref={boardRef} />
-					<Editor ref={editorRef} />
+					<Editor />
 				</SplitScreen>
 			</section>
-			<ActionBar
-				onExport={() => boardRef.current.handleExport()}
-				warp={() => editorRef.current.warp()}
-			/>
+			<ActionBar onExport={() => boardRef.current.handleExport()} />
 		</div>
 	);
 }

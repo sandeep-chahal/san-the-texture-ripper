@@ -59,16 +59,6 @@ function ActionBar({ onExport, warp }) {
 					></span>
 				</li>
 				<li
-					onClick={warp}
-					className={`${
-						!warpRealTime
-							? "text-primary2 cursor-pointer"
-							: "text-gray cursor-not-allowed"
-					} w-min-20 px-4 h-full border-r-4 border-primary1 flex items-center justify-center`}
-				>
-					Warp
-				</li>
-				<li
 					onClick={handleReset}
 					className="w-min-20 px-4 h-full border-r-4 border-primary1 cursor-pointer flex items-center justify-center"
 				>

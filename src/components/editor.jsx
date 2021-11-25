@@ -1,10 +1,4 @@
-import React, {
-	useRef,
-	useEffect,
-	useState,
-	useImperativeHandle,
-	forwardRef,
-} from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useStore } from "../store";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as d3 from "d3";
@@ -14,7 +8,7 @@ import { uniqueId } from "../utils";
 const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
 
-const Editor = forwardRef((props, ref) => {
+const Editor = (props) => {
 	const svg = useRef(null);
 	const [disabled, setDisabled] = useState(true);
 	const canvas = useRef();
@@ -27,10 +21,6 @@ const Editor = forwardRef((props, ref) => {
 	const glfxCanvas = useRef(null);
 	const texture = useRef(null);
 
-	useImperativeHandle(ref, () => ({
-		warp: updateResultGLFX,
-	}));
-
 	useEffect(() => {
 		if (file && canvas.current) {
 			console.log("got new image");
@@ -38,13 +28,11 @@ const Editor = forwardRef((props, ref) => {
 			img.src = file;
 			img.onload = () => {
 				console.log("read new Image");
-				canvas.current
-					.getContext("2d")
-					.clearRect(0, 0, canvas.current.width, canvas.current.height);
-
+				const ctx = canvas.current.getContext("2d");
+				ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 				canvas.current.width = img.width;
 				canvas.current.height = img.height;
-				canvas.current.getContext("2d").drawImage(img, 0, 0);
+				ctx.drawImage(img, 0, 0);
 				glfxCanvas.current = fx.canvas();
 				texture.current = glfxCanvas.current.texture(img);
 				layers.current = {};
@@ -69,7 +57,7 @@ const Editor = forwardRef((props, ref) => {
 	}, [file]);
 	useEffect(() => {
 		const onKeyDown = (e) => {
-			if (e.keyCode === 17 && disabled) {
+			if (e.keyCode === 17 && disabled && activeLayer) {
 				setDisabled(false);
 			}
 		};
@@ -85,7 +73,7 @@ const Editor = forwardRef((props, ref) => {
 			window.removeEventListener("keydown", onKeyDown);
 			window.removeEventListener("keyup", onKeyUp);
 		};
-	}, []);
+	}, [disabled, activeLayer]);
 
 	const addLayer = () => {
 		const newLayer = getDefaultLayerConfig();
@@ -140,25 +128,30 @@ const Editor = forwardRef((props, ref) => {
 				return "translate(" + d + ")";
 			})
 			.call(
-				d3.drag().on("drag", function (d) {
-					if (
-						d.x > 0 &&
-						d.x < canvas.current.width &&
-						d.y > 0 &&
-						d.y < canvas.current.height
-					) {
-						d3.select(this).attr(
-							"transform",
-							"translate(" + d.x + "," + d.y + ")"
-						);
-						layers.current[activeLayer].points[
-							d3.select(this).attr("data-index")
-						] = [d.x, d.y];
-						updatePerspectiveGrid();
-						if (!warpRealTime) return;
+				d3
+					.drag()
+					.on("drag", function (d) {
+						if (
+							d.x > 0 &&
+							d.x < canvas.current.width &&
+							d.y > 0 &&
+							d.y < canvas.current.height
+						) {
+							d3.select(this).attr(
+								"transform",
+								"translate(" + d.x + "," + d.y + ")"
+							);
+							layers.current[activeLayer].points[
+								d3.select(this).attr("data-index")
+							] = [d.x, d.y];
+							updatePerspectiveGrid();
+							if (!warpRealTime) return;
+							updateResultGLFX();
+						}
+					})
+					.on("end", () => {
 						updateResultGLFX();
-					}
-				})
+					})
 			);
 
 		updatePerspectiveGrid();
@@ -328,5 +321,5 @@ const Editor = forwardRef((props, ref) => {
 			</TransformWrapper>
 		</div>
 	);
-});
+};
 export default Editor;
