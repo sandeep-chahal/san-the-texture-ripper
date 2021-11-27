@@ -292,17 +292,34 @@ const Editor = (props) => {
 							>
 								{layers.current[key].name}
 							</span>
-							<span
+							{/* delete icon */}
+							<svg
 								title="Delete"
-								className="cursor-pointer text-red-600 text-sm ml-3 opacity-0 group-hover:opacity-100"
 								onClick={() => handleDeleteLayer(key)}
+								className="inline cursor-pointer text-red-600 text-sm ml-3 opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="var(--color-bg-secondary-2)"
+								viewBox="0 0 30 30"
+								width="15px"
+								height="15px"
 							>
-								X
-							</span>
+								<path d="M 7 4 C 6.744125 4 6.4879687 4.0974687 6.2929688 4.2929688 L 4.2929688 6.2929688 C 3.9019687 6.6839688 3.9019687 7.3170313 4.2929688 7.7070312 L 11.585938 15 L 4.2929688 22.292969 C 3.9019687 22.683969 3.9019687 23.317031 4.2929688 23.707031 L 6.2929688 25.707031 C 6.6839688 26.098031 7.3170313 26.098031 7.7070312 25.707031 L 15 18.414062 L 22.292969 25.707031 C 22.682969 26.098031 23.317031 26.098031 23.707031 25.707031 L 25.707031 23.707031 C 26.098031 23.316031 26.098031 22.682969 25.707031 22.292969 L 18.414062 15 L 25.707031 7.7070312 C 26.098031 7.3170312 26.098031 6.6829688 25.707031 6.2929688 L 23.707031 4.2929688 C 23.316031 3.9019687 22.682969 3.9019687 22.292969 4.2929688 L 15 11.585938 L 7.7070312 4.2929688 C 7.5115312 4.0974687 7.255875 4 7 4 z" />
+							</svg>
 						</div>
 					))}
-					<div className="px-3 cursor-pointer" onClick={addLayer}>
-						+
+					<div className="flex items-center ml-2 transition-transform transform rotate-0 hover:rotate-90 hover:scale-110">
+						<svg
+							className="block cursor-pointer"
+							onClick={addLayer}
+							xmlns="http://www.w3.org/2000/svg"
+							id="Layer_1"
+							data-name="Layer 1"
+							viewBox="0 0 122.88 122.88"
+							width="15px"
+							height="15px"
+						>
+							<path d="M61.44,0A61.46,61.46,0,1,1,18,18,61.25,61.25,0,0,1,61.44,0ZM88.6,56.82v9.24a4,4,0,0,1-4,4H70V84.62a4,4,0,0,1-4,4H56.82a4,4,0,0,1-4-4V70H38.26a4,4,0,0,1-4-4V56.82a4,4,0,0,1,4-4H52.84V38.26a4,4,0,0,1,4-4h9.24a4,4,0,0,1,4,4V52.84H84.62a4,4,0,0,1,4,4Zm8.83-31.37a50.92,50.92,0,1,0,14.9,36,50.78,50.78,0,0,0-14.9-36Z" />
+						</svg>
 					</div>
 				</div>
 			) : null}

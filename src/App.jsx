@@ -11,14 +11,13 @@ function App() {
 
 	return (
 		<div className="font-squada">
-			<Header />
+			<Header onExport={() => setShowOutput(true)} />
 			<section className="split-screen-parent overflow-hidden">
 				<SplitScreen split="vertical">
 					<Board ref={boardRef} />
 					<Editor />
 				</SplitScreen>
 			</section>
-			<ActionBar onExport={() => setShowOutput(true)} />
 			{showOutput && <Output onClose={() => setShowOutput(false)} />}
 		</div>
 	);

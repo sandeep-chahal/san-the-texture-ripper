@@ -10,7 +10,6 @@ function ActionBar({ onExport, warp }) {
 	const handleFileChange = async (e) => {
 		try {
 			const file = e.target.files[0];
-			e.target.value = "";
 			if (IMAGE_FORMATS.includes(file.type)) {
 				const base64File = await readImage(file);
 				setFile(base64File);

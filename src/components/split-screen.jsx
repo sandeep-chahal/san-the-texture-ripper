@@ -44,9 +44,15 @@ function SplitScreen({ children, limit = 100 }) {
 				{children[0]}
 			</div>
 			<span
-				className="w-2 bg-secondary1 flex items-center cursor-ew-resize"
+				className="w-1 bg-secondary1 flex items-center cursor-ew-resize"
 				ref={spliter}
-			></span>
+			>
+				<div className="flex flex-col justify-center items-center w-full">
+					{new Array(5).fill(null).map((i) => {
+						return <span className="w-1 h-1 mt-2 rounded-full bg-primary1" />;
+					})}
+				</div>
+			</span>
 			<div
 				style={{
 					width: `${width - slide}px`,
