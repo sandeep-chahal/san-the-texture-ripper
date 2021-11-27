@@ -53,6 +53,7 @@ const Editor = (props) => {
 			totalLayerCount.current = 0;
 			setActiveLayer(null);
 			setDisabled(true);
+			setResults({});
 		}
 	}, [file]);
 	useEffect(() => {
@@ -102,7 +103,7 @@ const Editor = (props) => {
 	const drawCropBox = () => {
 		if (file === null || activeLayer == null) return;
 		svg.current.selectAll("*").remove();
-		const { radius, strokeWidth } = getSvgSize();
+		const { radius, strokeWidth, opacity } = getSvgSize();
 		line.current = svg.current
 			.selectAll(".line")
 			.data(new Array(10).fill(null))
@@ -110,6 +111,7 @@ const Editor = (props) => {
 			.append("path")
 			.attr("class", "line")
 			.attr("stroke-width", strokeWidth * 0.7)
+			.attr("stroke-opacity", opacity)
 			.attr("stroke", "#77172A");
 
 		svg.current
@@ -120,6 +122,7 @@ const Editor = (props) => {
 			.attr("class", "handle")
 			.attr("fill", "transparent")
 			.attr("stroke-width", strokeWidth)
+			.attr("stroke-opacity", opacity)
 			.attr("r", radius)
 			.attr("filter", "invert(1)")
 			.attr("stroke", "#fff")
@@ -190,7 +193,7 @@ const Editor = (props) => {
 	}, [warpRealTime]);
 
 	const updateResultGLFX = () => {
-		// lazy implementation
+		// opencv works better but its ~25MB :(
 		if (!activeLayer || !layers.current[activeLayer]) return;
 		let points = layers.current[activeLayer].points;
 		let width = Math.max(
@@ -253,13 +256,19 @@ const Editor = (props) => {
 		}
 	};
 
+	const lerp = (x, y, a) => x * (1 - a) + y * a;
+
 	const getSvgSize = () => {
 		const rMinSize = 3;
-		const rMaxSize = 30;
+		const rMaxSize = 20;
 		const size = Math.min(canvas.current.width, canvas.current.height);
 		let radius = size / 45;
 		radius = Math.max(rMinSize, Math.min(rMaxSize, radius));
-		return { radius, strokeWidth: radius / 2 };
+		if (size * scale.current > 800) radius *= 0.5;
+		const opacity = Math.max(lerp(0.6, 1, 1 - scale.current + 1), 0.6);
+		console.log(size);
+
+		return { radius, strokeWidth: radius / 2, opacity };
 	};
 
 	return (
@@ -302,8 +311,10 @@ const Editor = (props) => {
 				minScale={0.1}
 				limitToBounds={false}
 				disabled={disabled}
-				onZoomStop={(ref) => {
+				onZoomStop={(ref) => {}}
+				onZoom={(ref) => {
 					scale.current = ref.state.scale;
+					drawCropBox();
 				}}
 			>
 				<TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
