@@ -8,12 +8,17 @@ function ActionBar({ onExport, warp }) {
 	const { setFile, warpRealTime, setWarpRealTime } = useStore();
 
 	const handleFileChange = async (e) => {
-		const file = e.target.files[0];
-		if (IMAGE_FORMATS.includes(file.type)) {
-			const base64File = await readImage(file);
-			setFile(base64File);
-		} else {
-			console.log("FILE TYPE NOT SUPPORTED", file.type);
+		try {
+			const file = e.target.files[0];
+			e.target.value = "";
+			if (IMAGE_FORMATS.includes(file.type)) {
+				const base64File = await readImage(file);
+				setFile(base64File);
+			} else {
+				console.log("FILE TYPE NOT SUPPORTED", file.type);
+			}
+		} catch (err) {
+			console.log(err);
 		}
 	};
 
