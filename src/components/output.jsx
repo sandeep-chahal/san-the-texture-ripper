@@ -22,7 +22,7 @@ function Output({ onClose }) {
 	};
 
 	return (
-		<div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
+		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
 			<div
 				style={{ width: "90%", height: "90%" }}
 				className="bg-primary1 flex flex-col"
