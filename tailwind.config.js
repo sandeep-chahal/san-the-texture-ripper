@@ -24,9 +24,14 @@ module.exports = {
 					"0%": { opacity: "0", transform: "translateY(20px)" },
 					"100%": { opacity: "100", transform: "translateY(0)" },
 				},
+				opacity: {
+					"0%": { opacity: "0" },
+					"100%": { opacity: "100" },
+				},
 			},
 			animation: {
 				reveal: "reveal 0.25s ease-out",
+				opacity: "opacity 0.35s ease-out",
 			},
 		},
 	},
