@@ -9,12 +9,12 @@ export default defineConfig({
 		VitePWA({
 			manifest: {
 				// content of manifest
-				name: "San: The Texture Ripper",
-				short_name: "TRipper",
+				name: "Sand Ripper",
+				short_name: "Sand Ripper",
 				start_url: "/",
 				display: "standalone",
-				background_color: "#fff",
-				theme_color: "#fff",
+				background_color: "#EDC298",
+				theme_color: "#EDC298",
 				icons: [
 					{
 						src: "/favicon.ico",
