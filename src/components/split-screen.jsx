@@ -48,8 +48,8 @@ function SplitScreen({ children, limit = 100 }) {
 				ref={spliter}
 			>
 				<div className="flex flex-col justify-center items-center w-full">
-					{new Array(5).fill(null).map((i) => {
-						return <span className="w-full h-1 mt-2 bg-primary1" />;
+					{new Array(5).fill(null).map((_, i) => {
+						return <span key={i} className="w-full h-1 mt-2 bg-primary1" />;
 					})}
 				</div>
 			</span>

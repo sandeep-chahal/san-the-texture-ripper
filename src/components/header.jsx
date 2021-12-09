@@ -29,8 +29,11 @@ const Header = ({ onExport }) => {
 
 	return (
 		<header className="bg-primary1 text-primary2 p-3 border-b-2 border-primary1 h-16 flex items-center justify-between">
-			<h1 className=" font-squada text-3xl">Sand Ripper</h1>
-			<ul className="bg-primary2 flex items-center">
+			<h1 className=" font-squada text-3xl flex justify-center">
+				<img src="favicon.svg" className="w-8 h-10 mr-3" />
+				Sand Ripper
+			</h1>
+			<ul className="bg-primary1 flex items-center">
 				<input
 					id="import-files"
 					hidden
@@ -38,7 +41,7 @@ const Header = ({ onExport }) => {
 					accept="image/png, image/jpeg , image/webp"
 					onChange={handleFileChange}
 				/>
-				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 bg-primary1">
+				<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
 					<label
 						htmlFor="import-files"
 						className="cursor-pointer w-full h-full flex items-center justify-center"
@@ -58,7 +61,7 @@ const Header = ({ onExport }) => {
 				</li>
 				<li
 					onClick={onExport}
-					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center bg-primary1"
+					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 				>
 					{/* export icon */}
 					<svg
@@ -70,8 +73,8 @@ const Header = ({ onExport }) => {
 					>
 						<g>
 							<path
-								fill-rule="evenodd"
-								clip-rule="evenodd"
+								fillRule="evenodd"
+								clipRule="evenodd"
 								d="M122.88,35.289L87.945,70.578v-17.58c-22.091-4.577-39.542,0.468-52.796,17.271 c2.301-34.558,25.907-51.235,52.795-52.339L87.945,0L122.88,35.289L122.88,35.289z"
 							/>
 							<path d="M6.908,23.746h35.626c-4.587,3.96-8.71,8.563-12.264,13.815H13.815v62.943h80.603V85.831l13.814-13.579v35.159 c0,3.814-3.093,6.907-6.907,6.907H6.908c-3.815,0-6.908-3.093-6.908-6.907V30.653C0,26.838,3.093,23.746,6.908,23.746L6.908,23.746 z" />
@@ -81,7 +84,7 @@ const Header = ({ onExport }) => {
 				</li>
 				<li
 					onClick={() => setWarpRealTime((s) => !s)}
-					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center bg-primary1"
+					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 				>
 					{/* engine icon */}
 					<svg
@@ -103,7 +106,7 @@ const Header = ({ onExport }) => {
 				</li>
 				<li
 					onClick={handleReset}
-					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center bg-primary1"
+					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 				>
 					{/* reset icon */}
 					<svg
@@ -119,7 +122,7 @@ const Header = ({ onExport }) => {
 					</svg>
 					Reset
 				</li>
-				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer bg-primary1">
+				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer">
 					{/* mail icon */}
 					<a
 						className="flex items-center justify-center"
@@ -128,7 +131,6 @@ const Header = ({ onExport }) => {
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							id="Layer_1"
-							data-name="Layer 1"
 							width="15px"
 							height="15px"
 							viewBox="0 0 122.88 88.86"
