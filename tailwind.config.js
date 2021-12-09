@@ -14,6 +14,7 @@ module.exports = {
 			backgroundColor: {
 				primary1: "var(--color-bg-primary-1)",
 				primary2: "var(--color-bg-primary-2)",
+				primary3: "var(--color-bg-primary-3)",
 				secondary1: "var(--color-bg-secondary-1)",
 			},
 			borderColor: {

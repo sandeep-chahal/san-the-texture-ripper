@@ -278,7 +278,7 @@ const Editor = (props) => {
 			}`}
 		>
 			{Object.keys(layers.current).length ? (
-				<div className="p-1 px-2 flex">
+				<div className="p-1 px-2 flex text-primary2">
 					{Object.keys(layers.current).map((key, index) => (
 						<div
 							key={key}
@@ -296,9 +296,8 @@ const Editor = (props) => {
 							<svg
 								title="Delete"
 								onClick={() => handleDeleteLayer(key)}
-								className="inline cursor-pointer text-red-600 text-sm ml-3 opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110"
+								className="fill-current inline cursor-pointer text-red-600 text-sm ml-3 opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110"
 								xmlns="http://www.w3.org/2000/svg"
-								fill="var(--color-bg-secondary-2)"
 								viewBox="0 0 30 30"
 								width="15px"
 								height="15px"
@@ -309,7 +308,7 @@ const Editor = (props) => {
 					))}
 					<div className="flex items-center ml-2 transition-transform transform rotate-0 hover:rotate-90 hover:scale-110">
 						<svg
-							className="block cursor-pointer"
+							className="fill-current text-primary2 block cursor-pointer"
 							onClick={addLayer}
 							xmlns="http://www.w3.org/2000/svg"
 							id="Layer_1"

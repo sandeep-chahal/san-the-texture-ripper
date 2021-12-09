@@ -28,10 +28,8 @@ const Header = ({ onExport }) => {
 	};
 
 	return (
-		<header className="bg-primary2 p-3 border-b-4 border-primary1 h-16 flex items-center justify-between">
-			<h1 className="text-primary2 font-squada text-3xl">
-				San: The Texture Ripper
-			</h1>
+		<header className="bg-primary1 text-primary2 p-3 border-b-2 border-primary1 h-16 flex items-center justify-between">
+			<h1 className=" font-squada text-3xl">San: The Texture Ripper</h1>
 			<ul className="bg-primary2 flex items-center">
 				<input
 					id="import-files"
@@ -40,14 +38,14 @@ const Header = ({ onExport }) => {
 					accept="image/png, image/jpeg , image/webp"
 					onChange={handleFileChange}
 				/>
-				<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
+				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 bg-primary1">
 					<label
 						htmlFor="import-files"
 						className="cursor-pointer w-full h-full flex items-center justify-center"
 					>
 						{/* import icon */}
 						<svg
-							className="mr-2"
+							className="fill-current text-primary2 mr-2"
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 89.63 122.88"
 							width="15px"
@@ -60,11 +58,11 @@ const Header = ({ onExport }) => {
 				</li>
 				<li
 					onClick={onExport}
-					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center bg-primary1"
 				>
 					{/* export icon */}
 					<svg
-						className="mr-2"
+						className="fill-current text-primary2 mr-2"
 						xmlns="http://www.w3.org/2000/svg"
 						width="15px"
 						height="15px"
@@ -83,11 +81,11 @@ const Header = ({ onExport }) => {
 				</li>
 				<li
 					onClick={() => setWarpRealTime((s) => !s)}
-					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center bg-primary1"
 				>
 					{/* engine icon */}
 					<svg
-						className="mr-2"
+						className="fill-current text-primary2 mr-2"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 120.41 122.88"
 						width="15px"
@@ -99,13 +97,13 @@ const Header = ({ onExport }) => {
 					Warp Real Time
 					<span
 						className={`${
-							warpRealTime ? "bg-green-600" : "bg-gray-500"
+							warpRealTime ? "bg-green-600" : "bg-primary2"
 						} w-3 h-3 ml-3 rounded-full`}
 					></span>
 				</li>
 				<li
 					onClick={handleReset}
-					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+					className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center bg-primary1"
 				>
 					{/* reset icon */}
 					<svg
@@ -113,7 +111,7 @@ const Header = ({ onExport }) => {
 						viewBox="0 0 122.88 118.66"
 						width="15px"
 						height="15px"
-						className="mr-2"
+						className="fill-current text-primary2 mr-2"
 					>
 						<g>
 							<path d="M106.2,22.2c1.78,2.21,3.43,4.55,5.06,7.46c5.99,10.64,8.52,22.73,7.49,34.54c-1.01,11.54-5.43,22.83-13.37,32.27 c-2.85,3.39-5.91,6.38-9.13,8.97c-11.11,8.93-24.28,13.34-37.41,13.22c-13.13-0.13-26.21-4.78-37.14-13.98 c-3.19-2.68-6.18-5.73-8.91-9.13C6.38,87.59,2.26,78.26,0.71,68.41c-1.53-9.67-0.59-19.83,3.07-29.66 c3.49-9.35,8.82-17.68,15.78-24.21C26.18,8.33,34.29,3.76,43.68,1.48c2.94-0.71,5.94-1.18,8.99-1.37c3.06-0.2,6.19-0.13,9.4,0.22 c2.01,0.22,3.46,2.03,3.24,4.04c-0.22,2.01-2.03,3.46-4.04,3.24c-2.78-0.31-5.49-0.37-8.14-0.2c-2.65,0.17-5.23,0.57-7.73,1.17 c-8.11,1.96-15.1,5.91-20.84,11.29C18.43,25.63,13.72,33,10.62,41.3c-3.21,8.61-4.04,17.51-2.7,25.96 c1.36,8.59,4.96,16.74,10.55,23.7c2.47,3.07,5.12,5.78,7.91,8.13c9.59,8.07,21.03,12.15,32.5,12.26c11.47,0.11,23-3.76,32.76-11.61 c2.9-2.33,5.62-4.98,8.13-7.97c6.92-8.22,10.77-18.09,11.66-28.2c0.91-10.37-1.32-20.99-6.57-30.33c-1.59-2.82-3.21-5.07-5.01-7.24 l-0.53,14.7c-0.07,2.02-1.76,3.6-3.78,3.52c-2.02-0.07-3.6-1.76-3.52-3.78l0.85-23.42c0.07-2.02,1.76-3.6,3.78-3.52 c0.13,0,0.25,0.02,0.37,0.03l0,0l22.7,3.19c2,0.28,3.4,2.12,3.12,4.13c-0.28,2-2.12,3.4-4.13,3.12L106.2,22.2L106.2,22.2z"></path>
@@ -121,7 +119,7 @@ const Header = ({ onExport }) => {
 					</svg>
 					Reset
 				</li>
-				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer">
+				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer bg-primary1">
 					{/* mail icon */}
 					<a
 						className="flex items-center justify-center"
@@ -134,7 +132,7 @@ const Header = ({ onExport }) => {
 							width="15px"
 							height="15px"
 							viewBox="0 0 122.88 88.86"
-							className="mr-2"
+							className="fill-current text-primary2 mr-2"
 						>
 							<title>email</title>
 							<path d="M7.05,0H115.83a7.07,7.07,0,0,1,7,7.05V81.81a7,7,0,0,1-1.22,4,2.78,2.78,0,0,1-.66,1,2.62,2.62,0,0,1-.66.46,7,7,0,0,1-4.51,1.65H7.05a7.07,7.07,0,0,1-7-7V7.05A7.07,7.07,0,0,1,7.05,0Zm-.3,78.84L43.53,40.62,6.75,9.54v69.3ZM49.07,45.39,9.77,83.45h103L75.22,45.39l-11,9.21h0a2.7,2.7,0,0,1-3.45,0L49.07,45.39Zm31.6-4.84,35.46,38.6V9.2L80.67,40.55ZM10.21,5.41,62.39,47.7,112.27,5.41Z" />

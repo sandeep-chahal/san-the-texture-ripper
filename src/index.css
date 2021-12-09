@@ -4,14 +4,27 @@
 
 @layer base{
   :root{
-    --color-text-primary-1: #121212;
-    --color-text-primary-2: #181818;
+    --color-text-primary-1: #C27224;
+    --color-text-primary-2: #C27224;
     --color-text-gray: #6D757A;
     --color-bg-primary-1: #ffffff;
     --color-bg-primary-2: #F5F5F5;
+    --color-bg-primary-3: #C27224;
     --color-bg-secondary-1: #121212;
-    --color-border-1: #121212;
+    --color-border-1: #C27224;
   }
+  @media (prefers-color-scheme: dark) {
+ :root{
+    --color-text-primary-1: #EDC298;
+    --color-text-primary-2: #EDC298;
+    --color-text-gray: #6D757A;
+    --color-bg-primary-1: #1D2025;
+    --color-bg-primary-2: #1F2933;
+    --color-bg-primary-3: #EDC298;
+    --color-bg-secondary-1: #F5F5F5;
+    --color-border-1: #EDC298;
+  }
+}
 
   body{
     -webkit-user-select: none; 
@@ -36,7 +49,7 @@
   .dot-pattern{
     background: linear-gradient(90deg, var(--color-bg-primary-2) 38.5px, transparent 1%) center,
                 linear-gradient(var(--color-bg-primary-2) 38.5px, transparent 1%) center,
-                #000;
+                var(--color-bg-primary-3);
 	  background-size: 40px 40px;
   }
 
