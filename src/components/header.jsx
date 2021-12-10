@@ -126,7 +126,7 @@ const Header = ({ onExport }) => {
 					{/* mail icon */}
 					<a
 						className="flex items-center justify-center"
-						href="mailto: sandeepchahal573@gmail.com"
+						href="mailto: 6sandripper9@gmail.com"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
