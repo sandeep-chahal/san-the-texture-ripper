@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { readImage } from "../utils";
 import { useStore } from "../store";
 
@@ -6,6 +6,7 @@ const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
 const Header = ({ onExport }) => {
 	const { setFile, warpRealTime, setWarpRealTime } = useStore();
+	const [showMore, setShowMore] = useState(false);
 
 	const handleFileChange = async (e) => {
 		try {
@@ -21,6 +22,20 @@ const Header = ({ onExport }) => {
 			console.log(err);
 		}
 	};
+
+	const onDropDown = () => {
+		setShowMore((showMore) => !showMore);
+	};
+
+	useEffect(() => {
+		const handleClick = () => {
+			setShowMore(false);
+			document.removeEventListener("click", handleClick);
+		};
+		if (showMore) {
+			document.addEventListener("click", handleClick, false);
+		}
+	}, [showMore]);
 
 	const handleReset = () => {
 		setFile(null);
@@ -122,25 +137,95 @@ const Header = ({ onExport }) => {
 					</svg>
 					Reset
 				</li>
-				<li className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer">
+
+				<li
+					onClick={onDropDown}
+					className="relative w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex justify-center items-center"
+				>
 					{/* mail icon */}
-					<a
-						className="flex items-center justify-center"
-						href="mailto: 6sandripper9@gmail.com"
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						version="1.1"
+						width="15px"
+						height="15px"
+						viewBox="0 0 330 330"
+						className="fill-current text-primary2 mr-2"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							id="Layer_1"
-							width="15px"
-							height="15px"
-							viewBox="0 0 122.88 88.86"
-							className="fill-current text-primary2 mr-2"
-						>
-							<title>email</title>
-							<path d="M7.05,0H115.83a7.07,7.07,0,0,1,7,7.05V81.81a7,7,0,0,1-1.22,4,2.78,2.78,0,0,1-.66,1,2.62,2.62,0,0,1-.66.46,7,7,0,0,1-4.51,1.65H7.05a7.07,7.07,0,0,1-7-7V7.05A7.07,7.07,0,0,1,7.05,0Zm-.3,78.84L43.53,40.62,6.75,9.54v69.3ZM49.07,45.39,9.77,83.45h103L75.22,45.39l-11,9.21h0a2.7,2.7,0,0,1-3.45,0L49.07,45.39Zm31.6-4.84,35.46,38.6V9.2L80.67,40.55ZM10.21,5.41,62.39,47.7,112.27,5.41Z" />
-						</svg>
-						Contact
-					</a>
+						<path d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393  c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393  s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z" />
+					</svg>
+					More
+					{/* dropdown */}
+					{showMore ? (
+						<ul className="absolute w-48 bg-primary2 top-full right-0 border-2 border-primary1 z-50">
+							<li>
+								{/* coffee icon */}
+								<a
+									className="p-2 border-b-2 border-primary1 bg-primary3 text-primary1 cursor-pointer flex items-center"
+									href="https://ko-fi.com/sandeep"
+									target="_blank"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										version="1.1"
+										viewBox="0 0 112.24 122.88"
+										width="15px"
+										height="15px"
+										className="fill-current text-primary1 mr-2"
+									>
+										<g>
+											<path d="M84.81,0.03c2.37,0,1.98,0,2.08,0c7.43-0.05,11.68-0.08,15.72,5.63c0.05,0.06,0.09,0.12,0.13,0.18l7.36,11.36 c0.06,0.09,0.12,0.18,0.17,0.27c0.03,0.04,0.05,0.07,0.08,0.11c0.8,1.19,1.88,2.83,1.88,4.55c0,2.3-1.21,3.97-4.85,3.97h-4.3 l-9.89,75.66c-0.12,0.89-0.21,1.83-0.3,2.8c-0.5,5.11-1.05,10.74-5.15,14.46c-4.51,4.1-11.19,3.94-16.92,3.8 c-0.73-0.02-1.43-0.03-2.68-0.03H34.95v-0.01c-5.03,0.14-8.92-1.14-11.69-3.83l-0.13-0.12c-0.04-0.04-0.08-0.08-0.13-0.13 c-0.04-0.04-0.08-0.09-0.12-0.13l-0.12-0.13l-0.12-0.13l-0.12-0.13c-0.04-0.05-0.08-0.09-0.12-0.14l-0.11-0.14l-0.11-0.14 l-0.11-0.14l-0.11-0.14l-0.11-0.14l-0.11-0.15l-0.1-0.15l-0.1-0.15l-0.1-0.15l-0.1-0.15l-0.1-0.16l0,0l-0.09-0.16l-0.09-0.16 l-0.09-0.16h0l-0.09-0.16l-0.09-0.16l-0.09-0.17l-0.08-0.17l-0.08-0.17l0,0l-0.08-0.17l-0.08-0.17l-0.08-0.18l-0.07-0.18l0,0 l-0.07-0.18l-0.07-0.18l-0.07-0.18l-0.07-0.18l-0.07-0.19l-0.06-0.19l0,0l-0.06-0.19l-0.06-0.19l-0.06-0.19l-0.06-0.19h0l-0.05-0.2 l-0.05-0.2h0l-0.05-0.2h0l-0.05-0.2h0l-0.05-0.2l-0.05-0.21h0l-0.04-0.21h0l-0.04-0.21l-0.04-0.21h0l-0.04-0.21h0l-0.04-0.21 l-0.04-0.22h0l-0.03-0.22h0l-0.03-0.22h0l-0.03-0.22l0,0l-0.03-0.22h0l-0.03-0.22l-0.02-0.23l0,0l-0.02-0.23l-0.02-0.23l-0.02-0.23 l-0.02-0.23l-0.02-0.23l-0.01-0.24l-1.42-10.89c-0.03-0.14-0.05-0.29-0.06-0.44L8.14,26.1H4.82C1.23,26.1,0,24.41,0,22.02 c0-1.98,1.4-4.07,2.39-5.53c0.21-0.32,0.4-0.6,0.47-0.71l4.97-8.19c4.66-7.68,5.86-7.67,14.4-7.57c0.42,0,0.87,0.01,2.91,0.01 C45.06,0.03,64.9,0.03,84.81,0.03L84.81,0.03z M97.71,26.14h-84.2l8.77,67.11h66.66L97.71,26.14L97.71,26.14z M22.98,98.59 l1.07,8.22c0.01,0.07,0.02,0.14,0.02,0.21h0c0.19,3.72,1.15,6.44,2.9,8.13c1.71,1.65,4.33,2.43,7.89,2.32l0.08,0v-0.01h33.19 c0.49,0,1.63,0.03,2.81,0.05c4.74,0.11,10.27,0.24,13.21-2.43c2.59-2.36,3.04-6.9,3.44-11.02c0.1-1.02,0.2-2.02,0.32-2.99 l0.32-2.48H22.98L22.98,98.59z" />
+										</g>
+									</svg>
+									Buy me a coffee
+								</a>
+							</li>
+							<li>
+								{/* mail icon */}
+								<a
+									className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center"
+									href="mailto: 6sandripper9@gmail.com"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										id="Layer_1"
+										width="15px"
+										height="15px"
+										viewBox="0 0 122.88 88.86"
+										className="fill-current text-primary2 mr-2"
+									>
+										<title>email</title>
+										<path d="M7.05,0H115.83a7.07,7.07,0,0,1,7,7.05V81.81a7,7,0,0,1-1.22,4,2.78,2.78,0,0,1-.66,1,2.62,2.62,0,0,1-.66.46,7,7,0,0,1-4.51,1.65H7.05a7.07,7.07,0,0,1-7-7V7.05A7.07,7.07,0,0,1,7.05,0Zm-.3,78.84L43.53,40.62,6.75,9.54v69.3ZM49.07,45.39,9.77,83.45h103L75.22,45.39l-11,9.21h0a2.7,2.7,0,0,1-3.45,0L49.07,45.39Zm31.6-4.84,35.46,38.6V9.2L80.67,40.55ZM10.21,5.41,62.39,47.7,112.27,5.41Z" />
+									</svg>
+									Contact
+								</a>
+							</li>
+							<li>
+								{/* install icon */}
+								<a
+									className="p-2 cursor-pointer flex items-center"
+									href="https://support.google.com/chrome/answer/9658361"
+									target="_blank"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="15px"
+										height="15px"
+										className="fill-current text-primary2 mr-2"
+										viewBox="0 0 122.876 107.16"
+									>
+										<g>
+											<path
+												fill-rule="evenodd"
+												clip-rule="evenodd"
+												d="M32.716,32.108h16.566V0l23.702,0v32.107l17.176,0l-28.7,30.32L32.716,32.108 L32.716,32.108z M113.705,32.244l7.733,34.271c0.021,0.071,0.034,0.146,0.044,0.223c0.678,5.731,1.177,10.726,1.338,15.138 c0.164,4.449-0.023,8.255-0.726,11.545c-0.014,0.063-0.03,0.123-0.052,0.183c-0.647,7.566-7.043,13.558-14.77,13.558h-92.12 c-7.736,0-14.138-6.006-14.772-13.585c-0.021-0.094-0.032-0.19-0.034-0.29l-0.012-0.533l-0.002-0.079 c-0.031-1.248-0.076-2.625-0.123-4.06c-0.181-5.508-0.39-11.875,0.058-17.388l-0.016,0.021l0.093-0.892 c0.027-0.294,0.059-0.584,0.091-0.872l7.736-37.239h10.213l-1.297,41.397h88.252l-0.849-41.397H113.705L113.705,32.244z M93.92,84.625c3.247,0,5.879,2.633,5.879,5.879c0,3.247-2.632,5.879-5.879,5.879s-5.879-2.632-5.879-5.879 C88.041,87.258,90.673,84.625,93.92,84.625L93.92,84.625z M17.253,85.941h22.783v8.092H17.253V85.941L17.253,85.941z"
+											/>
+										</g>
+									</svg>
+									How to Install
+								</a>
+							</li>
+						</ul>
+					) : null}
 				</li>
 			</ul>
 		</header>

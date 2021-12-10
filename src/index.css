@@ -4,7 +4,7 @@
 
 @layer base{
   :root{
-    --color-text-primary-1: #C27224;
+    --color-text-primary-1: #fff;
     --color-text-primary-2: #C27224;
     --color-text-gray: #6D757A;
     --color-bg-primary-1: #ffffff;
@@ -15,7 +15,7 @@
   }
   @media (prefers-color-scheme: dark) {
  :root{
-    --color-text-primary-1: #EDC298;
+    --color-text-primary-1: #121212;
     --color-text-primary-2: #EDC298;
     --color-text-gray: #6D757A;
     --color-bg-primary-1: #1D2025;
