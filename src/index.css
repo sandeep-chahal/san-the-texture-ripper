@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+*::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+*::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: none;
+}
+
 @layer base{
   :root{
     --color-text-primary-1: #fff;
@@ -52,6 +61,7 @@
                 var(--color-bg-primary-3);
 	  background-size: 40px 40px;
   }
+
 
 }
 

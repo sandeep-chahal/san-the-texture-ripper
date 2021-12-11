@@ -1,4 +1,5 @@
 import React from "react";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useStore } from "../store";
 
 const Board = () => {
@@ -9,20 +10,7 @@ const Board = () => {
 	return (
 		<div className="w-full h-full overflow-auto bg-primary2 text-primary2">
 			<div className="flex items-start flex-wrap h-max max-w-full">
-				{resultsArray.length ? (
-					resultsArray.map((data, index) => (
-						<img
-							style={{
-								width: data.width,
-								height: data.height,
-							}}
-							width={data.width}
-							height={data.height}
-							key={index}
-							src={data.result}
-						/>
-					))
-				) : (
+				{!resultsArray.length ? (
 					<div className="w-full mt-32 flex flex-col items-center justify-center">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -38,6 +26,29 @@ const Board = () => {
 						<p>No Results Yet</p>
 						<p>Import a image file to get started</p>
 					</div>
+				) : (
+					<TransformWrapper minScale={0.1} limitToBounds={false}>
+						<TransformComponent
+							wrapperStyle={{ width: "100%", height: "100%" }}
+							contentClass="w-full min-h-screen"
+						>
+							<div className="max-w-full">
+								{resultsArray.map((data, index) => (
+									<img
+										style={{
+											width: data.width,
+											height: data.height,
+										}}
+										width={data.width}
+										height={data.height}
+										key={index}
+										src={data.result}
+										className="inline-block"
+									/>
+								))}
+							</div>
+						</TransformComponent>
+					</TransformWrapper>
 				)}
 			</div>
 		</div>
