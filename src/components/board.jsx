@@ -42,7 +42,14 @@ const Board = () => {
 						>
 							<div className="max-w-full">
 								{Object.keys(results).map((key, index) => (
-									<div className="group relative m-2" key={key}>
+									<div
+										className="group relative m-2"
+										key={key}
+										style={{
+											width: results[key].width,
+											height: results[key].height,
+										}}
+									>
 										<img
 											style={{
 												width: results[key].width,
