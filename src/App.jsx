@@ -8,13 +8,14 @@ import Board from "./components/board";
 import Output from "./components/output";
 import { readImage } from "./utils";
 import { useStore } from "./store";
+import WhatsNew from "./components/whats-new";
 
 const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
 	const [droping, setDroping] = useState(false);
-	const { setFile } = useStore();
+	const { setFile, showWhatsNew } = useStore();
 	useEffect(() => {
 		ReactGA.initialize(import.meta.env.VITE_TRACKING_ID);
 		ReactGA.pageview("/");
@@ -76,6 +77,7 @@ function App() {
 				</section>
 			</FileDrop>
 			{showOutput && <Output onClose={() => setShowOutput(false)} />}
+			{showWhatsNew && <WhatsNew />}
 		</div>
 	);
 }
