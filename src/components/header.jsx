@@ -1,27 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { readImage } from "../utils";
 import { useStore } from "../store";
 
-const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
-
-const Header = ({ onExport }) => {
+const Header = ({ onExport, handleFileChange }) => {
 	const { setFile, warpRealTime, setWarpRealTime } = useStore();
 	const [showMore, setShowMore] = useState(false);
-
-	const handleFileChange = async (e) => {
-		try {
-			const file = e.target.files[0];
-			e.target.value = "";
-			if (IMAGE_FORMATS.includes(file.type)) {
-				const base64File = await readImage(file);
-				setFile(base64File);
-			} else {
-				console.log("FILE TYPE NOT SUPPORTED", file.type);
-			}
-		} catch (err) {
-			console.log(err);
-		}
-	};
 
 	const onDropDown = () => {
 		setShowMore((showMore) => !showMore);
@@ -54,7 +36,9 @@ const Header = ({ onExport }) => {
 					hidden
 					type="file"
 					accept="image/png, image/jpeg , image/webp"
-					onChange={handleFileChange}
+					onChange={(e) =>
+						handleFileChange(e.target.files[0], () => (e.target.value = ""))
+					}
 				/>
 				<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
 					<label

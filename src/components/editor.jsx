@@ -322,6 +322,7 @@ const Editor = (props) => {
 					</div>
 				</div>
 			) : null}
+
 			<TransformWrapper
 				scale={scale}
 				minScale={0.1}
