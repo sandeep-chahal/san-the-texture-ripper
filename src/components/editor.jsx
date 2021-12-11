@@ -209,6 +209,7 @@ const Editor = (props) => {
 			width += diff;
 			height += diff;
 		}
+		// algorithm works better when width and height same
 		const fakeDim = Math.max(width, height);
 		points = points.reduce((pV, cV) => [...pV, ...cV], []);
 		const dstPoints = [0, 0, fakeDim, 0, fakeDim, fakeDim, 0, fakeDim];
@@ -219,6 +220,7 @@ const Editor = (props) => {
 		tempCanvas.width = fakeDim;
 		tempCanvas.height = fakeDim;
 		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
+		console.log(glfxCanvas.current);
 		tempCanvasCtx.drawImage(
 			glfxCanvas.current,
 			0,
@@ -230,6 +232,41 @@ const Editor = (props) => {
 			fakeDim,
 			fakeDim
 		);
+		// to remove transparency
+		// get the data till the pixel is transparent on both axis
+		let newWidth = null;
+		let newHeight = null;
+		for (let i = 0; i < fakeDim; i++) {
+			const xPixelValue = tempCanvasCtx.getImageData(i, 0, 1, 1).data;
+			if (
+				xPixelValue[0] === 0 &&
+				xPixelValue[1] === 0 &&
+				xPixelValue[2] === 0 &&
+				xPixelValue[3] === 0 &&
+				newWidth === null
+			) {
+				newWidth = i;
+			}
+			const yPixelValue = tempCanvasCtx.getImageData(0, i, 1, 1).data;
+			if (
+				yPixelValue[0] === 0 &&
+				yPixelValue[1] === 0 &&
+				yPixelValue[2] === 0 &&
+				yPixelValue[3] === 0 &&
+				newHeight === null
+			) {
+				newHeight = i;
+			}
+		}
+		if (newWidth === null) newWidth = fakeDim;
+		if (newHeight === null) newHeight = fakeDim;
+
+		const newPixelData = tempCanvasCtx.getImageData(0, 0, newWidth, newHeight);
+		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
+		tempCanvas.width = newWidth;
+		tempCanvas.height = newHeight;
+		tempCanvasCtx.putImageData(newPixelData, 0, 0);
+
 		setResults((state) => {
 			const newState = { ...state };
 			newState[activeLayer] = {

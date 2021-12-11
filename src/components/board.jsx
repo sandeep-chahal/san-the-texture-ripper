@@ -43,7 +43,7 @@ const Board = () => {
 										height={data.height}
 										key={index}
 										src={data.result}
-										className="inline-block"
+										className="inline-block m-2"
 									/>
 								))}
 							</div>

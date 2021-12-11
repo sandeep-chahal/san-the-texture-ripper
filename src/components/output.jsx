@@ -1,9 +1,22 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { toPng } from "html-to-image";
+import Resizable from "react-resizable-box";
 import { useStore } from "../store";
+
+const parseResults = (results) => {
+	if (Object.keys(results || {}).length === 0) {
+		return {};
+	}
+	const sizes = {};
+	Object.keys(results).forEach((key) => {
+		sizes[key] = [results[key].width, results[key].height];
+	});
+	return sizes;
+};
 
 function Output({ onClose }) {
 	const { results } = useStore();
+	const [sizes, setSizes] = useState(() => parseResults(results));
 	const printComponent = useRef(null);
 
 	const handleExport = () => {
@@ -28,25 +41,34 @@ function Output({ onClose }) {
 				className="bg-primary1 text-primary2 flex flex-col"
 			>
 				{/* header */}
-				<div className="p-2 px-6 text-2xl bg-primary2 border-primary1">
-					<h1>Output</h1>
+				<div className="p-2 px-6 bg-primary2 border-primary1 ">
+					<h1 className="text-2xl">Output</h1>
+					<span className="text-sm">Drag images from sides to resize</span>
 				</div>
 				{/* output */}
 				<div className="overflow-y-auto">
-					<div ref={printComponent} className="w-max max-w-full">
-						{Object.values(results || {}).map((data, index) => (
-							<img
-								className="inline-block m-2"
-								style={{
-									width: data.width,
-									height: data.height,
-								}}
-								width={data.width}
-								height={data.height}
-								key={index}
-								src={data.result}
-							/>
-						))}
+					<div ref={printComponent} className="w-max max-w-full flex flex-wrap">
+						{Object.keys(results || {}).map((key, index) => {
+							const data = results[key];
+							const [width, height] = sizes[key];
+							return (
+								<Resizable
+									width={width}
+									height={height}
+									maxHeight={height * 10}
+									maxWidth={width * 10}
+									className="m-2"
+									key={index}
+									minHeight={200}
+									minWidth={200}
+								>
+									<img
+										className="w-full h-full inline-block pointer-events-none"
+										src={data.result}
+									/>
+								</Resizable>
+							);
+						})}
 					</div>
 				</div>
 
