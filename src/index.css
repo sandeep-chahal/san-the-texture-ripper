@@ -4,6 +4,7 @@
 
 *::-webkit-scrollbar {
   width: 5px;
+  height: 4px;
 }
  
 *::-webkit-scrollbar-thumb {
@@ -61,7 +62,6 @@
                 var(--color-bg-primary-3);
 	  background-size: 40px 40px;
   }
-
 
 }
 

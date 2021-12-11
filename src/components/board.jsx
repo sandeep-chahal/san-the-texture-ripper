@@ -40,7 +40,7 @@ const Board = () => {
 							wrapperStyle={{ width: "100%", height: "100%" }}
 							contentClass="w-full min-h-screen"
 						>
-							<div className="max-w-full">
+							<div className="max-w-full flex flex-wrap h-full">
 								{Object.keys(results).map((key, index) => (
 									<div
 										className="group relative m-2"
