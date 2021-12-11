@@ -18,6 +18,16 @@ function App() {
 	useEffect(() => {
 		ReactGA.initialize(import.meta.env.VITE_TRACKING_ID);
 		ReactGA.pageview("/");
+		// copy paste image
+		document.onpaste = (e) => {
+			if (e.clipboardData.items.length > 0) {
+				const item = e.clipboardData.items[0];
+				if (item.kind === "file" && IMAGE_FORMATS.includes(item.type)) {
+					const blob = item.getAsFile();
+					handleFileChange(blob);
+				}
+			}
+		};
 	}, []);
 
 	const handleFileChange = async (file, cb) => {
