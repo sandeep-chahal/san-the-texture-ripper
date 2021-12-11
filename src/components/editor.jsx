@@ -23,11 +23,9 @@ const Editor = (props) => {
 
 	useEffect(() => {
 		if (file && canvas.current) {
-			console.log("got new image");
 			const img = new Image();
 			img.src = file;
 			img.onload = () => {
-				console.log("read new Image");
 				const ctx = canvas.current.getContext("2d");
 				ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 				canvas.current.width = img.width;
@@ -205,7 +203,6 @@ const Editor = (props) => {
 		tempCanvas.width = fakeDim;
 		tempCanvas.height = fakeDim;
 		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
-		console.log(glfxCanvas.current);
 		tempCanvasCtx.drawImage(
 			glfxCanvas.current,
 			0,
@@ -267,7 +264,6 @@ const Editor = (props) => {
 	const handleDeleteLayer = (id) => {
 		const keys = Object.keys(layers.current);
 		if (keys.length === 1) return;
-		console.log("deleting", id);
 		delete layers.current[id];
 		setResults((state) => {
 			const newState = { ...state };
@@ -289,8 +285,6 @@ const Editor = (props) => {
 		radius = Math.max(rMinSize, Math.min(rMaxSize, radius));
 		if (size * scale.current > 800) radius *= 0.5;
 		const opacity = Math.max(lerp(0.6, 1, 1 - scale.current + 1), 0.6);
-		console.log(size);
-
 		return { radius, strokeWidth: radius / 2, opacity };
 	};
 

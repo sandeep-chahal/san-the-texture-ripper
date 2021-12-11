@@ -12,14 +12,12 @@ function SplitScreen({ children, limit = 100 }) {
 			setSlide(e.x);
 		};
 		const listenForDrag = (e) => {
-			console.log("mouse down");
 			document.body.style.cursor = "ew-resize";
 			window.addEventListener("mousemove", onDrag);
 			window.addEventListener("mouseup", onMouseUp);
 			window.addEventListener("blur", onMouseUp);
 		};
 		const onMouseUp = (e) => {
-			console.log("mouse up");
 			document.body.style.cursor = "default";
 			window.removeEventListener("mousemove", onDrag);
 			window.removeEventListener("mouseup", onMouseUp);
