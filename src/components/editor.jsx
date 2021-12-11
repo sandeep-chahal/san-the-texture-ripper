@@ -39,21 +39,6 @@ const Editor = (props) => {
 				addLayer();
 				drawCropBox();
 			};
-		} else {
-			// reset everything
-			canvas.current
-				.getContext("2d")
-				.clearRect(0, 0, canvas.current.width, canvas.current.height);
-			canvas.current.width = 0;
-			canvas.current.height = 0;
-			glfxCanvas.current = null;
-			texture.current = null;
-			layers.current = {};
-			line.current = null;
-			totalLayerCount.current = 0;
-			setActiveLayer(null);
-			setDisabled(true);
-			setResults({});
 		}
 	}, [file]);
 	useEffect(() => {
@@ -274,6 +259,7 @@ const Editor = (props) => {
 				width,
 				height,
 				id: activeLayer,
+				name: layers.current[activeLayer].name,
 			};
 			return newState;
 		});

@@ -20,8 +20,7 @@ const Header = ({ onExport, handleFileChange }) => {
 	}, [showMore]);
 
 	const handleReset = () => {
-		setFile(null);
-		setWarpRealTime(false);
+		window.location.reload();
 	};
 
 	return (
