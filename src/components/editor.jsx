@@ -20,6 +20,9 @@ const Editor = (props) => {
 	const [activeLayer, setActiveLayer] = useState(null);
 	const glfxCanvas = useRef(null);
 	const texture = useRef(null);
+	const isMouseOver = useRef(false);
+	const wrapperRef = useRef(null);
+	const parentRef = useRef(null);
 
 	useEffect(() => {
 		if (file && canvas.current) {
@@ -43,6 +46,20 @@ const Editor = (props) => {
 		const onKeyDown = (e) => {
 			if (e.keyCode === 17 && disabled && activeLayer) {
 				setDisabled(false);
+			}
+			if ((isMouseOver.current && e.keyCode === 107) || e.keyCode === 187) {
+				// console.log("zoom in");
+				wrapperRef.current.zoomIn();
+				scale.current += 0.5;
+				drawCropBox();
+			} else if (
+				(isMouseOver.current && e.keyCode === 109) ||
+				e.keyCode === 189
+			) {
+				// console.log("zoom out");
+				wrapperRef.current.zoomOut();
+				scale.current -= 0.5;
+				drawCropBox();
 			}
 		};
 		const onKeyUp = (e) => {
@@ -78,6 +95,19 @@ const Editor = (props) => {
 			],
 		};
 	};
+
+	useEffect(() => {
+		if (parentRef.current) {
+			parentRef.current.addEventListener("mouseenter", (e) => {
+				// console.log("Mouse Entered");
+				isMouseOver.current = true;
+			});
+			parentRef.current.addEventListener("mouseleave", (e) => {
+				// console.log("Mouse Left");
+				isMouseOver.current = false;
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		drawCropBox();
@@ -293,6 +323,8 @@ const Editor = (props) => {
 			className={`h-full dot-pattern ${
 				disabled ? "cursor-default" : "cursor-grab"
 			}`}
+			ref={parentRef}
+			// onKeyPress={console.log}
 		>
 			{Object.keys(layers.current).length ? (
 				<div className="p-1 px-2 flex items-start text-primary2">
@@ -344,7 +376,8 @@ const Editor = (props) => {
 			) : null}
 
 			<TransformWrapper
-				scale={scale}
+				ref={wrapperRef}
+				scale={scale.current}
 				minScale={0.1}
 				limitToBounds={false}
 				disabled={disabled}

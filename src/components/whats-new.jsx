@@ -8,7 +8,7 @@ function WhatsNew() {
 	return (
 		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
 			<div
-				style={{ width: "90%", height: "90%" }}
+				style={{ width: "60%", height: "90%" }}
 				className="relative bg-primary2 text-primary2 flex flex-col overflow-auto"
 			>
 				<div className="">
@@ -26,7 +26,10 @@ function WhatsNew() {
 					</svg>
 				</div>
 				<div className="w-4/5 mx-auto mt-4">
-					<ul className="text-2xl flex flex-wrap">
+					<ul className="text-2xl  flex-wrap">
+						<li className="list-disc mr-4">
+							<h2 className="mb-4">Use + and - to zoom in and out</h2>
+						</li>
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Drag and drop image</h2>
 							<img className=" mb-8" src="gifs/drag-n-drop.gif" />
