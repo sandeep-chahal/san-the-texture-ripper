@@ -45,19 +45,31 @@ function WhatsNew() {
 						</li>
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Drag and drop image</h2>
-							<img className=" mb-8" src="gifs/drag-n-drop.gif" />
+							<img
+								className=" mb-8"
+								src="https://media2.giphy.com/media/ljQZsb3swigxy7dz2f/giphy.gif"
+							/>
 						</li>
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Copy paste image</h2>
-							<img className=" mb-8" src="gifs/copy-paste.gif" />
+							<img
+								className=" mb-8"
+								src="https://media1.giphy.com/media/qFKNI3T860FUXfUzd1/giphy.gif"
+							/>
 						</li>
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Resize output images</h2>
-							<img className=" mb-8" src="gifs/resize.gif" />
+							<img
+								className=" mb-8"
+								src="https://media3.giphy.com/media/0koZYA8HvB92dNaT2J/giphy.gif"
+							/>
 						</li>
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Zoom in preview</h2>
-							<img className=" mb-8" src="gifs/movable.gif" />
+							<img
+								className=" mb-8"
+								src="https://media3.giphy.com/media/tlc8gDDcNcsDsaSrol/giphy.gif"
+							/>
 						</li>
 					</ul>
 					<div className="mb-4">
