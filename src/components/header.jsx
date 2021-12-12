@@ -145,7 +145,7 @@ const Header = ({ onExport, handleFileChange }) => {
 								{/* coffee icon */}
 								<a
 									className="p-2 border-b-2 border-primary1 bg-primary3 text-primary1 cursor-pointer flex items-center"
-									href="https://ko-fi.com/sandeep"
+									href="https://www.buymeacoffee.com/sandeepchahal"
 									target="_blank"
 								>
 									<svg

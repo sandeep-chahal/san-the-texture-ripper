@@ -28,6 +28,19 @@ function WhatsNew() {
 				<div className="w-4/5 mx-auto mt-4">
 					<ul className="text-2xl  flex-wrap">
 						<li className="list-disc mr-4">
+							<h2 className="mb-4">
+								Fixed{" "}
+								<a
+									className="border-b-2 border-primary1"
+									target="_blank"
+									href="https://www.buymeacoffee.com/sandeepchahal"
+								>
+									BuyMeACoffee
+								</a>{" "}
+								link
+							</h2>
+						</li>
+						<li className="list-disc mr-4">
 							<h2 className="mb-4">Use + and - to zoom in and out</h2>
 						</li>
 						<li className="list-disc mr-4">
