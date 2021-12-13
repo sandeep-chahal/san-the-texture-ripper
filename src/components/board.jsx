@@ -21,14 +21,13 @@ const Board = () => {
 	};
 
 	useEffect(() => {
+		const onMouseEnter = () => {
+			isMouseOver.current = true;
+		};
+		const onMouseLeave = () => {
+			isMouseOver.current = false;
+		};
 		if (parentRef.current) {
-			const onMouseEnter = () => {
-				isMouseOver.current = true;
-			};
-			const onMouseLeave = () => {
-				isMouseOver.current = false;
-			};
-
 			parentRef.current.addEventListener("mouseenter", onMouseEnter);
 			parentRef.current.addEventListener("mouseleave", onMouseLeave);
 		}
