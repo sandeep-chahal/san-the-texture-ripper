@@ -100,15 +100,22 @@ const Editor = (props) => {
 
 	useEffect(() => {
 		if (parentRef.current) {
-			parentRef.current.addEventListener("mouseenter", (e) => {
-				// console.log("Mouse Entered");
+			const onMouseEnter = () => {
 				isMouseOver.current = true;
-			});
-			parentRef.current.addEventListener("mouseleave", (e) => {
-				// console.log("Mouse Left");
+			};
+			const onMouseLeave = () => {
 				isMouseOver.current = false;
-			});
+			};
+
+			parentRef.current.addEventListener("mouseenter", onMouseEnter);
+			parentRef.current.addEventListener("mouseleave", onMouseLeave);
 		}
+		return () => {
+			if (parentRef.current) {
+				parentRef.current.removeEventListener("mouseenter", onMouseEnter);
+				parentRef.current.removeEventListener("mouseleave", onMouseLeave);
+			}
+		};
 	}, []);
 
 	useEffect(() => {
@@ -125,22 +132,21 @@ const Editor = (props) => {
 			.enter()
 			.append("path")
 			.attr("class", "line")
-			.attr("stroke-width", strokeWidth * 0.7)
+			.attr("stroke-width", strokeWidth * 0.5)
 			.attr("stroke-opacity", opacity)
-			.attr("stroke", "#77172A");
+			.attr("stroke", "#00ACED");
 
 		svg.current
 			.selectAll(".handle")
 			.data(layers.current[activeLayer].points)
 			.enter()
 			.append("circle")
-			.attr("class", "handle")
+			.attr("class", `handle cursor-move`)
 			.attr("fill", "transparent")
-			.attr("stroke-width", strokeWidth)
+			.attr("stroke-width", strokeWidth * 0.8)
 			.attr("stroke-opacity", opacity)
 			.attr("r", radius)
-			.attr("filter", "invert(1)")
-			.attr("stroke", "#fff")
+			.attr("stroke", "#C27224")
 			.attr("data-index", (d, i) => i)
 			.attr("transform", function (d) {
 				return "translate(" + d + ")";
@@ -203,9 +209,6 @@ const Editor = (props) => {
 			return points;
 		}
 	};
-	useEffect(() => {
-		// alert(warpRealTime);
-	}, [warpRealTime]);
 
 	const updateResultGLFX = () => {
 		// opencv works better but its ~25MB :(
@@ -310,12 +313,15 @@ const Editor = (props) => {
 	const lerp = (x, y, a) => x * (1 - a) + y * a;
 
 	const getSvgSize = () => {
-		const rMinSize = 3;
+		const rMinSize = 2;
 		const rMaxSize = 20;
 		const size = Math.min(canvas.current.width, canvas.current.height);
 		let radius = size / 45;
 		radius = Math.max(rMinSize, Math.min(rMaxSize, radius));
-		if (size * scale.current > 800) radius *= 0.5;
+		if (size * scale.current > 4000) radius *= 0.15;
+		else if (size * scale.current > 2000) radius *= 0.3;
+		else if (size * scale.current > 800) radius *= 0.5;
+		else if (size * scale.current > 500) radius *= 0.8;
 		const opacity = Math.max(lerp(0.6, 1, 1 - scale.current + 1), 0.6);
 		return { radius, strokeWidth: radius / 2, opacity };
 	};

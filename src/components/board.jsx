@@ -22,14 +22,15 @@ const Board = () => {
 
 	useEffect(() => {
 		if (parentRef.current) {
-			parentRef.current.addEventListener("mouseenter", (e) => {
-				// console.log("Mouse Entered");
+			const onMouseEnter = () => {
 				isMouseOver.current = true;
-			});
-			parentRef.current.addEventListener("mouseleave", (e) => {
-				// console.log("Mouse Left");
+			};
+			const onMouseLeave = () => {
 				isMouseOver.current = false;
-			});
+			};
+
+			parentRef.current.addEventListener("mouseenter", onMouseEnter);
+			parentRef.current.addEventListener("mouseleave", onMouseLeave);
 		}
 		const onKeyDown = (e) => {
 			if (isMouseOver.current && e.keyCode === 107) {
@@ -44,6 +45,10 @@ const Board = () => {
 		window.addEventListener("keydown", onKeyDown);
 		return () => {
 			window.removeEventListener("keydown", onKeyDown);
+			if (parentRef.current) {
+				parentRef.current.removeEventListener("mouseenter", onMouseEnter);
+				parentRef.current.removeEventListener("mouseleave", onMouseLeave);
+			}
 		};
 	}, []);
 

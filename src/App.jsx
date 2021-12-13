@@ -31,6 +31,17 @@ function App() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (showOutput) return;
+		const preventContextMenu = (e) => {
+			e.preventDefault();
+		};
+		document.addEventListener("contextmenu", preventContextMenu);
+		return () => {
+			document.removeEventListener("contextmenu", preventContextMenu);
+		};
+	}, [showOutput]);
+
 	const handleFileChange = async (file, cb) => {
 		try {
 			if (IMAGE_FORMATS.includes(file.type)) {
