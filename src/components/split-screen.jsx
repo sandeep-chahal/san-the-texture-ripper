@@ -35,6 +35,7 @@ function SplitScreen({ children, limit = 100 }) {
 	return (
 		<div className={`flex h-full flex-row`}>
 			<div
+				className="overflow-hidden"
 				style={{
 					width: `${slide}px`,
 				}}

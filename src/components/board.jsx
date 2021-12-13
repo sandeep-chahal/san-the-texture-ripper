@@ -44,15 +44,11 @@ const Board = () => {
 		window.addEventListener("keydown", onKeyDown);
 		return () => {
 			window.removeEventListener("keydown", onKeyDown);
-			window.removeEventListener("keyup", onKeyUp);
 		};
 	}, []);
 
 	return (
-		<div
-			className="w-full h-full overflow-auto bg-primary2 text-primary2"
-			ref={parentRef}
-		>
+		<div className="w-full h-full bg-primary2 text-primary2" ref={parentRef}>
 			<div className="flex items-start flex-wrap h-max max-w-full">
 				{!resultsArray.length ? (
 					<div className="w-full mt-32 flex flex-col items-center justify-center">
