@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import WarningSvg from "./svg/warning-svg";
 
 const ResetPopup = ({ close }) => {
+	const handleKeyPress = (e) => {
+		if (e.key === "Escape") close();
+	};
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyPress);
+		return () => {
+			window.removeEventListener("keydown", handleKeyPress);
+		};
+	}, []);
 	return (
 		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center z-50">
 			<div className="bg-primary1 py-4 px-5 rounded-md">
@@ -25,6 +35,7 @@ const ResetPopup = ({ close }) => {
 				</button>
 				<button
 					onClick={close}
+					title="Close (Esc)"
 					className="bg-primary2 text-primary2 p-2 px-4 w-full mt-1"
 				>
 					No

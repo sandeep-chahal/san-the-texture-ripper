@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { toPng } from "html-to-image";
 import Resizable from "react-resizable-box";
 import { useStore } from "../store";
@@ -35,6 +35,17 @@ function Output({ onClose }) {
 				console.error("oops, something went wrong!", error);
 			});
 	};
+
+	const handleKeyPress = (e) => {
+		if (e.key === "Escape") onClose();
+	};
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyPress);
+		return () => {
+			window.removeEventListener("keydown", handleKeyPress);
+		};
+	}, []);
 
 	return (
 		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -78,6 +89,7 @@ function Output({ onClose }) {
 				<div className="p-2 bg-primary2 border-primary1 mt-auto flex justify-between">
 					<button
 						onClick={onClose}
+						title="Close (Esc)"
 						className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center"
 					>
 						{/* close icon */}
@@ -86,6 +98,11 @@ function Output({ onClose }) {
 					</button>
 					<button
 						onClick={handleExport}
+						ref={(ref) => {
+							if (ref) {
+								ref.focus();
+							}
+						}}
 						className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center"
 					>
 						{/* export icon */}

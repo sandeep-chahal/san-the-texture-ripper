@@ -1,9 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect } from "react";
 import DeleteSvg from "../components/svg/delete-svg";
 import { useStore } from "../store";
 
 function WhatsNew() {
 	const { setShowWhatsNew } = useStore();
+
+	const handleKeyPress = (e) => {
+		if (e.key === "Escape") setShowWhatsNew(false);
+	};
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyPress);
+		return () => {
+			window.removeEventListener("keydown", handleKeyPress);
+		};
+	}, []);
 
 	return (
 		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">

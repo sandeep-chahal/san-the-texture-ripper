@@ -46,6 +46,12 @@ const Editor = (props) => {
 	}, [file]);
 	useEffect(() => {
 		const onKeyDown = (e) => {
+			if (e.key === "c") {
+				handleDeleteLayer(activeLayer);
+			}
+			if (e.key === "n") {
+				addLayer();
+			}
 			if (e.keyCode === 17 && disabled && activeLayer) {
 				setDisabled(false);
 			}
@@ -351,6 +357,7 @@ const Editor = (props) => {
 								</span>
 								{/* delete icon */}
 								<div
+									title="Delete Layer (C)"
 									className="inline-block opacity-0 group-hover:opacity-100"
 									onClick={() => handleDeleteLayer(key)}
 								>

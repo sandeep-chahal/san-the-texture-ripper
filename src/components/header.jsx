@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useStore } from "../store";
 import useWindowSize from "../hooks/useWIndowSize";
 import DesktopNav from "./desktop-nav";
@@ -10,9 +10,26 @@ const Header = ({ onExport, handleFileChange }) => {
 		useStore();
 	const { width, height } = useWindowSize();
 	const [resetPopup, setResetPopup] = useState(false);
+	const importRef = useRef(null);
+
+	const handleKeyPress = (e) => {
+		if (e.key === "r") setResetPopup(true);
+		if (e.key === "e") onExport();
+		if (e.key === "i" && importRef.current) importRef.current.click();
+		if (e.key === "w") setWarpRealTime((w) => !w);
+	};
+
+	useEffect(() => {
+		window.addEventListener("keypress", handleKeyPress);
+		return () => {
+			window.removeEventListener("keypress", handleKeyPress);
+		};
+	});
+
 	const handleReset = () => {
 		setResetPopup(true);
 	};
+
 	return (
 		<header className="bg-primary1 text-primary2 p-3 border-b-2 border-primary1 h-16 flex items-center justify-between">
 			<h1 className=" font-squada text-3xl flex justify-center">
@@ -29,6 +46,7 @@ const Header = ({ onExport, handleFileChange }) => {
 					handleReset={handleReset}
 					setFile={setFile}
 					handleFileChange={handleFileChange}
+					importRef={importRef}
 				/>
 			) : (
 				<MobileNav

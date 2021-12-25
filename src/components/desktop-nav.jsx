@@ -17,6 +17,7 @@ const DesktopNav = ({
 	setShowWhatsNew,
 	warpRealTime,
 	setFile,
+	importRef,
 }) => {
 	const [showMore, setShowMore] = useState(false);
 
@@ -50,7 +51,9 @@ const DesktopNav = ({
 			/>
 			<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
 				<label
+					ref={importRef}
 					htmlFor="import-files"
+					title="Import Image (I)"
 					className="cursor-pointer w-full h-full flex items-center justify-center"
 				>
 					{/* import icon */}
@@ -60,6 +63,7 @@ const DesktopNav = ({
 			</li>
 			<li
 				onClick={onExport}
+				title="Export (E)"
 				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 			>
 				{/* export icon */}
@@ -68,6 +72,7 @@ const DesktopNav = ({
 			</li>
 			<li
 				onClick={() => setWarpRealTime((s) => !s)}
+				title="Turn On/Off Real Time Warping (W)"
 				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 			>
 				{/* engine icon */}
@@ -81,6 +86,7 @@ const DesktopNav = ({
 			</li>
 			<li
 				onClick={handleReset}
+				title="Reset (R)"
 				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 			>
 				{/* reset icon */}
