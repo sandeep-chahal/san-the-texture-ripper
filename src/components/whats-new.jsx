@@ -34,6 +34,26 @@ function WhatsNew() {
 				<div className="w-4/5 mx-auto mt-4">
 					<ul className="text-2xl  flex-wrap">
 						<li className="list-disc mr-4">
+							<h2 className="">Added Key Shortcuts</h2>
+							<ul className="flex mb-4 text-xl">
+								<div>
+									<li>I: Import Image</li>
+									<li>E: Export Image</li>
+									<li>R: Reset</li>
+									<li>W: Turn Warp Real Time On/Off</li>
+								</div>
+								<div>
+									<li>Esc: Close Popups</li>
+									<li>N: Create New Layer</li>
+									<li>C: Delete Active Layer</li>
+								</div>
+							</ul>
+						</li>
+						<li className="list-disc mr-4">
+							<h2 className="mb-4">Added Reset Warning Popup</h2>
+						</li>
+						<li className="h-1 bg-primary3 w-full mb-4"></li>
+						<li className="list-disc mr-4">
 							<h2 className="mb-4">
 								Fixed{" "}
 								<a
@@ -49,6 +69,7 @@ function WhatsNew() {
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Use + and - to zoom in and out</h2>
 						</li>
+						<li className="h-1 bg-primary3 w-full mb-4"></li>
 						<li className="list-disc mr-4">
 							<h2 className="mb-4">Drag and drop image</h2>
 							<img
