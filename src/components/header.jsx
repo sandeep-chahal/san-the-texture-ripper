@@ -3,13 +3,15 @@ import { useStore } from "../store";
 import useWindowSize from "../hooks/useWIndowSize";
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
+import ResetPopup from "./reset-popup";
 
 const Header = ({ onExport, handleFileChange }) => {
 	const { setFile, warpRealTime, setWarpRealTime, setShowWhatsNew } =
 		useStore();
 	const { width, height } = useWindowSize();
+	const [resetPopup, setResetPopup] = useState(false);
 	const handleReset = () => {
-		window.location.reload();
+		setResetPopup(true);
 	};
 	return (
 		<header className="bg-primary1 text-primary2 p-3 border-b-2 border-primary1 h-16 flex items-center justify-between">
@@ -39,6 +41,7 @@ const Header = ({ onExport, handleFileChange }) => {
 					handleFileChange={handleFileChange}
 				/>
 			)}
+			{resetPopup ? <ResetPopup close={() => setResetPopup(false)} /> : null}
 		</header>
 	);
 };
