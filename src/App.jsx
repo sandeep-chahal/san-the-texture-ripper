@@ -6,11 +6,9 @@ import SplitScreen from "./components/split-screen";
 import Editor from "./components/editor";
 import Board from "./components/board";
 import Output from "./components/output";
-import { readImage } from "./utils";
+import { handleFileChange, readFileFromClipboard } from "./utils/file";
 import { useStore } from "./store";
 import WhatsNew from "./components/whats-new";
-
-const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
@@ -20,15 +18,7 @@ function App() {
 		ReactGA.initialize(import.meta.env.VITE_TRACKING_ID);
 		ReactGA.pageview("/");
 		// copy paste image
-		document.onpaste = (e) => {
-			if (e.clipboardData.items.length > 0) {
-				const item = e.clipboardData.items[0];
-				if (item.kind === "file" && IMAGE_FORMATS.includes(item.type)) {
-					const blob = item.getAsFile();
-					handleFileChange(blob);
-				}
-			}
-		};
+		document.onpaste = (e) => readFileFromClipboard(e, setFile);
 	}, []);
 
 	useEffect(() => {
@@ -42,26 +32,13 @@ function App() {
 		};
 	}, [showOutput]);
 
-	const handleFileChange = async (file, cb) => {
-		try {
-			if (IMAGE_FORMATS.includes(file.type)) {
-				const base64File = await readImage(file);
-				setFile(base64File);
-			} else {
-				console.log("FILE TYPE NOT SUPPORTED", file.type);
-			}
-			// clear the file input
-			if (cb) cb();
-		} catch (err) {
-			console.log(err);
-		}
-	};
-
 	return (
 		<div className="font-squada animate-opacity">
 			<Header
 				onExport={() => setShowOutput(true)}
-				handleFileChange={handleFileChange}
+				handleFileChange={(file, clearInput) =>
+					handleFileChange(file, setFile, clearInput)
+				}
 			/>
 			<FileDrop
 				onFrameDragEnter={(event) => {
@@ -71,8 +48,8 @@ function App() {
 				onFrameDrop={(event) => {
 					setDroping(false);
 					const file = event.dataTransfer.files[0];
-					if (file && IMAGE_FORMATS.includes(file.type)) {
-						handleFileChange(file);
+					if (file) {
+						handleFileChange(file, setFile);
 					}
 				}}
 			>

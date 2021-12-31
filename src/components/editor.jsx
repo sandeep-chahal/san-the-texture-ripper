@@ -26,22 +26,33 @@ const Editor = (props) => {
 	const wrapperRef = useRef(null);
 	const parentRef = useRef(null);
 
+	const showImage = (data) => {
+		const ctx = canvas.current.getContext("2d");
+		ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+		canvas.current.width = data.width;
+		canvas.current.height = data.height;
+		ctx.drawImage(data, 0, 0);
+		glfxCanvas.current = fx.canvas();
+		texture.current = glfxCanvas.current.texture(data);
+		glfxCanvas.current.draw(texture.current).update();
+		layers.current = {};
+		totalLayerCount.current = 0;
+		addLayer();
+		drawCropBox();
+	};
+
 	useEffect(() => {
-		if (file && canvas.current) {
-			const img = new Image();
-			img.src = file;
-			img.onload = () => {
-				const ctx = canvas.current.getContext("2d");
-				ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
-				canvas.current.width = img.width;
-				canvas.current.height = img.height;
-				ctx.drawImage(img, 0, 0);
-				glfxCanvas.current = fx.canvas();
-				texture.current = glfxCanvas.current.texture(img);
-				layers.current = {};
-				addLayer();
-				drawCropBox();
-			};
+		if (canvas.current && file) {
+			// if file is base64
+			if (typeof file === "string") {
+				const img = new Image();
+				img.src = file;
+				img.onload = () => showImage(img);
+			}
+			// if file is bitmap
+			else if (typeof file === "object") {
+				showImage(file);
+			}
 		}
 	}, [file]);
 	useEffect(() => {
@@ -125,10 +136,11 @@ const Editor = (props) => {
 
 	useEffect(() => {
 		drawCropBox();
-	}, [file, activeLayer, warpRealTime]);
+	}, [activeLayer, warpRealTime]);
 
 	const drawCropBox = () => {
-		if (file === null || activeLayer == null) return;
+		if (file === null || activeLayer == null || !layers.current[activeLayer])
+			return;
 		svg.current.selectAll("*").remove();
 		const { radius, strokeWidth, opacity } = getSvgSize();
 		line.current = svg.current
@@ -254,6 +266,7 @@ const Editor = (props) => {
 			fakeDim,
 			fakeDim
 		);
+
 		// to remove transparency
 		// get the data till the pixel is transparent on both axis
 		let newWidth = null;
@@ -280,14 +293,22 @@ const Editor = (props) => {
 				newHeight = i;
 			}
 		}
-		if (newWidth === null) newWidth = fakeDim;
-		if (newHeight === null) newHeight = fakeDim;
 
-		const newPixelData = tempCanvasCtx.getImageData(0, 0, newWidth, newHeight);
-		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
-		tempCanvas.width = newWidth;
-		tempCanvas.height = newHeight;
-		tempCanvasCtx.putImageData(newPixelData, 0, 0);
+		if (newWidth != null || newHeight !== null) {
+			newWidth = newWidth || fakeDim;
+			newHeight = newHeight || fakeDim;
+
+			const newPixelData = tempCanvasCtx.getImageData(
+				0,
+				0,
+				newWidth,
+				newHeight
+			);
+			tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
+			tempCanvas.width = newWidth;
+			tempCanvas.height = newHeight;
+			tempCanvasCtx.putImageData(newPixelData, 0, 0);
+		}
 
 		setResults((state) => {
 			const newState = { ...state };
