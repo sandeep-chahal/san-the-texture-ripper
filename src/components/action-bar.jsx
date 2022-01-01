@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { readImage } from "../utils";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
 
 const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
 function ActionBar({ onExport, warp }) {
-	const { setFile, warpRealTime, setWarpRealTime } = useStore();
+	const { setFile, warpRealTime, setWarpRealTime } = useMainStore();
 
 	const handleFileChange = async (e) => {
 		try {

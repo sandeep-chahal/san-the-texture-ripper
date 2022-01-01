@@ -3,12 +3,12 @@ import { toPng } from "html-to-image";
 import Resizable from "react-resizable-box";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
 import CloseSvg from "../components/svg/close-svg";
 import ExportSvg from "../components/svg/export-svg";
 
 function Output({ onClose }) {
-	const { results } = useStore();
+	const { results } = useMainStore();
 	const printComponent = useRef(null);
 	const imgRefs = useRef([]);
 

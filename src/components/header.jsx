@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
 import useWindowSize from "../hooks/useWIndowSize";
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
@@ -7,7 +7,7 @@ import ResetPopup from "./reset-popup";
 
 const Header = ({ onExport, handleFileChange }) => {
 	const { setFile, warpRealTime, setWarpRealTime, setShowWhatsNew } =
-		useStore();
+		useMainStore();
 	const { width, height } = useWindowSize();
 	const [resetPopup, setResetPopup] = useState(false);
 	const importRef = useRef(null);

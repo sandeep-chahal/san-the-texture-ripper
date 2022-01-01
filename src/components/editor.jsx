@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
+import { useEditorStore } from "../store/editor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import * as d3 from "d3";
 import fx from "glfx";
@@ -10,21 +11,25 @@ import AddSvg from "../components/svg/add-svg";
 const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
 
-const Editor = (props) => {
-	const svg = useRef(null);
-	const [disabled, setDisabled] = useState(true);
-	const canvas = useRef();
-	const scale = useRef(1);
-	const line = useRef(null);
-	const { file, setResults, warpRealTime } = useStore();
-	const layers = useRef({});
-	const totalLayerCount = useRef(0);
-	const [activeLayer, setActiveLayer] = useState(null);
-	const glfxCanvas = useRef(null);
-	const texture = useRef(null);
+const Editor = () => {
 	const isMouseOver = useRef(false);
 	const wrapperRef = useRef(null);
 	const parentRef = useRef(null);
+	const [disabled, setDisabled] = useState(true);
+	const svg = useRef(null);
+	const canvas = useRef();
+	const scale = useRef(1);
+	const line = useRef(null);
+
+	const { file, setResults, warpRealTime } = useMainStore();
+	const {
+		layers,
+		totalLayerCount,
+		activeLayer,
+		setActiveLayer,
+		glfxCanvas,
+		texture,
+	} = useEditorStore();
 
 	const showImage = (data) => {
 		const ctx = canvas.current.getContext("2d");
@@ -35,9 +40,8 @@ const Editor = (props) => {
 		glfxCanvas.current = fx.canvas();
 		texture.current = glfxCanvas.current.texture(data);
 		glfxCanvas.current.draw(texture.current).update();
-		layers.current = {};
-		totalLayerCount.current = 0;
-		addLayer();
+
+		if (!activeLayer) addLayer();
 		drawCropBox();
 	};
 

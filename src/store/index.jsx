@@ -34,7 +34,7 @@ export default ({ children }) => {
 	);
 };
 
-export const useStore = () => {
+export const useMainStore = () => {
 	const store = useContext(context);
 	return store;
 };

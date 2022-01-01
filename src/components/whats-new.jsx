@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import DeleteSvg from "../components/svg/delete-svg";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
 
 function WhatsNew() {
-	const { setShowWhatsNew } = useStore();
+	const { setShowWhatsNew } = useMainStore();
 
 	const handleKeyPress = (e) => {
 		if (e.key === "Escape") setShowWhatsNew(false);

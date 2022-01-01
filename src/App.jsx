@@ -7,18 +7,30 @@ import Editor from "./components/editor";
 import Board from "./components/board";
 import Output from "./components/output";
 import { handleFileChange, readFileFromClipboard } from "./utils/file";
-import { useStore } from "./store";
+import { useMainStore } from "./store";
+import { useEditorStore } from "./store/editor";
 import WhatsNew from "./components/whats-new";
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
 	const [droping, setDroping] = useState(false);
-	const { setFile, showWhatsNew } = useStore();
+	const { setFile, showWhatsNew } = useMainStore();
+	const { layers, setActiveLayer, totalLayerCount } = useEditorStore();
+
+	const setNewFile = (file) => {
+		// reset old layers
+		layers.current = {};
+		totalLayerCount.current = 0;
+		setActiveLayer(null);
+		// set new file
+		setFile(file);
+	};
+
 	useEffect(() => {
 		ReactGA.initialize(import.meta.env.VITE_TRACKING_ID);
 		ReactGA.pageview("/");
 		// copy paste image
-		document.onpaste = (e) => readFileFromClipboard(e, setFile);
+		document.onpaste = (e) => readFileFromClipboard(e, setNewFile);
 	}, []);
 
 	useEffect(() => {
@@ -37,7 +49,7 @@ function App() {
 			<Header
 				onExport={() => setShowOutput(true)}
 				handleFileChange={(file, clearInput) =>
-					handleFileChange(file, setFile, clearInput)
+					handleFileChange(file, setNewFile, clearInput)
 				}
 			/>
 			<FileDrop
@@ -49,7 +61,7 @@ function App() {
 					setDroping(false);
 					const file = event.dataTransfer.files[0];
 					if (file) {
-						handleFileChange(file, setFile);
+						handleFileChange(file, setNewFile);
 					}
 				}}
 			>

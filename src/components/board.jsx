@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
 import DeleteSvg from "../components/svg/delete-svg";
 import EmptySvg from "../components/svg/empty-svg";
 
 const Board = () => {
-	const { results, setResults } = useStore();
+	const { results, setResults } = useMainStore();
 	const parentRef = useRef(null);
 	const wrapperRef = useRef(null);
 	const isMouseOver = useRef(null);
