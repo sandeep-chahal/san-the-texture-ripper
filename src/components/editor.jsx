@@ -12,25 +12,26 @@ const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
 
 const Editor = () => {
-	const isMouseOver = useRef(false);
-	const wrapperRef = useRef(null);
-	const parentRef = useRef(null);
-	const [disabled, setDisabled] = useState(true);
-	const svg = useRef(null);
-	const canvas = useRef();
-	const scale = useRef(1);
-	const line = useRef(null);
+	const isMouseOver = useRef(false); // if mouse is over editor
+	const wrapperRef = useRef(null); // transform wrapper(zoom, pan, pinch)
+	const parentRef = useRef(null); // parent/container div
+	const [disabled, setDisabled] = useState(true); // if panning and zooming is disabled / ctrl key is pressed or not
+	const svg = useRef(null); // cropbox svg
+	const canvas = useRef(); // canvas
+	const scale = useRef(1); // zoom scale
+	const line = useRef(null); // cropbox lines/grid lines
 
 	const { file, setResults, warpRealTime } = useMainStore();
 	const {
-		layers,
-		totalLayerCount,
-		activeLayer,
+		layers, // layers object
+		totalLayerCount, //total number of layers
+		activeLayer, // current active layer id
 		setActiveLayer,
-		glfxCanvas,
-		texture,
+		glfxCanvas, //glfx canvas
+		texture, //glfx texture
 	} = useEditorStore();
 
+	// draw newly added image on canvas
 	const showImage = (data) => {
 		const ctx = canvas.current.getContext("2d");
 		ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
@@ -45,6 +46,7 @@ const Editor = () => {
 		drawCropBox();
 	};
 
+	// when new file is imported
 	useEffect(() => {
 		if (canvas.current && file) {
 			// if file is base64
@@ -59,6 +61,8 @@ const Editor = () => {
 			}
 		}
 	}, [file]);
+
+	// handle key events
 	useEffect(() => {
 		const onKeyDown = (e) => {
 			if (e.key === "c") {
@@ -99,6 +103,7 @@ const Editor = () => {
 		};
 	}, [disabled, activeLayer]);
 
+	// add new layer
 	const addLayer = () => {
 		const newLayer = getDefaultLayerConfig();
 		layers.current[newLayer.id] = newLayer;
@@ -110,6 +115,7 @@ const Editor = () => {
 		return {
 			name: `Layer ${++totalLayerCount.current}`,
 			id: uniqueId(),
+			// points -> where new cropbox handles(svg circles) will be drawn initially
 			points: [
 				[radius * 2, radius * 2],
 				[canvas.current.width - radius * 2, radius * 2],
@@ -119,6 +125,7 @@ const Editor = () => {
 		};
 	};
 
+	// mouse events
 	useEffect(() => {
 		const onMouseEnter = () => {
 			isMouseOver.current = true;
@@ -142,6 +149,7 @@ const Editor = () => {
 		drawCropBox();
 	}, [activeLayer, warpRealTime]);
 
+	// draw d3 svg cropbox
 	const drawCropBox = () => {
 		if (file === null || activeLayer == null || !layers.current[activeLayer])
 			return;
@@ -175,13 +183,16 @@ const Editor = () => {
 			.call(
 				d3
 					.drag()
+					// when handles(circles) are dragged
 					.on("drag", function (d) {
+						// check if new position is within canvas
 						if (
 							d.x > 0 &&
 							d.x < canvas.current.width &&
 							d.y > 0 &&
 							d.y < canvas.current.height
 						) {
+							// update points
 							d3.select(this).attr(
 								"transform",
 								"translate(" + d.x + "," + d.y + ")"
@@ -200,6 +211,7 @@ const Editor = () => {
 			);
 
 		updatePerspectiveGrid();
+		// draw cropbox lines/grid
 		function updatePerspectiveGrid() {
 			const points = layers.current[activeLayer].points;
 			const verticalLines1 = getMidPointArray(points[0], points[3]);
@@ -216,6 +228,7 @@ const Editor = () => {
 			});
 		}
 
+		// get mid point of a line/two points
 		function midPoint(x1, y1, x2, y2) {
 			return [(x1 + x2) / 2, (y1 + y2) / 2];
 		}
@@ -231,9 +244,11 @@ const Editor = () => {
 		}
 	};
 
+	// perform warping using glfx library
 	const updateResultGLFX = () => {
 		// opencv works better but its ~25MB :(
 		if (!activeLayer || !layers.current[activeLayer]) return;
+		// get cropbox points
 		let points = layers.current[activeLayer].points;
 		let width = Math.max(
 			points[1][0] - points[0][0],
@@ -243,6 +258,7 @@ const Editor = () => {
 			points[3][1] - points[0][1],
 			points[2][1] - points[1][1]
 		);
+		// min height and width must be 200px
 		if (width < 200 || height < 200) {
 			let diff = Math.max(200 - width, 200 - height);
 			width += diff;
@@ -250,12 +266,16 @@ const Editor = () => {
 		}
 		// algorithm works better when width and height same
 		const fakeDim = Math.max(width, height);
+		// flatten the array
 		points = points.reduce((pV, cV) => [...pV, ...cV], []);
 		const dstPoints = [0, 0, fakeDim, 0, fakeDim, fakeDim, 0, fakeDim];
+		// warp
 		glfxCanvas.current
 			.draw(texture.current)
 			.perspective(points, dstPoints)
 			.update();
+
+		// draw result to temp canvas with fakeDim
 		tempCanvas.width = fakeDim;
 		tempCanvas.height = fakeDim;
 		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
@@ -272,11 +292,12 @@ const Editor = () => {
 		);
 
 		// to remove transparency
-		// get the data till the pixel is transparent on both axis
+		// get the new width and height till the pixel is transparent on both axis
 		let newWidth = null;
 		let newHeight = null;
 		for (let i = 0; i < fakeDim; i++) {
 			const xPixelValue = tempCanvasCtx.getImageData(i, 0, 1, 1).data;
+			// if current pixel is transparent
 			if (
 				xPixelValue[0] === 0 &&
 				xPixelValue[1] === 0 &&
@@ -286,7 +307,9 @@ const Editor = () => {
 			) {
 				newWidth = i;
 			}
+
 			const yPixelValue = tempCanvasCtx.getImageData(0, i, 1, 1).data;
+			// if current pixel is transparent
 			if (
 				yPixelValue[0] === 0 &&
 				yPixelValue[1] === 0 &&
@@ -296,8 +319,9 @@ const Editor = () => {
 			) {
 				newHeight = i;
 			}
+			if (newWidth !== null && newHeight !== null) break;
 		}
-
+		// if there was transparent pixels
 		if (newWidth != null || newHeight !== null) {
 			newWidth = newWidth || fakeDim;
 			newHeight = newHeight || fakeDim;
@@ -326,6 +350,8 @@ const Editor = () => {
 			return newState;
 		});
 	};
+
+	// delete layer
 	const handleDeleteLayer = (id) => {
 		const keys = Object.keys(layers.current);
 		if (keys.length === 1) return;
@@ -342,6 +368,7 @@ const Editor = () => {
 
 	const lerp = (x, y, a) => x * (1 - a) + y * a;
 
+	// calculate handle(circle) radius and lines width based on canvas size and zoom
 	const getSvgSize = () => {
 		const rMinSize = 2;
 		const rMaxSize = 20;
@@ -362,8 +389,8 @@ const Editor = () => {
 				disabled ? "cursor-default" : "cursor-grab"
 			}`}
 			ref={parentRef}
-			// onKeyPress={console.log}
 		>
+			{/* show layers */}
 			{Object.keys(layers.current).length ? (
 				<div className="p-1 px-2 flex items-start text-primary2">
 					<div className="flex overflow-x-auto scroll-bar-1">
@@ -400,7 +427,7 @@ const Editor = () => {
 					</div>
 				</div>
 			) : null}
-
+			{/* pan and zoom components */}
 			<TransformWrapper
 				ref={wrapperRef}
 				scale={scale.current}
@@ -415,7 +442,9 @@ const Editor = () => {
 			>
 				<TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
 					<div>
+						{/* actual canvas */}
 						<canvas ref={canvas}></canvas>
+						{/* cropbox */}
 						<svg id="svg" className="absolute top-0 left-0 w-full h-full">
 							<g
 								ref={(ref) => {
