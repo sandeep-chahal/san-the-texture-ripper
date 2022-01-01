@@ -83,7 +83,7 @@ function Output({ onClose }) {
 												imgRefs.current[index] = ref;
 											}
 										}}
-										className="w-full h-full inline-block pointer-events-none"
+										className="inline-block pointer-events-none"
 										src={data.result}
 									/>
 								</Resizable>

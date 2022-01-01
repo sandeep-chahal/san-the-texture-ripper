@@ -15,7 +15,7 @@ const Editor = () => {
 	const isMouseOver = useRef(false); // if mouse is over editor
 	const wrapperRef = useRef(null); // transform wrapper(zoom, pan, pinch)
 	const parentRef = useRef(null); // parent/container div
-	const [disabled, setDisabled] = useState(true); // if panning and zooming is disabled / ctrl key is pressed or not
+	const [disabled, setDisabled] = useState(false); // if panning and zooming is disabled / ctrl key is pressed or not
 	const canvas = useRef(); // canvas
 	const scale = useRef(1); // zoom scale
 	const cropBox = useRef(null);
@@ -70,9 +70,6 @@ const Editor = () => {
 			if (e.key === "n") {
 				addLayer();
 			}
-			if (e.keyCode === 17 && disabled && activeLayer) {
-				setDisabled(false);
-			}
 			if ((isMouseOver.current && e.keyCode === 107) || e.keyCode === 187) {
 				// console.log("zoom in");
 				wrapperRef.current.zoomIn();
@@ -88,17 +85,10 @@ const Editor = () => {
 				if (cropBox.current) cropBox.current.drawCropBox();
 			}
 		};
-		const onKeyUp = (e) => {
-			if (e.keyCode === 17) {
-				setDisabled(true);
-			}
-		};
 
 		window.addEventListener("keydown", onKeyDown);
-		window.addEventListener("keyup", onKeyUp);
 		return () => {
 			window.removeEventListener("keydown", onKeyDown);
-			window.removeEventListener("keyup", onKeyUp);
 		};
 	}, [disabled, activeLayer]);
 
@@ -288,12 +278,7 @@ const Editor = () => {
 	};
 
 	return (
-		<div
-			className={`h-full dot-pattern ${
-				disabled ? "cursor-default" : "cursor-grab"
-			}`}
-			ref={parentRef}
-		>
+		<div className={`h-full dot-pattern`} ref={parentRef}>
 			{/* show layers */}
 			{Object.keys(layers.current).length ? (
 				<div className="p-1 px-2 flex items-start text-primary2">
@@ -342,6 +327,15 @@ const Editor = () => {
 				onZoom={(ref) => {
 					scale.current = ref.state.scale;
 					if (cropBox.current) cropBox.current.drawCropBox();
+				}}
+				onPanningStart={(ref, e) => {
+					// dont pan if using left click without ctrl key
+					// and pan if using other mouse button (e.g middle button, right button)
+					if (e.which === 1 && !e.ctrlKey) setDisabled(true);
+					else setDisabled(false);
+				}}
+				onPanningStop={(ref) => {
+					setDisabled(false);
 				}}
 			>
 				<TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>

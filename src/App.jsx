@@ -10,12 +10,24 @@ import { handleFileChange, readFileFromClipboard } from "./utils/file";
 import { useMainStore } from "./store";
 import { useEditorStore } from "./store/editor";
 import WhatsNew from "./components/whats-new";
+import useWindowSize from "./hooks/useWindowSize";
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
-	const [droping, setDroping] = useState(false);
+	const [dropping, setDropping] = useState(false);
 	const { setFile, showWhatsNew } = useMainStore();
 	const { layers, setActiveLayer, totalLayerCount } = useEditorStore();
+	const { width, height } = useWindowSize();
+	const [splitType, setSplitType] = useState("vertical");
+
+	useEffect(() => {
+		if (width < 800 && splitType === "vertical") {
+			setSplitType("horizontal");
+		}
+		if (width > 800 && splitType === "horizontal") {
+			setSplitType("vertical");
+		}
+	}, [width]);
 
 	const setNewFile = (file) => {
 		// reset old layers
@@ -54,11 +66,11 @@ function App() {
 			/>
 			<FileDrop
 				onFrameDragEnter={(event) => {
-					setDroping(true);
+					setDropping(true);
 				}}
-				onFrameDragLeave={(event) => setDroping(false)}
+				onFrameDragLeave={(event) => setDropping(false)}
 				onFrameDrop={(event) => {
-					setDroping(false);
+					setDropping(false);
 					const file = event.dataTransfer.files[0];
 					if (file) {
 						handleFileChange(file, setNewFile);
@@ -67,10 +79,10 @@ function App() {
 			>
 				<section
 					className={`split-screen-parent overflow-hidden ${
-						droping ? "opacity-90" : ""
+						dropping ? "opacity-90" : ""
 					}`}
 				>
-					<SplitScreen split="vertical">
+					<SplitScreen type={splitType} width={width} height={height}>
 						<Board />
 						<Editor />
 					</SplitScreen>
