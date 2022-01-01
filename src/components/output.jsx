@@ -1,39 +1,41 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toPng } from "html-to-image";
 import Resizable from "react-resizable-box";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 import { useStore } from "../store";
 import CloseSvg from "../components/svg/close-svg";
 import ExportSvg from "../components/svg/export-svg";
 
-const parseResults = (results) => {
-	if (Object.keys(results || {}).length === 0) {
-		return {};
-	}
-	const sizes = {};
-	Object.keys(results).forEach((key) => {
-		sizes[key] = [results[key].width, results[key].height];
-	});
-	return sizes;
-};
-
 function Output({ onClose }) {
 	const { results } = useStore();
-	const [sizes, setSizes] = useState(() => parseResults(results));
 	const printComponent = useRef(null);
+	const imgRefs = useRef([]);
 
-	const handleExport = () => {
-		toPng(printComponent.current)
-			.then((dataUrl) => {
-				var link = document.createElement("a");
-				link.download = "result.png";
-				link.href = dataUrl;
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			})
-			.catch(function (error) {
-				console.error("oops, something went wrong!", error);
-			});
+	const downloadZip = async () => {
+		try {
+			var zip = new JSZip();
+
+			await Promise.all(
+				imgRefs.current.map(async (ref, index) => {
+					const dataUrl = await toPng(ref);
+					zip.file(`${index}.png`, dataUrl.split("base64,")[1], {
+						base64: true,
+					});
+				})
+			);
+			saveAs(
+				await zip.generateAsync({ type: "blob" }),
+				`Results ${Date.now()}.zip`
+			);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleExport = async () => {
+		const dataURl = await toPng(printComponent.current);
+		saveAs(dataURl, `Results ${Date.now()}.png`);
 	};
 
 	const handleKeyPress = (e) => {
@@ -63,7 +65,7 @@ function Output({ onClose }) {
 					<div ref={printComponent} className="w-max max-w-full flex flex-wrap">
 						{Object.keys(results || {}).map((key, index) => {
 							const data = results[key];
-							const [width, height] = sizes[key];
+							const [width, height] = [results[key].width, results[key].height];
 							return (
 								<Resizable
 									width={width}
@@ -76,6 +78,11 @@ function Output({ onClose }) {
 									minWidth={200}
 								>
 									<img
+										ref={(ref) => {
+											if (ref) {
+												imgRefs.current[index] = ref;
+											}
+										}}
 										className="w-full h-full inline-block pointer-events-none"
 										src={data.result}
 									/>
@@ -96,19 +103,31 @@ function Output({ onClose }) {
 						<CloseSvg />
 						Close
 					</button>
-					<button
-						onClick={handleExport}
-						ref={(ref) => {
-							if (ref) {
-								ref.focus();
-							}
-						}}
-						className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center"
-					>
-						{/* export icon */}
-						<ExportSvg />
-						Export
-					</button>
+					<div className="flex">
+						<button
+							title="Export all textures separately in zip file"
+							onClick={downloadZip}
+							className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center mr-2"
+						>
+							{/* export icon */}
+							<ExportSvg />
+							Export Zip
+						</button>
+						<button
+							title="Export one big single texture"
+							onClick={handleExport}
+							ref={(ref) => {
+								if (ref) {
+									ref.focus();
+								}
+							}}
+							className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center"
+						>
+							{/* export icon */}
+							<ExportSvg />
+							Export Png
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
