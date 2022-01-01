@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useMainStore } from "../store";
-import useWindowSize from "../hooks/useWIndowSize";
+import useWindowSize from "../hooks/useWinSize";
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
 import ResetPopup from "./reset-popup";

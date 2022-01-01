@@ -10,7 +10,7 @@ import { handleFileChange, readFileFromClipboard } from "./utils/file";
 import { useMainStore } from "./store";
 import { useEditorStore } from "./store/editor";
 import WhatsNew from "./components/whats-new";
-import useWindowSize from "./hooks/useWindowSize";
+import useWindowSize from "./hooks/useWinSize";
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
