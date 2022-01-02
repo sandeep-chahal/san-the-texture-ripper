@@ -19,8 +19,8 @@ function WhatsNew() {
 	return (
 		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
 			<div
-				style={{ width: "60%", height: "90%" }}
-				className="relative bg-primary2 text-primary2 flex flex-col overflow-auto"
+				style={{ height: "90%" }}
+				className="relative bg-primary2 text-primary2 flex flex-col overflow-auto w-11/12 md:w-3/4"
 			>
 				<div className="">
 					<h1 className="text-center mt-4 text-4xl">What's New</h1>
@@ -35,15 +35,15 @@ function WhatsNew() {
 					<ul className="text-2xl  flex-wrap">
 						<li className="list-disc mr-4">
 							<h2 className="">Added Key Shortcuts</h2>
-							<ul className="flex mb-4 text-xl">
+							<ul className="flex mb-4 text-xl flex-col md:flex-row">
 								<div>
 									<li>I: Import Image</li>
 									<li>E: Export Image</li>
 									<li>R: Reset</li>
-									<li>W: Turn Warp Real Time On/Off</li>
-								</div>
-								<div>
 									<li>Esc: Close Popups</li>
+								</div>
+								<div className="md:ml-20">
+									<li>W: Turn Warp Real Time On/Off</li>
 									<li>N: Create New Layer</li>
 									<li>C: Delete Active Layer</li>
 								</div>
