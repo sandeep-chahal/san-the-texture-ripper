@@ -34,6 +34,7 @@ export default defineConfig({
 				],
 			},
 			registerType: "autoUpdate",
+			includeAssets: ["opencv.js"],
 			workbox: {
 				globPatterns: ["**/*.{js,css,ico,html,svg,png}"],
 				cleanupOutdatedCaches: true,

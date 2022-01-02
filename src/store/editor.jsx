@@ -8,6 +8,7 @@ const EditorStore = ({ children }) => {
 	const [activeLayer, setActiveLayer] = useState(null);
 	const glfxCanvas = useRef(null);
 	const texture = useRef(null);
+	const opencvImg = useRef(null);
 
 	return (
 		<editorContext.Provider
@@ -18,6 +19,7 @@ const EditorStore = ({ children }) => {
 				setActiveLayer,
 				glfxCanvas,
 				texture,
+				opencvImg,
 			}}
 		>
 			{children}

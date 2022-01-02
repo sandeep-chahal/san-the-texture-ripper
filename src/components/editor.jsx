@@ -3,6 +3,7 @@ import { useMainStore } from "../store";
 import { useEditorStore } from "../store/editor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import fx from "glfx";
+import { useOpenCv } from "opencv-react";
 import { uniqueId } from "../utils";
 import DeleteSvg from "../components/svg/delete-svg";
 import AddSvg from "../components/svg/add-svg";
@@ -19,8 +20,10 @@ const Editor = () => {
 	const canvas = useRef(); // canvas
 	const scale = useRef(1); // zoom scale
 	const cropBox = useRef(null);
+	const { cv } = useOpenCv();
 
-	const { file, setResults, warpRealTime } = useMainStore();
+	const { file, setResults, warpRealTime, warpLibrary, cvStatus } =
+		useMainStore();
 	const {
 		layers, // layers object
 		totalLayerCount, //total number of layers
@@ -28,6 +31,7 @@ const Editor = () => {
 		setActiveLayer,
 		glfxCanvas, //glfx canvas
 		texture, //glfx texture
+		opencvImg, // opencv image
 	} = useEditorStore();
 
 	// draw newly added image on canvas
@@ -40,6 +44,7 @@ const Editor = () => {
 		glfxCanvas.current = fx.canvas();
 		texture.current = glfxCanvas.current.texture(data);
 		glfxCanvas.current.draw(texture.current).update();
+		if (cv) opencvImg.current = cv.imread(canvas.current);
 
 		if (!activeLayer) addLayer();
 		if (cropBox.current) cropBox.current.drawCropBox();
@@ -136,12 +141,12 @@ const Editor = () => {
 
 	useEffect(() => {
 		if (cropBox.current) cropBox.current.drawCropBox();
-	}, [activeLayer, warpRealTime]);
+	}, [activeLayer, warpRealTime, warpLibrary]);
 
 	// perform warping using glfx library
 	const updateResultGLFX = () => {
-		// opencv works better but its ~25MB :(
 		if (!activeLayer || !layers.current[activeLayer]) return;
+		const ts1 = performance.now();
 		// get cropbox points
 		let points = layers.current[activeLayer].points;
 		let width = Math.max(
@@ -243,6 +248,7 @@ const Editor = () => {
 			};
 			return newState;
 		});
+		console.log(performance.now() - ts1);
 	};
 
 	// delete layer
@@ -275,6 +281,68 @@ const Editor = () => {
 		else if (size * scale.current > 500) radius *= 0.8;
 		const opacity = Math.max(lerp(0.6, 1, 1 - scale.current + 1), 0.6);
 		return { radius, strokeWidth: radius / 2, opacity };
+	};
+
+	const updateResultOpencv = () => {
+		// http://www.recompile.in/2019/11/image-perspective-correction-using.html
+		if (!activeLayer || !layers.current[activeLayer] || !cv) return;
+
+		let points = layers.current[activeLayer].points;
+
+		let width = Math.max(
+			points[1][0] - points[0][0],
+			points[2][0] - points[3][0]
+		);
+		let height = Math.max(
+			points[3][1] - points[0][1],
+			points[2][1] - points[1][1]
+		);
+		// min height and width must be 200px
+		if (width < 200 || height < 200) {
+			let diff = Math.max(200 - width, 200 - height);
+			width += diff;
+			height += diff;
+		}
+		// flatten the array
+		points = points.reduce((pV, cV) => [...pV, ...cV], []);
+		const dstPoints = [0, 0, height, 0, height, width, 0, width];
+
+		let dst = new cv.Mat();
+		let dsize = new cv.Size(height, width);
+		let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, points);
+		let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, dstPoints);
+		let M = cv.getPerspectiveTransform(srcTri, dstTri);
+		cv.warpPerspective(
+			opencvImg.current,
+			dst,
+			M,
+			dsize,
+			cv.INTER_LINEAR,
+			cv.BORDER_CONSTANT,
+			new cv.Scalar()
+		);
+
+		tempCanvas.width = dsize.width;
+		tempCanvas.height = dsize.height;
+		cv.imshow(tempCanvas, dst);
+		const base64 = tempCanvas.toDataURL();
+
+		setResults((state) => {
+			const newState = { ...state };
+			newState[activeLayer] = {
+				result: base64,
+				width,
+				height,
+				id: activeLayer,
+				name: layers.current[activeLayer].name,
+			};
+			return newState;
+		});
+
+		dst.delete();
+		M.delete();
+		srcTri.delete();
+		dstTri.delete();
 	};
 
 	return (
@@ -345,7 +413,9 @@ const Editor = () => {
 						<CropBox
 							canvas={canvas}
 							layers={layers}
-							updateResultGLFX={updateResultGLFX}
+							updateResults={
+								warpLibrary === "glfx" ? updateResultGLFX : updateResultOpencv
+							}
 							ref={cropBox}
 							file={file}
 							activeLayer={activeLayer}

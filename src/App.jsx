@@ -55,7 +55,6 @@ function App() {
 			document.removeEventListener("contextmenu", preventContextMenu);
 		};
 	}, [showOutput]);
-
 	return (
 		<div className="font-squada animate-opacity">
 			<Header

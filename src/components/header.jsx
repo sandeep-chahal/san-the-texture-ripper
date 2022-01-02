@@ -4,13 +4,21 @@ import useWindowSize from "../hooks/useWinSize";
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
 import ResetPopup from "./reset-popup";
+import { useOpenCv } from "opencv-react";
 
 const Header = ({ onExport, handleFileChange }) => {
-	const { setFile, warpRealTime, setWarpRealTime, setShowWhatsNew } =
-		useMainStore();
+	const {
+		setFile,
+		warpRealTime,
+		setWarpRealTime,
+		setShowWhatsNew,
+		warpLibrary,
+		setWarpLibrary,
+	} = useMainStore();
 	const { width, height } = useWindowSize();
 	const [resetPopup, setResetPopup] = useState(false);
 	const importRef = useRef(null);
+	const { loaded } = useOpenCv();
 
 	const handleKeyPress = (e) => {
 		if (e.key === "r") setResetPopup(true);
@@ -47,6 +55,9 @@ const Header = ({ onExport, handleFileChange }) => {
 					setFile={setFile}
 					handleFileChange={handleFileChange}
 					importRef={importRef}
+					warpLibrary={warpLibrary}
+					setWarpLibrary={setWarpLibrary}
+					cvLoaded={loaded}
 				/>
 			) : (
 				<MobileNav
@@ -56,7 +67,11 @@ const Header = ({ onExport, handleFileChange }) => {
 					setShowWhatsNew={setShowWhatsNew}
 					handleReset={handleReset}
 					setFile={setFile}
+					importRef={importRef}
 					handleFileChange={handleFileChange}
+					warpLibrary={warpLibrary}
+					setWarpLibrary={setWarpLibrary}
+					cvLoaded={loaded}
 				/>
 			)}
 			{resetPopup ? <ResetPopup close={() => setResetPopup(false)} /> : null}

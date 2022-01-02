@@ -7,7 +7,6 @@ import EngineSvg from "../components/svg/engine-svg";
 import ExportSvg from "../components/svg/export-svg";
 import ImportSvg from "../components/svg/import-svg";
 import InstallSvg from "./svg/install-svg";
-import MoreSvg from "./svg/more-svg";
 
 const MobileNav = ({
 	handleFileChange,
@@ -16,6 +15,9 @@ const MobileNav = ({
 	handleReset,
 	setShowWhatsNew,
 	warpRealTime,
+	warpLibrary,
+	setWarpLibrary,
+	cvLoaded,
 }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 
@@ -72,6 +74,22 @@ const MobileNav = ({
 						{/* export icon */}
 						<ExportSvg />
 						Export
+					</li>
+					<li
+						onClick={() => setWarpLibrary("glfx")}
+						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full ${
+							warpLibrary === "glfx" && "bg-primary2"
+						}`}
+					>
+						GLFX
+					</li>
+					<li
+						onClick={() => setWarpLibrary("opencv")}
+						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full ${
+							warpLibrary === "opencv" && "bg-primary2"
+						}`}
+					>
+						OpenCV
 					</li>
 					<li
 						onClick={() => setWarpRealTime((s) => !s)}

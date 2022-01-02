@@ -3,7 +3,7 @@ import * as d3 from "d3";
 
 const CropBox = forwardRef(
 	(
-		{ canvas, layers, updateResultGLFX, activeLayer, getSvgSize, warpRealTime },
+		{ canvas, layers, updateResults, activeLayer, getSvgSize, warpRealTime },
 		ref
 	) => {
 		const svg = useRef(null); // cropbox svg
@@ -62,11 +62,11 @@ const CropBox = forwardRef(
 								] = [d.x, d.y];
 								updatePerspectiveGrid();
 								if (!warpRealTime) return;
-								updateResultGLFX();
+								updateResults();
 							}
 						})
 						.on("end", () => {
-							updateResultGLFX();
+							updateResults();
 						})
 				);
 			updatePerspectiveGrid();

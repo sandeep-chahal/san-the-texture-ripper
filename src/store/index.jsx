@@ -7,9 +7,19 @@ export default ({ children }) => {
 	const [warpRealTime, setWarpRealTime] = useState(false);
 	const [showWhatsNew, setShowWhatsNew] = useState(false);
 	const [results, setResults] = useState({});
+	const [warpLibrary, changeWarpLibrary] = useState("glfx");
 
-	// show whats new if the user has not seen it before
+	const setWarpLibrary = (library) => {
+		localStorage.setItem("warp_library", library);
+		changeWarpLibrary(library);
+	};
+
 	useEffect(() => {
+		// last selected library
+		const library = localStorage.getItem("warp_library");
+		if (library === "glfx" || library === "opencv") changeWarpLibrary(library);
+
+		// show whats new if the user has not seen it before
 		const lastUpdate = localStorage.getItem("lastUpdate");
 		if (lastUpdate !== import.meta.env.VITE_LAST_UPDATE) {
 			setShowWhatsNew(true);
@@ -27,6 +37,8 @@ export default ({ children }) => {
 				setShowWhatsNew,
 				warpRealTime,
 				setWarpRealTime,
+				warpLibrary,
+				setWarpLibrary,
 			}}
 		>
 			{children}

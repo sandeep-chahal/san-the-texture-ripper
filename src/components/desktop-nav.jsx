@@ -18,6 +18,9 @@ const DesktopNav = ({
 	warpRealTime,
 	setFile,
 	importRef,
+	warpLibrary,
+	setWarpLibrary,
+	cvLoaded,
 }) => {
 	const [showMore, setShowMore] = useState(false);
 
@@ -69,6 +72,25 @@ const DesktopNav = ({
 				{/* export icon */}
 				<ExportSvg />
 				Export
+			</li>
+			<li
+				title="Warping Library"
+				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+			>
+				<select
+					value={warpLibrary}
+					className="p-1 bg-primary1 outline-none"
+					onChange={(e) => setWarpLibrary(e.target.value)}
+				>
+					<option value="glfx">GLFX</option>
+					<option
+						title={!cvLoaded ? "downloading" : ""}
+						disabled={!cvLoaded}
+						value="opencv"
+					>
+						OpenCV
+					</option>
+				</select>
 			</li>
 			<li
 				onClick={() => setWarpRealTime((s) => !s)}
