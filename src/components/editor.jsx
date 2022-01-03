@@ -8,6 +8,7 @@ import { uniqueId } from "../utils";
 import DeleteSvg from "../components/svg/delete-svg";
 import AddSvg from "../components/svg/add-svg";
 import CropBox from "./cropbox";
+import Tabs from "./tabs";
 
 const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
@@ -69,12 +70,12 @@ const Editor = () => {
 	// handle key events
 	useEffect(() => {
 		const onKeyDown = (e) => {
-			if (e.key === "c") {
-				handleDeleteLayer(activeLayer);
-			}
-			if (e.key === "n") {
-				addLayer();
-			}
+			// if (e.key === "c") {
+			// 	handleDeleteLayer(activeLayer);
+			// }
+			// if (e.key === "n") {
+			// 	addLayer();
+			// }
 			if (
 				(isMouseOver.current && e.keyCode === 107) ||
 				e.keyCode === 187
@@ -266,15 +267,20 @@ const Editor = () => {
 	// delete layer
 	const handleDeleteLayer = (id) => {
 		const keys = Object.keys(layers.current);
+
+		// if there's only one layer then dont delete
 		if (keys.length === 1) return;
+
 		delete layers.current[id];
 		setResults((state) => {
 			const newState = { ...state };
 			delete newState[id];
 			return newState;
 		});
+		// if user deleted active layer then set active layer to first layer
+		// or to second if first layer is deleted
 		if (activeLayer === id) {
-			setActiveLayer(keys[0]);
+			setActiveLayer(keys[keys[0] === id ? 1 : 0]);
 		}
 	};
 
@@ -359,45 +365,17 @@ const Editor = () => {
 
 	return (
 		<div className={`h-full dot-pattern`} ref={parentRef}>
-			{/* show layers */}
-			{Object.keys(layers.current).length ? (
-				<div className="p-1 px-2 flex items-start text-primary2">
-					<div className="flex overflow-x-auto scroll-bar-1">
-						{Object.keys(layers.current).map((key, index) => (
-							<div
-								key={key}
-								className={`px-3 group min-w-max relative ${
-									activeLayer === key
-										? "border-b-2 border-primary1"
-										: ""
-								}`}
-							>
-								<span
-									className="cursor-pointer"
-									onClick={() => setActiveLayer(key)}
-								>
-									{layers.current[key].name}
-								</span>
-								{/* delete icon */}
-								<div
-									title="Delete Layer (C)"
-									className="inline-block opacity-0 group-hover:opacity-100"
-									onClick={() => handleDeleteLayer(key)}
-								>
-									<DeleteSvg />
-								</div>
-							</div>
-						))}
-					</div>
-					{/* add icon */}
-					<div
-						onClick={addLayer}
-						className="mt-1 flex items-center ml-2 transition-transform transform rotate-0 hover:rotate-90 hover:scale-110"
-					>
-						<AddSvg />
-					</div>
-				</div>
-			) : null}
+			<Tabs
+				tabs={Object.values(layers.current).map((tab) => ({
+					name: tab.name,
+					key: tab.id,
+				}))}
+				handleDeleteTab={handleDeleteLayer}
+				activeTab={activeLayer}
+				setActiveTab={setActiveLayer}
+				addTab={addLayer}
+			/>
+
 			{/* pan and zoom components */}
 			<TransformWrapper
 				ref={wrapperRef}
