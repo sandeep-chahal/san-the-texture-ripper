@@ -61,7 +61,8 @@
 					transparent 1%
 				)
 				center,
-			linear-gradient(var(--color-bg-primary-2) 38.5px, transparent 1%) center,
+			linear-gradient(var(--color-bg-primary-2) 38.5px, transparent 1%)
+				center,
 			var(--color-bg-primary-3);
 		background-size: 40px 40px;
 	}

@@ -75,7 +75,10 @@ const Editor = () => {
 			if (e.key === "n") {
 				addLayer();
 			}
-			if ((isMouseOver.current && e.keyCode === 107) || e.keyCode === 187) {
+			if (
+				(isMouseOver.current && e.keyCode === 107) ||
+				e.keyCode === 187
+			) {
 				// console.log("zoom in");
 				wrapperRef.current.zoomIn();
 				scale.current += 0.5;
@@ -113,7 +116,10 @@ const Editor = () => {
 			points: [
 				[radius * 2, radius * 2],
 				[canvas.current.width - radius * 2, radius * 2],
-				[canvas.current.width - radius * 2, canvas.current.height - radius * 2],
+				[
+					canvas.current.width - radius * 2,
+					canvas.current.height - radius * 2,
+				],
 				[radius * 2, canvas.current.height - radius * 2],
 			],
 		};
@@ -133,8 +139,14 @@ const Editor = () => {
 		}
 		return () => {
 			if (parentRef.current) {
-				parentRef.current.removeEventListener("mouseenter", onMouseEnter);
-				parentRef.current.removeEventListener("mouseleave", onMouseLeave);
+				parentRef.current.removeEventListener(
+					"mouseenter",
+					onMouseEnter
+				);
+				parentRef.current.removeEventListener(
+					"mouseleave",
+					onMouseLeave
+				);
 			}
 		};
 	}, []);
@@ -355,7 +367,9 @@ const Editor = () => {
 							<div
 								key={key}
 								className={`px-3 group min-w-max relative ${
-									activeLayer === key ? "border-b-2 border-primary1" : ""
+									activeLayer === key
+										? "border-b-2 border-primary1"
+										: ""
 								}`}
 							>
 								<span
@@ -406,7 +420,9 @@ const Editor = () => {
 					setDisabled(false);
 				}}
 			>
-				<TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+				<TransformComponent
+					wrapperStyle={{ width: "100%", height: "100%" }}
+				>
 					<div>
 						{/* actual canvas */}
 						<canvas ref={canvas}></canvas>
@@ -414,7 +430,9 @@ const Editor = () => {
 							canvas={canvas}
 							layers={layers}
 							updateResults={
-								warpLibrary === "glfx" ? updateResultGLFX : updateResultOpencv
+								warpLibrary === "glfx"
+									? updateResultGLFX
+									: updateResultOpencv
 							}
 							ref={cropBox}
 							file={file}

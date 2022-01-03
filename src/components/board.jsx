@@ -45,14 +45,23 @@ const Board = () => {
 		return () => {
 			window.removeEventListener("keydown", onKeyDown);
 			if (parentRef.current) {
-				parentRef.current.removeEventListener("mouseenter", onMouseEnter);
-				parentRef.current.removeEventListener("mouseleave", onMouseLeave);
+				parentRef.current.removeEventListener(
+					"mouseenter",
+					onMouseEnter
+				);
+				parentRef.current.removeEventListener(
+					"mouseleave",
+					onMouseLeave
+				);
 			}
 		};
 	}, []);
 
 	return (
-		<div className="w-full h-full bg-primary2 text-primary2" ref={parentRef}>
+		<div
+			className="w-full h-full bg-primary2 text-primary2"
+			ref={parentRef}
+		>
 			<div className="flex items-start flex-wrap h-max max-w-full">
 				{!resultsArray.length ? (
 					<div className="w-full mt-32 flex flex-col items-center justify-center">
@@ -93,8 +102,14 @@ const Board = () => {
 										/>
 
 										<div className="opacity-0 group-hover:opacity-100 absolute top-0 left-0 flex items-center justify-between w-full bg-black bg-opacity-60 py-1 px-2">
-											<h2 className="">{results[key].name}</h2>
-											<div onClick={() => handleDeleteResult(key)}>
+											<h2 className="">
+												{results[key].name}
+											</h2>
+											<div
+												onClick={() =>
+													handleDeleteResult(key)
+												}
+											>
 												<DeleteSvg />
 											</div>
 										</div>

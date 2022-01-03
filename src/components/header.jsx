@@ -80,7 +80,9 @@ const Header = ({ onExport, handleFileChange }) => {
 					setNewUpdate={setNewUpdate}
 				/>
 			)}
-			{resetPopup ? <ResetPopup close={() => setResetPopup(false)} /> : null}
+			{resetPopup ? (
+				<ResetPopup close={() => setResetPopup(false)} />
+			) : null}
 		</header>
 	);
 };

@@ -18,7 +18,8 @@ export default ({ children }) => {
 	useEffect(() => {
 		// last selected library
 		const library = localStorage.getItem("warp_library");
-		if (library === "glfx" || library === "opencv") changeWarpLibrary(library);
+		if (library === "glfx" || library === "opencv")
+			changeWarpLibrary(library);
 
 		// show whats new if the user has not seen it before
 		const lastUpdate = localStorage.getItem("lastUpdate");

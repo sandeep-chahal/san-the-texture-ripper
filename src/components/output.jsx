@@ -58,14 +58,22 @@ function Output({ onClose }) {
 				{/* header */}
 				<div className="p-2 px-6 bg-primary2 border-primary1 ">
 					<h1 className="text-2xl">Output</h1>
-					<span className="text-sm">Drag images from sides to resize</span>
+					<span className="text-sm">
+						Drag images from sides to resize
+					</span>
 				</div>
 				{/* output */}
 				<div className="overflow-y-auto">
-					<div ref={printComponent} className="w-max max-w-full flex flex-wrap">
+					<div
+						ref={printComponent}
+						className="w-max max-w-full flex flex-wrap"
+					>
 						{Object.keys(results || {}).map((key, index) => {
 							const data = results[key];
-							const [width, height] = [results[key].width, results[key].height];
+							const [width, height] = [
+								results[key].width,
+								results[key].height,
+							];
 							return (
 								<Resizable
 									width={width}

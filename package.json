@@ -1,32 +1,39 @@
 {
-  "name": "san-the-texture-ripper",
-  "version": "0.0.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
-  },
-  "dependencies": {
-    "d3": "^7.1.1",
-    "file-saver": "^2.0.5",
-    "glfx": "^0.0.4",
-    "html-to-image": "^1.9.0",
-    "jszip": "^3.7.1",
-    "opencv-react": "^0.0.5",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-file-drop": "^3.1.2",
-    "react-ga": "^3.3.0",
-    "react-resizable-box": "^2.1.0",
-    "react-zoom-pan-pinch": "^2.1.3"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^1.0.0",
-    "autoprefixer": "^9",
-    "postcss": "^7",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
-    "vite": "^2.6.4",
-    "vite-plugin-pwa": "^0.11.10"
-  }
+	"name": "san-the-texture-ripper",
+	"version": "0.0.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"serve": "vite preview",
+		"prepare": "husky install"
+	},
+	"dependencies": {
+		"d3": "^7.1.1",
+		"file-saver": "^2.0.5",
+		"glfx": "^0.0.4",
+		"html-to-image": "^1.9.0",
+		"jszip": "^3.7.1",
+		"opencv-react": "^0.0.5",
+		"prop-types": "^15.7.2",
+		"react": "^17.0.0",
+		"react-dom": "^17.0.0",
+		"react-file-drop": "^3.1.2",
+		"react-ga": "^3.3.0",
+		"react-resizable-box": "^2.1.0",
+		"react-zoom-pan-pinch": "^2.1.3"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-react": "^1.0.0",
+		"autoprefixer": "^9",
+		"husky": "^7.0.4",
+		"lint-staged": "^12.1.5",
+		"postcss": "^7",
+		"prettier": "^2.5.1",
+		"tailwindcss": "npm:@tailwindcss/postcss7-compat",
+		"vite": "^2.6.4",
+		"vite-plugin-pwa": "^0.11.10"
+	},
+	"lint-staged": {
+		"**/*": "prettier --write --ignore-unknown"
+	}
 }

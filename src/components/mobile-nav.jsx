@@ -45,7 +45,10 @@ const MobileNav = ({
 				onClick={() => setMenuOpen((o) => !o)}
 			>
 				<div style={{ height: "1.5px" }} className="w-6 bg-primary3" />
-				<div style={{ height: "1.5px" }} className="w-4 mt-1 bg-primary3" />
+				<div
+					style={{ height: "1.5px" }}
+					className="w-4 mt-1 bg-primary3"
+				/>
 			</div>
 			<input
 				id="import-files"
@@ -53,7 +56,10 @@ const MobileNav = ({
 				type="file"
 				accept="image/png, image/jpeg , image/webp"
 				onChange={(e) =>
-					handleFileChange(e.target.files[0], () => (e.target.value = ""))
+					handleFileChange(
+						e.target.files[0],
+						() => (e.target.value = "")
+					)
 				}
 			/>
 			{menuOpen && (

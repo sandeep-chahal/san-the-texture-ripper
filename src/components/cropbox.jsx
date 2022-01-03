@@ -3,7 +3,14 @@ import * as d3 from "d3";
 
 const CropBox = forwardRef(
 	(
-		{ canvas, layers, updateResults, activeLayer, getSvgSize, warpRealTime },
+		{
+			canvas,
+			layers,
+			updateResults,
+			activeLayer,
+			getSvgSize,
+			warpRealTime,
+		},
 		ref
 	) => {
 		const svg = useRef(null); // cropbox svg
@@ -11,7 +18,11 @@ const CropBox = forwardRef(
 
 		// draw d3 svg cropbox
 		const drawCropBox = () => {
-			if (file === null || activeLayer == null || !layers.current[activeLayer])
+			if (
+				file === null ||
+				activeLayer == null ||
+				!layers.current[activeLayer]
+			)
 				return;
 			svg.current.selectAll("*").remove();
 			const { radius, strokeWidth, opacity } = getSvgSize();

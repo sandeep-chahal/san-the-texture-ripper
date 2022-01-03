@@ -23,7 +23,12 @@ function SplitScreen({
 				y = e.y;
 			}
 
-			if (x < limit || x > width - limit || y < limit || y > height - limit)
+			if (
+				x < limit ||
+				x > width - limit ||
+				y < limit ||
+				y > height - limit
+			)
 				return;
 			if (isVertical) setSlide(x);
 			else setSlide(y - 60);
@@ -62,7 +67,9 @@ function SplitScreen({
 			style={{
 				touchAction: "none",
 			}}
-			className={` flex h-full w-full ${isVertical ? "flex-row" : "flex-col"}`}
+			className={` flex h-full w-full ${
+				isVertical ? "flex-row" : "flex-col"
+			}`}
 		>
 			<div
 				className="overflow-hidden"
@@ -86,7 +93,12 @@ function SplitScreen({
 				>
 					{new Array(5).fill(null).map((_, i) => {
 						if (isVertical)
-							return <span key={i} className="w-full h-1 mt-2 bg-primary1" />;
+							return (
+								<span
+									key={i}
+									className="w-full h-1 mt-2 bg-primary1"
+								/>
+							);
 						else
 							return (
 								<span

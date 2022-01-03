@@ -69,7 +69,9 @@ function WhatsNew() {
 							</h2>
 						</li>
 						<li className="list-disc mr-4">
-							<h2 className="mb-4">Use + and - to zoom in and out</h2>
+							<h2 className="mb-4">
+								Use + and - to zoom in and out
+							</h2>
 						</li>
 						<li className="h-1 bg-primary3 w-full mb-4"></li>
 						<li className="list-disc mr-4">
@@ -102,8 +104,8 @@ function WhatsNew() {
 						</li>
 					</ul>
 					<div className="mb-4">
-						Note: The application is still in development, please report any bug
-						you find.
+						Note: The application is still in development, please
+						report any bug you find.
 					</div>
 				</div>
 			</div>

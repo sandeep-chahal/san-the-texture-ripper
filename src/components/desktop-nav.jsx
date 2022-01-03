@@ -50,7 +50,10 @@ const DesktopNav = ({
 				type="file"
 				accept="image/png, image/jpeg , image/webp"
 				onChange={(e) =>
-					handleFileChange(e.target.files[0], () => (e.target.value = ""))
+					handleFileChange(
+						e.target.files[0],
+						() => (e.target.value = "")
+					)
 				}
 			/>
 			<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
