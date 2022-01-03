@@ -3,13 +3,15 @@ import DeleteSvg from "../components/svg/delete-svg";
 import { useMainStore } from "../store";
 
 function WhatsNew() {
-	const { setShowWhatsNew } = useMainStore();
+	const { setShowWhatsNew, setNewUpdate } = useMainStore();
 
 	const handleKeyPress = (e) => {
 		if (e.key === "Escape") setShowWhatsNew(false);
 	};
 
 	useEffect(() => {
+		setNewUpdate(false);
+		localStorage.setItem("lastUpdate", import.meta.env.VITE_LAST_UPDATE);
 		window.addEventListener("keydown", handleKeyPress);
 		return () => {
 			window.removeEventListener("keydown", handleKeyPress);

@@ -15,7 +15,7 @@ import useWindowSize from "./hooks/useWinSize";
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
 	const [dropping, setDropping] = useState(false);
-	const { setFile, showWhatsNew } = useMainStore();
+	const { setFile, showWhatsNew, newUpdate, setNewUpdate } = useMainStore();
 	const { layers, setActiveLayer, totalLayerCount } = useEditorStore();
 	const { width, height } = useWindowSize();
 	const [splitType, setSplitType] = useState("vertical");
@@ -62,6 +62,8 @@ function App() {
 				handleFileChange={(file, clearInput) =>
 					handleFileChange(file, setNewFile, clearInput)
 				}
+				newUpdate={newUpdate}
+				setNewUpdate={setNewUpdate}
 			/>
 			<FileDrop
 				onFrameDragEnter={(event) => {

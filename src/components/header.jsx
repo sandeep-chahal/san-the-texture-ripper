@@ -14,6 +14,8 @@ const Header = ({ onExport, handleFileChange }) => {
 		setShowWhatsNew,
 		warpLibrary,
 		setWarpLibrary,
+		newUpdate,
+		setNewUpdate,
 	} = useMainStore();
 	const { width, height } = useWindowSize();
 	const [resetPopup, setResetPopup] = useState(false);
@@ -58,6 +60,8 @@ const Header = ({ onExport, handleFileChange }) => {
 					warpLibrary={warpLibrary}
 					setWarpLibrary={setWarpLibrary}
 					cvLoaded={loaded}
+					newUpdate={newUpdate}
+					setNewUpdate={setNewUpdate}
 				/>
 			) : (
 				<MobileNav
@@ -72,6 +76,8 @@ const Header = ({ onExport, handleFileChange }) => {
 					warpLibrary={warpLibrary}
 					setWarpLibrary={setWarpLibrary}
 					cvLoaded={loaded}
+					newUpdate={newUpdate}
+					setNewUpdate={setNewUpdate}
 				/>
 			)}
 			{resetPopup ? <ResetPopup close={() => setResetPopup(false)} /> : null}

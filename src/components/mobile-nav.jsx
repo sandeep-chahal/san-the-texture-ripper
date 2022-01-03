@@ -18,6 +18,8 @@ const MobileNav = ({
 	warpLibrary,
 	setWarpLibrary,
 	cvLoaded,
+	newUpdate,
+	setNewUpdate,
 }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 
@@ -150,6 +152,9 @@ const MobileNav = ({
 						{/* whatsnew icon */}
 						<WhatsnewSvg />
 						Whats New
+						{newUpdate && (
+							<div className="-mt-4 ml-1 w-2 h-2 bg-red rounded-full" />
+						)}
 					</li>
 				</ul>
 			)}

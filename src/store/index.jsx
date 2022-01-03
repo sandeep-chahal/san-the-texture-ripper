@@ -6,6 +6,7 @@ export default ({ children }) => {
 	const [file, setFile] = useState(null);
 	const [warpRealTime, setWarpRealTime] = useState(false);
 	const [showWhatsNew, setShowWhatsNew] = useState(false);
+	const [newUpdate, setNewUpdate] = useState(false);
 	const [results, setResults] = useState({});
 	const [warpLibrary, changeWarpLibrary] = useState("glfx");
 
@@ -22,8 +23,7 @@ export default ({ children }) => {
 		// show whats new if the user has not seen it before
 		const lastUpdate = localStorage.getItem("lastUpdate");
 		if (lastUpdate !== import.meta.env.VITE_LAST_UPDATE) {
-			setShowWhatsNew(true);
-			localStorage.setItem("lastUpdate", import.meta.env.VITE_LAST_UPDATE);
+			setNewUpdate(true);
 		}
 	}, []);
 	return (
@@ -39,6 +39,8 @@ export default ({ children }) => {
 				setWarpRealTime,
 				warpLibrary,
 				setWarpLibrary,
+				newUpdate,
+				setNewUpdate,
 			}}
 		>
 			{children}

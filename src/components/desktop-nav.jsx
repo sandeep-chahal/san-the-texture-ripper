@@ -16,11 +16,12 @@ const DesktopNav = ({
 	handleReset,
 	setShowWhatsNew,
 	warpRealTime,
-	setFile,
 	importRef,
 	warpLibrary,
 	setWarpLibrary,
 	cvLoaded,
+	newUpdate,
+	setNewUpdate,
 }) => {
 	const [showMore, setShowMore] = useState(false);
 
@@ -123,6 +124,9 @@ const DesktopNav = ({
 				{/* more icon */}
 				<MoreSvg />
 				More
+				{newUpdate && (
+					<div className="-mt-4 ml-1 w-2 h-2 bg-red rounded-full" />
+				)}
 				{/* dropdown */}
 				{showMore ? (
 					<ul className="absolute w-48 bg-primary2 top-full right-0 border-2 border-primary1 z-50">
@@ -167,6 +171,9 @@ const DesktopNav = ({
 							{/* whatsnew icon */}
 							<WhatsnewSvg />
 							Whats New
+							{newUpdate && (
+								<div className="-mt-4 ml-1 w-2 h-2 bg-red rounded-full" />
+							)}
 						</li>
 					</ul>
 				) : null}
