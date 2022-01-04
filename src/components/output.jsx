@@ -63,10 +63,10 @@ function Output({ onClose }) {
 					</span>
 				</div>
 				{/* output */}
-				<div className="overflow-y-auto">
+				<div className="relative h-full overflow-auto">
 					<div
 						ref={printComponent}
-						className="w-max max-w-full flex flex-wrap"
+						className="absolute top-0 left-0 flex flex-wrap"
 					>
 						{Object.keys(results || {}).map((key, index) => {
 							const data = results[key];
@@ -80,7 +80,7 @@ function Output({ onClose }) {
 									height={height}
 									maxHeight={height * 10}
 									maxWidth={width * 10}
-									className="m-2"
+									className="m-2 w-full h-full"
 									key={index}
 									minHeight={200}
 									minWidth={200}
