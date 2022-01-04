@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { LoadOpenCV, gg } from "../utils/loadOpenCV";
+import { LoadOpenCV } from "../utils/loadOpenCV";
 
 export const context = createContext();
 
@@ -22,14 +22,29 @@ export default ({ children }) => {
 				cv: null,
 			});
 
-			LoadOpenCV((cv) => {
-				localStorage.setItem("opencv_loaded", true);
-				setOpenCV({
-					state: "loaded",
-					cv: cv,
-				});
-				console.log("OpenCV loaded");
-			});
+			LoadOpenCV(
+				// when open cv loaded
+				(cv) => {
+					localStorage.setItem("opencv_loaded", true);
+					setOpenCV({
+						state: "loaded",
+						cv: cv,
+					});
+					console.log("OpenCV loaded");
+				},
+				(err) => {
+					// on error
+					console.log("Couldn't load opencv");
+					localStorage.setItem("warp_library", "glfx");
+					localStorage.setItem("opencv_loaded", false);
+					setWarpLibrary("glfx");
+					setOpenCV({
+						state: "not_loaded",
+						cv: null,
+					});
+					alert("Couldn't load opencv");
+				}
+			);
 		} else {
 			console.log("OpenCV already loaded");
 		}
