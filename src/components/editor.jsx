@@ -3,10 +3,7 @@ import { useMainStore } from "../store";
 import { useEditorStore } from "../store/editor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import fx from "glfx";
-import { useOpenCv } from "opencv-react";
 import { uniqueId } from "../utils";
-import DeleteSvg from "../components/svg/delete-svg";
-import AddSvg from "../components/svg/add-svg";
 import CropBox from "./cropbox";
 import Tabs from "./tabs";
 
@@ -21,9 +18,8 @@ const Editor = () => {
 	const canvas = useRef(); // canvas
 	const scale = useRef(1); // zoom scale
 	const cropBox = useRef(null);
-	const { cv } = useOpenCv();
 
-	const { file, setResults, warpRealTime, warpLibrary, cvStatus } =
+	const { file, setResults, warpRealTime, warpLibrary, openCV } =
 		useMainStore();
 	const {
 		layers, // layers object
@@ -45,8 +41,9 @@ const Editor = () => {
 		glfxCanvas.current = fx.canvas();
 		texture.current = glfxCanvas.current.texture(data);
 		glfxCanvas.current.draw(texture.current).update();
-		if (cv) opencvImg.current = cv.imread(canvas.current);
-
+		if (window.cv) {
+			opencvImg.current = window.cv.imread(canvas.current);
+		}
 		if (!activeLayer) addLayer();
 		if (cropBox.current) cropBox.current.drawCropBox();
 	};
@@ -65,7 +62,7 @@ const Editor = () => {
 				showImage(file);
 			}
 		}
-	}, [file]);
+	}, [file, openCV.cv]);
 
 	// handle key events
 	useEffect(() => {
@@ -303,7 +300,16 @@ const Editor = () => {
 
 	const updateResultOpencv = () => {
 		// http://www.recompile.in/2019/11/image-perspective-correction-using.html
-		if (!activeLayer || !layers.current[activeLayer] || !cv) return;
+		if (!activeLayer || !layers.current[activeLayer]) return;
+		if (openCV.state !== "loaded") {
+			alert(
+				openCV.state === "loading"
+					? "opencv is not loaded"
+					: "opencv is not ready yet"
+			);
+			return;
+		}
+		const cv = window.cv;
 
 		let points = layers.current[activeLayer].points;
 

@@ -4,15 +4,12 @@ import "./index.css";
 import App from "./App";
 import MainStore from "./store";
 import EditorStore from "./store/editor";
-import { OpenCvProvider } from "opencv-react";
 
 ReactDOM.render(
 	<React.StrictMode>
 		<MainStore>
 			<EditorStore>
-				<OpenCvProvider openCvPath="opencv.js">
-					<App />
-				</OpenCvProvider>
+				<App />
 			</EditorStore>
 		</MainStore>
 	</React.StrictMode>,

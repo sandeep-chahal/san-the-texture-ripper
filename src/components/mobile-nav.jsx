@@ -17,9 +17,7 @@ const MobileNav = ({
 	warpRealTime,
 	warpLibrary,
 	setWarpLibrary,
-	cvLoaded,
 	newUpdate,
-	setNewUpdate,
 }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 

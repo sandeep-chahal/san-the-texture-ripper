@@ -2740,11 +2740,6 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-opencv-react@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/opencv-react/-/opencv-react-0.0.5.tgz#0659dc9d344e23beb32a1c46b2416456b3ad7d81"
-  integrity sha512-1PJEaTY1NYWsaCa3DAr7bOYXdKWWLjcIEx0XHwmHjhE+9kKKTbQBt43um5eBs+PdB61fzUQNl2Zogra6DIx1nQ==
-
 p-map@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-4.0.0.tgz#bb2f95a5eda2ec168ec9274e06a747c3e2904d2b"

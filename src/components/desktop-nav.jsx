@@ -19,9 +19,7 @@ const DesktopNav = ({
 	importRef,
 	warpLibrary,
 	setWarpLibrary,
-	cvLoaded,
 	newUpdate,
-	setNewUpdate,
 }) => {
 	const [showMore, setShowMore] = useState(false);
 
@@ -87,13 +85,7 @@ const DesktopNav = ({
 					onChange={(e) => setWarpLibrary(e.target.value)}
 				>
 					<option value="glfx">GLFX</option>
-					<option
-						title={!cvLoaded ? "downloading" : ""}
-						disabled={!cvLoaded}
-						value="opencv"
-					>
-						OpenCV
-					</option>
+					<option value="opencv">OpenCV</option>
 				</select>
 			</li>
 			<li
