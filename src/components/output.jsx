@@ -10,6 +10,7 @@ import ExportSvg from "../components/svg/export-svg";
 function Output({ onClose }) {
 	const { results } = useMainStore();
 	const printComponent = useRef(null);
+	const [lockAR, setLockAR] = useState(false);
 	const imgRefs = useRef([]);
 
 	const downloadZip = async () => {
@@ -38,14 +39,22 @@ function Output({ onClose }) {
 		saveAs(dataURl, `Results ${Date.now()}.png`);
 	};
 
-	const handleKeyPress = (e) => {
+	const handleKeyDown = (e) => {
 		if (e.key === "Escape") onClose();
+		if (e.key === "Control" || e.key === "Shift") {
+			window.addEventListener("keyup", handleKeyUp);
+			setLockAR(true);
+		}
+	};
+	const handleKeyUp = () => {
+		setLockAR(false);
+		window.removeEventListener("keyup", handleKeyUp);
 	};
 
 	useEffect(() => {
-		window.addEventListener("keydown", handleKeyPress);
+		window.addEventListener("keydown", handleKeyDown);
 		return () => {
-			window.removeEventListener("keydown", handleKeyPress);
+			window.removeEventListener("keydown", handleKeyDown);
 		};
 	}, []);
 
@@ -84,6 +93,7 @@ function Output({ onClose }) {
 									key={index}
 									minHeight={200}
 									minWidth={200}
+									lockAspectRatio={lockAR}
 								>
 									<img
 										ref={(ref) => {
