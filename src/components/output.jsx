@@ -13,13 +13,18 @@ function Output({ onClose }) {
 	const [lockAR, setLockAR] = useState(false);
 	const imgRefs = useRef([]);
 
+	// toPng filter
+	const filter = (node) => {
+		return node.classList.contains && node.classList.contains("export");
+	};
+
 	const downloadZip = async () => {
 		try {
 			var zip = new JSZip();
 
 			await Promise.all(
 				imgRefs.current.map(async (ref, index) => {
-					const dataUrl = await toPng(ref);
+					const dataUrl = await toPng(ref, { filter });
 					zip.file(`${index}.png`, dataUrl.split("base64,")[1], {
 						base64: true,
 					});
@@ -35,7 +40,7 @@ function Output({ onClose }) {
 	};
 
 	const handleExport = async () => {
-		const dataURl = await toPng(printComponent.current);
+		const dataURl = await toPng(printComponent.current, { filter });
 		saveAs(dataURl, `Results ${Date.now()}.png`);
 	};
 
@@ -89,11 +94,20 @@ function Output({ onClose }) {
 									height={height}
 									maxHeight={height * 10}
 									maxWidth={width * 10}
-									className="m-2 w-full h-full"
+									className="export m-2 w-full h-full group"
 									key={index}
 									minHeight={200}
 									minWidth={200}
 									lockAspectRatio={lockAR}
+									handlerClasses={{
+										bottomRight: `group-hover:opacity-20 bg-yellow-400 opacity-0`,
+										right: `group-hover:opacity-20 ${
+											!lockAR && "bg-yellow-400"
+										} opacity-0`,
+										bottom: `group-hover:opacity-20 ${
+											!lockAR && "bg-yellow-400"
+										} opacity-0`,
+									}}
 								>
 									<img
 										ref={(ref) => {
@@ -101,7 +115,7 @@ function Output({ onClose }) {
 												imgRefs.current[index] = ref;
 											}
 										}}
-										className="w-full h-full inline-block pointer-events-none"
+										className="export w-full h-full inline-block pointer-events-none"
 										src={data.result}
 									/>
 								</Resizable>
