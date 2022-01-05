@@ -19,10 +19,10 @@ function WhatsNew() {
 	}, []);
 
 	return (
-		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
+		<div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
 			<div
 				style={{ height: "90%" }}
-				className="relative bg-primary2 text-primary2 flex flex-col overflow-auto w-11/12 md:w-3/4"
+				className="relative bg-primary2 text-primary2 flex flex-col overflow-auto w-11/12 md:w-3/4 animate-reveal"
 			>
 				<div className="">
 					<h1 className="text-center mt-4 text-4xl">What's New</h1>

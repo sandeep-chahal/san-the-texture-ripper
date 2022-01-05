@@ -77,13 +77,13 @@ function Output({ onClose }) {
 	}, []);
 
 	return (
-		<div className="animate-reveal fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center z-50">
+		<div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center z-50">
 			<div
 				style={{ width: "90%", height: "90%" }}
-				className="bg-primary1 text-primary2 flex flex-col"
+				className="bg-primary2 text-primary2 flex flex-col animate-reveal "
 			>
 				{/* header */}
-				<div className="p-2 px-6 bg-primary2 border-primary1 ">
+				<div className="p-2 px-6 bg-primary2 border-primary1 border-b-2">
 					<h1 className="text-2xl">Output</h1>
 					<span className="text-sm">
 						Drag images from sides to resize
@@ -138,7 +138,7 @@ function Output({ onClose }) {
 				</div>
 
 				{/* buttons */}
-				<div className="p-2 bg-primary2 border-primary1 mt-auto flex justify-between">
+				<div className="p-2 bg-primary2 border-primary1 mt-auto flex justify-between border-t-2">
 					<button
 						onClick={onClose}
 						title="Close (Esc)"
