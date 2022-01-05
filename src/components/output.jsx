@@ -6,12 +6,14 @@ import JSZip from "jszip";
 import { useMainStore } from "../store";
 import CloseSvg from "../components/svg/close-svg";
 import ExportSvg from "../components/svg/export-svg";
+import HeartSvg from "../components/svg/heart-svg";
 
 function Output({ onClose }) {
 	const { results } = useMainStore();
 	const printComponent = useRef(null);
 	const [lockAR, setLockAR] = useState(false);
 	const imgRefs = useRef([]);
+	const [exporting, setExporting] = useState(false);
 
 	// toPng filter
 	const filter = (node) => {
@@ -20,6 +22,7 @@ function Output({ onClose }) {
 
 	const downloadZip = async () => {
 		try {
+			setExporting(true);
 			var zip = new JSZip();
 
 			await Promise.all(
@@ -36,12 +39,22 @@ function Output({ onClose }) {
 			);
 		} catch (err) {
 			console.log(err);
+		} finally {
+			setExporting(false);
 		}
 	};
 
 	const handleExport = async () => {
-		const dataURl = await toPng(printComponent.current, { filter });
-		saveAs(dataURl, `Results ${Date.now()}.png`);
+		try {
+			setExporting(true);
+
+			const dataURl = await toPng(printComponent.current, { filter });
+			saveAs(dataURl, `Results ${Date.now()}.png`);
+		} catch (err) {
+			console.log(err);
+		} finally {
+			setExporting(false);
+		}
 	};
 
 	const handleKeyDown = (e) => {
@@ -135,31 +148,35 @@ function Output({ onClose }) {
 						<CloseSvg />
 						Close
 					</button>
-					<div className="flex">
-						<button
-							title="Export all textures separately in zip file"
-							onClick={downloadZip}
-							className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center mr-2"
-						>
-							{/* export icon */}
-							<ExportSvg />
-							Export Zip
-						</button>
-						<button
-							title="Export one big single texture"
-							onClick={handleExport}
-							ref={(ref) => {
-								if (ref) {
-									ref.focus();
-								}
-							}}
-							className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center"
-						>
-							{/* export icon */}
-							<ExportSvg />
-							Export Png
-						</button>
-					</div>
+					{!exporting ? (
+						<div className="flex">
+							<button
+								title="Export all textures separately in zip file"
+								onClick={downloadZip}
+								className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center mr-2"
+							>
+								{/* export icon */}
+								<ExportSvg />
+								Export Zip
+							</button>
+							<button
+								title="Export one big single texture"
+								onClick={handleExport}
+								ref={(ref) => {
+									if (ref) {
+										ref.focus();
+									}
+								}}
+								className="border-2 border-primary1 p-1 px-2 rounded-md flex items-center"
+							>
+								{/* export icon */}
+								<ExportSvg />
+								Export Png
+							</button>
+						</div>
+					) : (
+						<HeartSvg size={35} />
+					)}
 				</div>
 			</div>
 		</div>

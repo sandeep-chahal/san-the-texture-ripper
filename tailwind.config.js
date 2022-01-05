@@ -30,10 +30,31 @@ module.exports = {
 					"0%": { opacity: "0" },
 					"100%": { opacity: "100" },
 				},
+				beat: {
+					"0%": {
+						transform: "scale(0.95)",
+					},
+					"5%": {
+						transform: "scale(1.1)",
+					},
+					"39%": {
+						transform: "scale(0.85)",
+					},
+					"45%": {
+						transform: "scale(1)",
+					},
+					"60%": {
+						transform: "scale(0.95)",
+					},
+					"100%": {
+						transform: "scale(0.9)",
+					},
+				},
 			},
 			animation: {
 				reveal: "reveal 0.25s ease-out",
 				opacity: "opacity 0.35s ease-out",
+				beat: "beat 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1)",
 			},
 		},
 	},
