@@ -156,7 +156,6 @@ const Editor = () => {
 	// perform warping using glfx library
 	const updateResultGLFX = () => {
 		if (!activeLayer || !layers.current[activeLayer]) return;
-		const ts1 = performance.now();
 		// get cropbox points
 		let points = layers.current[activeLayer].points;
 		let width = Math.max(
@@ -258,7 +257,6 @@ const Editor = () => {
 			};
 			return newState;
 		});
-		console.log(performance.now() - ts1);
 	};
 
 	// delete layer

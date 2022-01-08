@@ -16,6 +16,7 @@
 	:root {
 		--color-text-primary-1: #fff;
 		--color-text-primary-2: #c27224;
+		--color-text-primary-3: #2e2e2e;
 		--color-text-gray: #6d757a;
 		--color-bg-primary-1: #ffffff;
 		--color-bg-primary-2: #f5f5f5;
@@ -28,6 +29,7 @@
 		:root {
 			--color-text-primary-1: #121212;
 			--color-text-primary-2: #edc298;
+			--color-text-primary-3: #fff;
 			--color-text-gray: #6d757a;
 			--color-bg-primary-1: #1d2025;
 			--color-bg-primary-2: #1f2933;
@@ -41,6 +43,12 @@
 		-webkit-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+	}
+	.scrollbar-none {
+		scrollbar-width: none; /* Firefox */
+	}
+	.scrollbar-none::-webkit-scrollbar {
+		display: none; /* Safari and Chrome */
 	}
 }
 
@@ -69,4 +77,8 @@
 	.cursor-ns-resize {
 		cursor: ns-resize;
 	}
+}
+
+ul li::before {
+	content: attr(data-icon);
 }

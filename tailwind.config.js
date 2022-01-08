@@ -9,6 +9,7 @@ module.exports = {
 			textColor: {
 				primary1: "var(--color-text-primary-1)",
 				primary2: "var(--color-text-primary-2)",
+				primary3: "var(--color-text-primary-3)",
 				gray: "var(--color-text-gray)",
 			},
 			backgroundColor: {

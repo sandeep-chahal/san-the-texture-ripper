@@ -46,7 +46,7 @@ const CropBox = forwardRef(
 				.attr("stroke-width", strokeWidth * 0.8)
 				.attr("stroke-opacity", opacity)
 				.attr("r", radius)
-				.attr("stroke", "#C27224")
+				.attr("stroke", "#EA1953")
 				.attr("data-index", (d, i) => i)
 				.attr("transform", function (d) {
 					return "translate(" + d + ")";
