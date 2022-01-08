@@ -1,13 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useStore } from "../store";
-import useWindowSize from "../hooks/useWIndowSize";
+import { useMainStore } from "../store";
+import useWindowSize from "../hooks/useWinSize";
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
 import ResetPopup from "./reset-popup";
 
 const Header = ({ onExport, handleFileChange }) => {
-	const { setFile, warpRealTime, setWarpRealTime, setShowWhatsNew } =
-		useStore();
+	const {
+		setFile,
+		warpRealTime,
+		setWarpRealTime,
+		setShowWhatsNew,
+		warpLibrary,
+		setWarpLibrary,
+		newUpdate,
+	} = useMainStore();
 	const { width, height } = useWindowSize();
 	const [resetPopup, setResetPopup] = useState(false);
 	const importRef = useRef(null);
@@ -47,6 +54,9 @@ const Header = ({ onExport, handleFileChange }) => {
 					setFile={setFile}
 					handleFileChange={handleFileChange}
 					importRef={importRef}
+					warpLibrary={warpLibrary}
+					setWarpLibrary={setWarpLibrary}
+					newUpdate={newUpdate}
 				/>
 			) : (
 				<MobileNav
@@ -56,10 +66,16 @@ const Header = ({ onExport, handleFileChange }) => {
 					setShowWhatsNew={setShowWhatsNew}
 					handleReset={handleReset}
 					setFile={setFile}
+					importRef={importRef}
 					handleFileChange={handleFileChange}
+					warpLibrary={warpLibrary}
+					setWarpLibrary={setWarpLibrary}
+					newUpdate={newUpdate}
 				/>
 			)}
-			{resetPopup ? <ResetPopup close={() => setResetPopup(false)} /> : null}
+			{resetPopup ? (
+				<ResetPopup close={() => setResetPopup(false)} />
+			) : null}
 		</header>
 	);
 };

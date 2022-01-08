@@ -6,29 +6,43 @@ import SplitScreen from "./components/split-screen";
 import Editor from "./components/editor";
 import Board from "./components/board";
 import Output from "./components/output";
-import { readImage } from "./utils";
-import { useStore } from "./store";
+import { handleFileChange, readFileFromClipboard } from "./utils/file";
+import { useMainStore } from "./store";
+import { useEditorStore } from "./store/editor";
 import WhatsNew from "./components/whats-new";
-
-const IMAGE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
+import useWindowSize from "./hooks/useWinSize";
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
-	const [droping, setDroping] = useState(false);
-	const { setFile, showWhatsNew } = useStore();
+	const [dropping, setDropping] = useState(false);
+	const { setFile, showWhatsNew, newUpdate, setNewUpdate } = useMainStore();
+	const { layers, setActiveLayer, totalLayerCount } = useEditorStore();
+	const { width, height } = useWindowSize();
+	const [splitType, setSplitType] = useState("vertical");
+
+	useEffect(() => {
+		if (width < 800 && splitType === "vertical") {
+			setSplitType("horizontal");
+		}
+		if (width > 800 && splitType === "horizontal") {
+			setSplitType("vertical");
+		}
+	}, [width]);
+
+	const setNewFile = (file) => {
+		// reset old layers
+		layers.current = {};
+		totalLayerCount.current = 0;
+		setActiveLayer(null);
+		// set new file
+		setFile(file);
+	};
+
 	useEffect(() => {
 		ReactGA.initialize(import.meta.env.VITE_TRACKING_ID);
 		ReactGA.pageview("/");
 		// copy paste image
-		document.onpaste = (e) => {
-			if (e.clipboardData.items.length > 0) {
-				const item = e.clipboardData.items[0];
-				if (item.kind === "file" && IMAGE_FORMATS.includes(item.type)) {
-					const blob = item.getAsFile();
-					handleFileChange(blob);
-				}
-			}
-		};
+		document.onpaste = (e) => readFileFromClipboard(e, setNewFile);
 	}, []);
 
 	useEffect(() => {
@@ -41,47 +55,35 @@ function App() {
 			document.removeEventListener("contextmenu", preventContextMenu);
 		};
 	}, [showOutput]);
-
-	const handleFileChange = async (file, cb) => {
-		try {
-			if (IMAGE_FORMATS.includes(file.type)) {
-				const base64File = await readImage(file);
-				setFile(base64File);
-			} else {
-				console.log("FILE TYPE NOT SUPPORTED", file.type);
-			}
-			// clear the file input
-			if (cb) cb();
-		} catch (err) {
-			console.log(err);
-		}
-	};
-
 	return (
 		<div className="font-squada animate-opacity">
 			<Header
 				onExport={() => setShowOutput(true)}
-				handleFileChange={handleFileChange}
+				handleFileChange={(file, clearInput) =>
+					handleFileChange(file, setNewFile, clearInput)
+				}
+				newUpdate={newUpdate}
+				setNewUpdate={setNewUpdate}
 			/>
 			<FileDrop
 				onFrameDragEnter={(event) => {
-					setDroping(true);
+					setDropping(true);
 				}}
-				onFrameDragLeave={(event) => setDroping(false)}
+				onFrameDragLeave={(event) => setDropping(false)}
 				onFrameDrop={(event) => {
-					setDroping(false);
+					setDropping(false);
 					const file = event.dataTransfer.files[0];
-					if (file && IMAGE_FORMATS.includes(file.type)) {
-						handleFileChange(file);
+					if (file) {
+						handleFileChange(file, setNewFile);
 					}
 				}}
 			>
 				<section
 					className={`split-screen-parent overflow-hidden ${
-						droping ? "opacity-90" : ""
+						dropping ? "opacity-90" : ""
 					}`}
 				>
-					<SplitScreen split="vertical">
+					<SplitScreen type={splitType} width={width} height={height}>
 						<Board />
 						<Editor />
 					</SplitScreen>

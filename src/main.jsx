@@ -2,13 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import Store from "./store";
+import MainStore from "./store";
+import EditorStore from "./store/editor";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Store>
-			<App />
-		</Store>
+		<MainStore>
+			<EditorStore>
+				<App />
+			</EditorStore>
+		</MainStore>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

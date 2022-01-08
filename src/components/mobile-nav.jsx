@@ -7,7 +7,6 @@ import EngineSvg from "../components/svg/engine-svg";
 import ExportSvg from "../components/svg/export-svg";
 import ImportSvg from "../components/svg/import-svg";
 import InstallSvg from "./svg/install-svg";
-import MoreSvg from "./svg/more-svg";
 
 const MobileNav = ({
 	handleFileChange,
@@ -16,6 +15,9 @@ const MobileNav = ({
 	handleReset,
 	setShowWhatsNew,
 	warpRealTime,
+	warpLibrary,
+	setWarpLibrary,
+	newUpdate,
 }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 
@@ -41,7 +43,10 @@ const MobileNav = ({
 				onClick={() => setMenuOpen((o) => !o)}
 			>
 				<div style={{ height: "1.5px" }} className="w-6 bg-primary3" />
-				<div style={{ height: "1.5px" }} className="w-4 mt-1 bg-primary3" />
+				<div
+					style={{ height: "1.5px" }}
+					className="w-4 mt-1 bg-primary3"
+				/>
 			</div>
 			<input
 				id="import-files"
@@ -49,7 +54,10 @@ const MobileNav = ({
 				type="file"
 				accept="image/png, image/jpeg , image/webp"
 				onChange={(e) =>
-					handleFileChange(e.target.files[0], () => (e.target.value = ""))
+					handleFileChange(
+						e.target.files[0],
+						() => (e.target.value = "")
+					)
 				}
 			/>
 			{menuOpen && (
@@ -72,6 +80,22 @@ const MobileNav = ({
 						{/* export icon */}
 						<ExportSvg />
 						Export
+					</li>
+					<li
+						onClick={() => setWarpLibrary("glfx")}
+						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full ${
+							warpLibrary === "glfx" && "bg-primary2"
+						}`}
+					>
+						GLFX
+					</li>
+					<li
+						onClick={() => setWarpLibrary("opencv")}
+						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full ${
+							warpLibrary === "opencv" && "bg-primary2"
+						}`}
+					>
+						OpenCV
 					</li>
 					<li
 						onClick={() => setWarpRealTime((s) => !s)}
@@ -132,6 +156,9 @@ const MobileNav = ({
 						{/* whatsnew icon */}
 						<WhatsnewSvg />
 						Whats New
+						{newUpdate && (
+							<div className="-mt-4 ml-1 w-2 h-2 bg-red rounded-full" />
+						)}
 					</li>
 				</ul>
 			)}

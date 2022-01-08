@@ -3,65 +3,82 @@
 @tailwind utilities;
 
 *::-webkit-scrollbar {
-  width: 5px;
-  height: 4px;
+	width: 5px;
+	height: 4px;
 }
- 
+
 *::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: none;
+	background-color: darkgrey;
+	outline: none;
 }
 
-@layer base{
-  :root{
-    --color-text-primary-1: #fff;
-    --color-text-primary-2: #C27224;
-    --color-text-gray: #6D757A;
-    --color-bg-primary-1: #ffffff;
-    --color-bg-primary-2: #F5F5F5;
-    --color-bg-primary-3: #C27224;
-    --color-bg-secondary-1: #121212;
-    --color-border-1: #C27224;
-  }
-  @media (prefers-color-scheme: dark) {
- :root{
-    --color-text-primary-1: #121212;
-    --color-text-primary-2: #EDC298;
-    --color-text-gray: #6D757A;
-    --color-bg-primary-1: #1D2025;
-    --color-bg-primary-2: #1F2933;
-    --color-bg-primary-3: #EDC298;
-    --color-bg-secondary-1: #F5F5F5;
-    --color-border-1: #EDC298;
-  }
-}
+@layer base {
+	:root {
+		--color-text-primary-1: #fff;
+		--color-text-primary-2: #c27224;
+		--color-text-primary-3: #2e2e2e;
+		--color-text-gray: #6d757a;
+		--color-bg-primary-1: #ffffff;
+		--color-bg-primary-2: #f5f5f5;
+		--color-bg-primary-3: #c27224;
+		--color-bg-secondary-1: #121212;
+		--color-border-1: #c27224;
+		--color--bg-red: #ef3a25;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--color-text-primary-1: #121212;
+			--color-text-primary-2: #edc298;
+			--color-text-primary-3: #fff;
+			--color-text-gray: #6d757a;
+			--color-bg-primary-1: #1d2025;
+			--color-bg-primary-2: #1f2933;
+			--color-bg-primary-3: #edc298;
+			--color-bg-secondary-1: #f5f5f5;
+			--color-border-1: #edc298;
+		}
+	}
 
-  body{
-    -webkit-user-select: none; 
-    -ms-user-select: none;
-    user-select: none; 
-  }
-
-  
- 
+	body {
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	.scrollbar-none {
+		scrollbar-width: none; /* Firefox */
+	}
+	.scrollbar-none::-webkit-scrollbar {
+		display: none; /* Safari and Chrome */
+	}
 }
 
 @layer utilities {
-.split-screen-parent{
-    height:calc(100vh - 4rem);
-  }
-  .cursor-ew-resize{
-    cursor:ew-resize;
-  }
-  .cursor-grab{
-    cursor:grab;
-  }
-  .dot-pattern{
-    background: linear-gradient(90deg, var(--color-bg-primary-2) 38.5px, transparent 1%) center,
-                linear-gradient(var(--color-bg-primary-2) 38.5px, transparent 1%) center,
-                var(--color-bg-primary-3);
-	  background-size: 40px 40px;
-  }
-
+	.split-screen-parent {
+		height: calc(100vh - 4rem);
+	}
+	.cursor-ew-resize {
+		cursor: ew-resize;
+	}
+	.cursor-grab {
+		cursor: grab;
+	}
+	.dot-pattern {
+		background: linear-gradient(
+					90deg,
+					var(--color-bg-primary-2) 38.5px,
+					transparent 1%
+				)
+				center,
+			linear-gradient(var(--color-bg-primary-2) 38.5px, transparent 1%)
+				center,
+			var(--color-bg-primary-3);
+		background-size: 40px 40px;
+	}
+	.cursor-ns-resize {
+		cursor: ns-resize;
+	}
 }
 
+ul li::before {
+	content: attr(data-icon);
+}

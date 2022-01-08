@@ -16,8 +16,10 @@ const DesktopNav = ({
 	handleReset,
 	setShowWhatsNew,
 	warpRealTime,
-	setFile,
 	importRef,
+	warpLibrary,
+	setWarpLibrary,
+	newUpdate,
 }) => {
 	const [showMore, setShowMore] = useState(false);
 
@@ -46,7 +48,10 @@ const DesktopNav = ({
 				type="file"
 				accept="image/png, image/jpeg , image/webp"
 				onChange={(e) =>
-					handleFileChange(e.target.files[0], () => (e.target.value = ""))
+					handleFileChange(
+						e.target.files[0],
+						() => (e.target.value = "")
+					)
 				}
 			/>
 			<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
@@ -69,6 +74,19 @@ const DesktopNav = ({
 				{/* export icon */}
 				<ExportSvg />
 				Export
+			</li>
+			<li
+				title="Warping Library"
+				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+			>
+				<select
+					value={warpLibrary}
+					className="p-1 bg-primary1 outline-none"
+					onChange={(e) => setWarpLibrary(e.target.value)}
+				>
+					<option value="glfx">GLFX</option>
+					<option value="opencv">OpenCV</option>
+				</select>
 			</li>
 			<li
 				onClick={() => setWarpRealTime((s) => !s)}
@@ -101,6 +119,9 @@ const DesktopNav = ({
 				{/* more icon */}
 				<MoreSvg />
 				More
+				{newUpdate && (
+					<div className="-mt-4 ml-1 w-2 h-2 bg-red rounded-full" />
+				)}
 				{/* dropdown */}
 				{showMore ? (
 					<ul className="absolute w-48 bg-primary2 top-full right-0 border-2 border-primary1 z-50">
@@ -145,6 +166,9 @@ const DesktopNav = ({
 							{/* whatsnew icon */}
 							<WhatsnewSvg />
 							Whats New
+							{newUpdate && (
+								<div className="-mt-4 ml-1 w-2 h-2 bg-red rounded-full" />
+							)}
 						</li>
 					</ul>
 				) : null}

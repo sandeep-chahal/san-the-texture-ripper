@@ -1,65 +1,86 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useStore } from "../store";
+import { useMainStore } from "../store";
+import { useEditorStore } from "../store/editor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import * as d3 from "d3";
 import fx from "glfx";
 import { uniqueId } from "../utils";
-import DeleteSvg from "../components/svg/delete-svg";
-import AddSvg from "../components/svg/add-svg";
+import CropBox from "./cropbox";
+import Tabs from "./tabs";
 
 const tempCanvas = document.createElement("canvas");
 const tempCanvasCtx = tempCanvas.getContext("2d");
 
-const Editor = (props) => {
-	const svg = useRef(null);
-	const [disabled, setDisabled] = useState(true);
-	const canvas = useRef();
-	const scale = useRef(1);
-	const line = useRef(null);
-	const { file, setResults, warpRealTime } = useStore();
-	const layers = useRef({});
-	const totalLayerCount = useRef(0);
-	const [activeLayer, setActiveLayer] = useState(null);
-	const glfxCanvas = useRef(null);
-	const texture = useRef(null);
-	const isMouseOver = useRef(false);
-	const wrapperRef = useRef(null);
-	const parentRef = useRef(null);
+const Editor = () => {
+	const isMouseOver = useRef(false); // if mouse is over editor
+	const wrapperRef = useRef(null); // transform wrapper(zoom, pan, pinch)
+	const parentRef = useRef(null); // parent/container div
+	const [disabled, setDisabled] = useState(false); // if panning and zooming is disabled / ctrl key is pressed or not
+	const canvas = useRef(); // canvas
+	const scale = useRef(1); // zoom scale
+	const cropBox = useRef(null);
 
-	useEffect(() => {
-		if (file && canvas.current) {
-			const img = new Image();
-			img.src = file;
-			img.onload = () => {
-				const ctx = canvas.current.getContext("2d");
-				ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
-				canvas.current.width = img.width;
-				canvas.current.height = img.height;
-				ctx.drawImage(img, 0, 0);
-				glfxCanvas.current = fx.canvas();
-				texture.current = glfxCanvas.current.texture(img);
-				layers.current = {};
-				addLayer();
-				drawCropBox();
-			};
+	const { file, setResults, warpRealTime, warpLibrary, openCV } =
+		useMainStore();
+	const {
+		layers, // layers object
+		totalLayerCount, //total number of layers
+		activeLayer, // current active layer id
+		setActiveLayer,
+		glfxCanvas, //glfx canvas
+		texture, //glfx texture
+		opencvImg, // opencv image
+	} = useEditorStore();
+
+	// draw newly added image on canvas
+	const showImage = (data) => {
+		const ctx = canvas.current.getContext("2d");
+		ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+		canvas.current.width = data.width;
+		canvas.current.height = data.height;
+		ctx.drawImage(data, 0, 0);
+		glfxCanvas.current = fx.canvas();
+		texture.current = glfxCanvas.current.texture(data);
+		glfxCanvas.current.draw(texture.current).update();
+		if (window.cv) {
+			opencvImg.current = window.cv.imread(canvas.current);
 		}
-	}, [file]);
+		if (!activeLayer) addLayer();
+		if (cropBox.current) cropBox.current.drawCropBox();
+	};
+
+	// when new file is imported
+	useEffect(() => {
+		if (canvas.current && file) {
+			// if file is base64
+			if (typeof file === "string") {
+				const img = new Image();
+				img.src = file;
+				img.onload = () => showImage(img);
+			}
+			// if file is bitmap
+			else if (typeof file === "object") {
+				showImage(file);
+			}
+		}
+	}, [file, openCV.cv]);
+
+	// handle key events
 	useEffect(() => {
 		const onKeyDown = (e) => {
-			if (e.key === "c") {
-				handleDeleteLayer(activeLayer);
-			}
-			if (e.key === "n") {
-				addLayer();
-			}
-			if (e.keyCode === 17 && disabled && activeLayer) {
-				setDisabled(false);
-			}
-			if ((isMouseOver.current && e.keyCode === 107) || e.keyCode === 187) {
+			// if (e.key === "c") {
+			// 	handleDeleteLayer(activeLayer);
+			// }
+			// if (e.key === "n") {
+			// 	addLayer();
+			// }
+			if (
+				(isMouseOver.current && e.keyCode === 107) ||
+				e.keyCode === 187
+			) {
 				// console.log("zoom in");
 				wrapperRef.current.zoomIn();
 				scale.current += 0.5;
-				drawCropBox();
+				if (cropBox.current) cropBox.current.drawCropBox();
 			} else if (
 				(isMouseOver.current && e.keyCode === 109) ||
 				e.keyCode === 189
@@ -67,23 +88,17 @@ const Editor = (props) => {
 				// console.log("zoom out");
 				wrapperRef.current.zoomOut();
 				scale.current -= 0.5;
-				drawCropBox();
-			}
-		};
-		const onKeyUp = (e) => {
-			if (e.keyCode === 17) {
-				setDisabled(true);
+				if (cropBox.current) cropBox.current.drawCropBox();
 			}
 		};
 
 		window.addEventListener("keydown", onKeyDown);
-		window.addEventListener("keyup", onKeyUp);
 		return () => {
 			window.removeEventListener("keydown", onKeyDown);
-			window.removeEventListener("keyup", onKeyUp);
 		};
 	}, [disabled, activeLayer]);
 
+	// add new layer
 	const addLayer = () => {
 		const newLayer = getDefaultLayerConfig();
 		layers.current[newLayer.id] = newLayer;
@@ -95,15 +110,20 @@ const Editor = (props) => {
 		return {
 			name: `Layer ${++totalLayerCount.current}`,
 			id: uniqueId(),
+			// points -> where new cropbox handles(svg circles) will be drawn initially
 			points: [
 				[radius * 2, radius * 2],
 				[canvas.current.width - radius * 2, radius * 2],
-				[canvas.current.width - radius * 2, canvas.current.height - radius * 2],
+				[
+					canvas.current.width - radius * 2,
+					canvas.current.height - radius * 2,
+				],
 				[radius * 2, canvas.current.height - radius * 2],
 			],
 		};
 	};
 
+	// mouse events
 	useEffect(() => {
 		const onMouseEnter = () => {
 			isMouseOver.current = true;
@@ -117,107 +137,26 @@ const Editor = (props) => {
 		}
 		return () => {
 			if (parentRef.current) {
-				parentRef.current.removeEventListener("mouseenter", onMouseEnter);
-				parentRef.current.removeEventListener("mouseleave", onMouseLeave);
+				parentRef.current.removeEventListener(
+					"mouseenter",
+					onMouseEnter
+				);
+				parentRef.current.removeEventListener(
+					"mouseleave",
+					onMouseLeave
+				);
 			}
 		};
 	}, []);
 
 	useEffect(() => {
-		drawCropBox();
-	}, [file, activeLayer, warpRealTime]);
+		if (cropBox.current) cropBox.current.drawCropBox();
+	}, [activeLayer, warpRealTime, warpLibrary]);
 
-	const drawCropBox = () => {
-		if (file === null || activeLayer == null) return;
-		svg.current.selectAll("*").remove();
-		const { radius, strokeWidth, opacity } = getSvgSize();
-		line.current = svg.current
-			.selectAll(".line")
-			.data(new Array(10).fill(null))
-			.enter()
-			.append("path")
-			.attr("class", "line")
-			.attr("stroke-width", strokeWidth * 0.5)
-			.attr("stroke-opacity", opacity)
-			.attr("stroke", "#00ACED");
-
-		svg.current
-			.selectAll(".handle")
-			.data(layers.current[activeLayer].points)
-			.enter()
-			.append("circle")
-			.attr("class", `handle cursor-move`)
-			.attr("fill", "transparent")
-			.attr("stroke-width", strokeWidth * 0.8)
-			.attr("stroke-opacity", opacity)
-			.attr("r", radius)
-			.attr("stroke", "#C27224")
-			.attr("data-index", (d, i) => i)
-			.attr("transform", function (d) {
-				return "translate(" + d + ")";
-			})
-			.call(
-				d3
-					.drag()
-					.on("drag", function (d) {
-						if (
-							d.x > 0 &&
-							d.x < canvas.current.width &&
-							d.y > 0 &&
-							d.y < canvas.current.height
-						) {
-							d3.select(this).attr(
-								"transform",
-								"translate(" + d.x + "," + d.y + ")"
-							);
-							layers.current[activeLayer].points[
-								d3.select(this).attr("data-index")
-							] = [d.x, d.y];
-							updatePerspectiveGrid();
-							if (!warpRealTime) return;
-							updateResultGLFX();
-						}
-					})
-					.on("end", () => {
-						updateResultGLFX();
-					})
-			);
-
-		updatePerspectiveGrid();
-		function updatePerspectiveGrid() {
-			const points = layers.current[activeLayer].points;
-			const verticalLines1 = getMidPointArray(points[0], points[3]);
-			const verticalLines2 = getMidPointArray(points[1], points[2]);
-			const horizontalLines1 = getMidPointArray(points[0], points[1]);
-			const horizontalLines2 = getMidPointArray(points[3], points[2]);
-			const linePoints1 = [...verticalLines1, ...horizontalLines1];
-			const linePoints2 = [...verticalLines2, ...horizontalLines2];
-			line.current._groups[0].forEach((line, index) => {
-				line.setAttribute(
-					"d",
-					`M${linePoints1[index][0]},${linePoints1[index][1]}L${linePoints2[index][0]},${linePoints2[index][1]}`
-				);
-			});
-		}
-
-		function midPoint(x1, y1, x2, y2) {
-			return [(x1 + x2) / 2, (y1 + y2) / 2];
-		}
-
-		function getMidPointArray(p1, p2) {
-			const points = [];
-			points.push(p1);
-			points.push(p2);
-			points.push(midPoint(p1[0], p1[1], p2[0], p2[1]));
-			points.push(midPoint(p1[0], p1[1], points[2][0], points[2][1]));
-			points.push(midPoint(p2[0], p2[1], points[2][0], points[2][1]));
-			return points;
-		}
-	};
-
+	// perform warping using glfx library
 	const updateResultGLFX = () => {
-		// opencv works better but its ~25MB :(
 		if (!activeLayer || !layers.current[activeLayer]) return;
+		// get cropbox points
 		let points = layers.current[activeLayer].points;
 		let width = Math.max(
 			points[1][0] - points[0][0],
@@ -227,6 +166,7 @@ const Editor = (props) => {
 			points[3][1] - points[0][1],
 			points[2][1] - points[1][1]
 		);
+		// min height and width must be 200px
 		if (width < 200 || height < 200) {
 			let diff = Math.max(200 - width, 200 - height);
 			width += diff;
@@ -234,12 +174,16 @@ const Editor = (props) => {
 		}
 		// algorithm works better when width and height same
 		const fakeDim = Math.max(width, height);
+		// flatten the array
 		points = points.reduce((pV, cV) => [...pV, ...cV], []);
 		const dstPoints = [0, 0, fakeDim, 0, fakeDim, fakeDim, 0, fakeDim];
+		// warp
 		glfxCanvas.current
 			.draw(texture.current)
 			.perspective(points, dstPoints)
 			.update();
+
+		// draw result to temp canvas with fakeDim
 		tempCanvas.width = fakeDim;
 		tempCanvas.height = fakeDim;
 		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
@@ -254,12 +198,14 @@ const Editor = (props) => {
 			fakeDim,
 			fakeDim
 		);
+
 		// to remove transparency
-		// get the data till the pixel is transparent on both axis
+		// get the new width and height till the pixel is transparent on both axis
 		let newWidth = null;
 		let newHeight = null;
 		for (let i = 0; i < fakeDim; i++) {
 			const xPixelValue = tempCanvasCtx.getImageData(i, 0, 1, 1).data;
+			// if current pixel is transparent
 			if (
 				xPixelValue[0] === 0 &&
 				xPixelValue[1] === 0 &&
@@ -269,7 +215,9 @@ const Editor = (props) => {
 			) {
 				newWidth = i;
 			}
+
 			const yPixelValue = tempCanvasCtx.getImageData(0, i, 1, 1).data;
+			// if current pixel is transparent
 			if (
 				yPixelValue[0] === 0 &&
 				yPixelValue[1] === 0 &&
@@ -279,15 +227,24 @@ const Editor = (props) => {
 			) {
 				newHeight = i;
 			}
+			if (newWidth !== null && newHeight !== null) break;
 		}
-		if (newWidth === null) newWidth = fakeDim;
-		if (newHeight === null) newHeight = fakeDim;
+		// if there was transparent pixels
+		if (newWidth != null || newHeight !== null) {
+			newWidth = newWidth || fakeDim;
+			newHeight = newHeight || fakeDim;
 
-		const newPixelData = tempCanvasCtx.getImageData(0, 0, newWidth, newHeight);
-		tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
-		tempCanvas.width = newWidth;
-		tempCanvas.height = newHeight;
-		tempCanvasCtx.putImageData(newPixelData, 0, 0);
+			const newPixelData = tempCanvasCtx.getImageData(
+				0,
+				0,
+				newWidth,
+				newHeight
+			);
+			tempCanvasCtx.clearRect(0, 0, fakeDim, fakeDim);
+			tempCanvas.width = newWidth;
+			tempCanvas.height = newHeight;
+			tempCanvasCtx.putImageData(newPixelData, 0, 0);
+		}
 
 		setResults((state) => {
 			const newState = { ...state };
@@ -301,22 +258,30 @@ const Editor = (props) => {
 			return newState;
 		});
 	};
+
+	// delete layer
 	const handleDeleteLayer = (id) => {
 		const keys = Object.keys(layers.current);
+
+		// if there's only one layer then dont delete
 		if (keys.length === 1) return;
+
 		delete layers.current[id];
 		setResults((state) => {
 			const newState = { ...state };
 			delete newState[id];
 			return newState;
 		});
+		// if user deleted active layer then set active layer to first layer
+		// or to second if first layer is deleted
 		if (activeLayer === id) {
-			setActiveLayer(keys[0]);
+			setActiveLayer(keys[keys[0] === id ? 1 : 0]);
 		}
 	};
 
 	const lerp = (x, y, a) => x * (1 - a) + y * a;
 
+	// calculate handle(circle) radius and lines width based on canvas size and zoom
 	const getSvgSize = () => {
 		const rMinSize = 2;
 		const rMaxSize = 20;
@@ -331,51 +296,91 @@ const Editor = (props) => {
 		return { radius, strokeWidth: radius / 2, opacity };
 	};
 
-	return (
-		<div
-			className={`h-full dot-pattern ${
-				disabled ? "cursor-default" : "cursor-grab"
-			}`}
-			ref={parentRef}
-			// onKeyPress={console.log}
-		>
-			{Object.keys(layers.current).length ? (
-				<div className="p-1 px-2 flex items-start text-primary2">
-					<div className="flex overflow-x-auto scroll-bar-1">
-						{Object.keys(layers.current).map((key, index) => (
-							<div
-								key={key}
-								className={`px-3 group min-w-max relative ${
-									activeLayer === key ? "border-b-2 border-primary1" : ""
-								}`}
-							>
-								<span
-									className="cursor-pointer"
-									onClick={() => setActiveLayer(key)}
-								>
-									{layers.current[key].name}
-								</span>
-								{/* delete icon */}
-								<div
-									title="Delete Layer (C)"
-									className="inline-block opacity-0 group-hover:opacity-100"
-									onClick={() => handleDeleteLayer(key)}
-								>
-									<DeleteSvg />
-								</div>
-							</div>
-						))}
-					</div>
-					{/* add icon */}
-					<div
-						onClick={addLayer}
-						className="mt-1 flex items-center ml-2 transition-transform transform rotate-0 hover:rotate-90 hover:scale-110"
-					>
-						<AddSvg />
-					</div>
-				</div>
-			) : null}
+	const updateResultOpencv = () => {
+		// http://www.recompile.in/2019/11/image-perspective-correction-using.html
+		if (!activeLayer || !layers.current[activeLayer]) return;
+		if (openCV.state !== "loaded") {
+			alert(
+				openCV.state === "loading"
+					? "opencv is not loaded"
+					: "opencv is not ready yet"
+			);
+			return;
+		}
+		const cv = window.cv;
 
+		let points = layers.current[activeLayer].points;
+
+		let width = Math.max(
+			points[1][0] - points[0][0],
+			points[2][0] - points[3][0]
+		);
+		let height = Math.max(
+			points[3][1] - points[0][1],
+			points[2][1] - points[1][1]
+		);
+		// min height and width must be 200px
+		if (width < 200 || height < 200) {
+			let diff = Math.max(200 - width, 200 - height);
+			width += diff;
+			height += diff;
+		}
+		// flatten the array
+		points = points.reduce((pV, cV) => [...pV, ...cV], []);
+		const dstPoints = [0, 0, height, 0, height, width, 0, width];
+
+		let dst = new cv.Mat();
+		let dsize = new cv.Size(height, width);
+		let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, points);
+		let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, dstPoints);
+		let M = cv.getPerspectiveTransform(srcTri, dstTri);
+		cv.warpPerspective(
+			opencvImg.current,
+			dst,
+			M,
+			dsize,
+			cv.INTER_LINEAR,
+			cv.BORDER_CONSTANT,
+			new cv.Scalar()
+		);
+
+		tempCanvas.width = dsize.width;
+		tempCanvas.height = dsize.height;
+		cv.imshow(tempCanvas, dst);
+		const base64 = tempCanvas.toDataURL();
+
+		setResults((state) => {
+			const newState = { ...state };
+			newState[activeLayer] = {
+				result: base64,
+				width,
+				height,
+				id: activeLayer,
+				name: layers.current[activeLayer].name,
+			};
+			return newState;
+		});
+
+		dst.delete();
+		M.delete();
+		srcTri.delete();
+		dstTri.delete();
+	};
+
+	return (
+		<div className={`h-full dot-pattern`} ref={parentRef}>
+			<Tabs
+				tabs={Object.values(layers.current).map((tab) => ({
+					name: tab.name,
+					key: tab.id,
+				}))}
+				handleDeleteTab={handleDeleteLayer}
+				activeTab={activeLayer}
+				setActiveTab={setActiveLayer}
+				addTab={addLayer}
+			/>
+
+			{/* pan and zoom components */}
 			<TransformWrapper
 				ref={wrapperRef}
 				scale={scale.current}
@@ -385,19 +390,38 @@ const Editor = (props) => {
 				onZoomStop={(ref) => {}}
 				onZoom={(ref) => {
 					scale.current = ref.state.scale;
-					drawCropBox();
+					if (cropBox.current) cropBox.current.drawCropBox();
+				}}
+				onPanningStart={(ref, e) => {
+					// dont pan if using left click without ctrl key
+					// and pan if using other mouse button (e.g middle button, right button)
+					if (e.which === 1 && !e.ctrlKey) setDisabled(true);
+					else setDisabled(false);
+				}}
+				onPanningStop={(ref) => {
+					setDisabled(false);
 				}}
 			>
-				<TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+				<TransformComponent
+					wrapperStyle={{ width: "100%", height: "100%" }}
+				>
 					<div>
+						{/* actual canvas */}
 						<canvas ref={canvas}></canvas>
-						<svg id="svg" className="absolute top-0 left-0 w-full h-full">
-							<g
-								ref={(ref) => {
-									svg.current = d3.select(ref);
-								}}
-							></g>
-						</svg>
+						<CropBox
+							canvas={canvas}
+							layers={layers}
+							updateResults={
+								warpLibrary === "glfx"
+									? updateResultGLFX
+									: updateResultOpencv
+							}
+							ref={cropBox}
+							file={file}
+							activeLayer={activeLayer}
+							getSvgSize={getSvgSize}
+							warpRealTime={warpRealTime}
+						/>
 					</div>
 				</TransformComponent>
 			</TransformWrapper>
