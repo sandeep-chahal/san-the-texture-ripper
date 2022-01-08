@@ -6,7 +6,7 @@ export const IMAGE_FORMATS = [
 ];
 
 export const readImage = (file) => {
-	if (createImageBitmap) {
+	if (window.createImageBitmap) {
 		console.log("using bitmap");
 		return createImageBitmap(file);
 	} else
