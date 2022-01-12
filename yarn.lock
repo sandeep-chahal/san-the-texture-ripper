@@ -2953,10 +2953,10 @@ react-dom@^17.0.0:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-file-drop@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/react-file-drop/-/react-file-drop-3.1.2.tgz#9e545abddc2790110c262d9fd0718ad43c71b56e"
-  integrity sha512-fhujAloK9AIDzu18ltGrYe8Pk9NuXdCc8MrFgLNPJJS22B/GdTwD7Pz4BCCUiX+4sFZr42L4AZM7RsJN2xu1BQ==
+react-file-drop@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/react-file-drop/-/react-file-drop-3.1.3.tgz#285b3ea47466e12173401e94d97afbffb60fdb79"
+  integrity sha512-uVIdL7NyVTJOxyxArVyG56ptzkahY7oLR/cFKnD+MO3d4tJfl+GwpFYuiyZ3Gtyb4DJ0/oi1SS40ui77e0KkoA==
   dependencies:
     prop-types "^15.7.2"
 
