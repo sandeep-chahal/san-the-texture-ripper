@@ -12,7 +12,7 @@
 		"file-saver": "^2.0.5",
 		"glfx": "^0.0.4",
 		"html-to-image": "^1.9.0",
-		"jszip": "^3.7.1",
+		"jszip": "^3.8.0",
 		"prop-types": "^15.7.2",
 		"react": "^17.0.0",
 		"react-dom": "^17.0.0",
