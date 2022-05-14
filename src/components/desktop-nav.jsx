@@ -8,6 +8,7 @@ import ExportSvg from "./svg/export-svg";
 import ImportSvg from "./svg/import-svg";
 import InstallSvg from "./svg/install-svg";
 import MoreSvg from "./svg/more-svg";
+import GithubSvg from "./svg/github-svg";
 
 const DesktopNav = ({
 	handleFileChange,
@@ -17,8 +18,7 @@ const DesktopNav = ({
 	setShowWhatsNew,
 	warpRealTime,
 	importRef,
-	warpLibrary,
-	setWarpLibrary,
+
 	newUpdate,
 }) => {
 	const [showMore, setShowMore] = useState(false);
@@ -77,16 +77,9 @@ const DesktopNav = ({
 			</li>
 			<li
 				title="Warping Library"
-				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-text flex items-center justify-center"
 			>
-				<select
-					value={warpLibrary}
-					className="p-1 bg-primary1 outline-none"
-					onChange={(e) => setWarpLibrary(e.target.value)}
-				>
-					<option value="glfx">GLFX</option>
-					<option value="opencv">OpenCV</option>
-				</select>
+				OpenCV
 			</li>
 			<li
 				onClick={() => setWarpRealTime((s) => !s)}
@@ -146,6 +139,17 @@ const DesktopNav = ({
 							>
 								<MailSvg />
 								Contact
+							</a>
+						</li>
+						<li>
+							{/* github icon */}
+							<a
+								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center"
+								href="https://github.com/sandeep-chahal/san-the-texture-ripper"
+								target="_blank"
+							>
+								<GithubSvg />
+								Github
 							</a>
 						</li>
 						<li>

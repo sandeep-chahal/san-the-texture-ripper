@@ -9,7 +9,6 @@ export default ({ children }) => {
 	const [showWhatsNew, setShowWhatsNew] = useState(false);
 	const [newUpdate, setNewUpdate] = useState(false);
 	const [results, setResults] = useState({});
-	const [warpLibrary, setWarpLibrary] = useState("glfx");
 	const [openCV, setOpenCV] = useState({
 		state: "not_loaded",
 		cv: null,
@@ -37,7 +36,6 @@ export default ({ children }) => {
 					console.log("Couldn't load opencv");
 					localStorage.setItem("warp_library", "glfx");
 					localStorage.setItem("opencv_loaded", false);
-					setWarpLibrary("glfx");
 					setOpenCV({
 						state: "not_loaded",
 						cv: null,
@@ -50,20 +48,8 @@ export default ({ children }) => {
 		}
 	};
 
-	const changeWarpLibrary = (library) => {
-		localStorage.setItem("warp_library", library);
-		if (library) setWarpLibrary(library);
-		if (library === "opencv") handleLoadOpenCV();
-	};
-
 	useEffect(() => {
-		// last selected library
-		const library = localStorage.getItem("warp_library");
-		if (library === "glfx" || library === "opencv") setWarpLibrary(library);
-		const openCVLoaded = JSON.parse(localStorage.getItem("opencv_loaded"));
-		if (openCVLoaded || library === "opencv") {
-			handleLoadOpenCV();
-		}
+		handleLoadOpenCV();
 
 		// show whats new if the user has not seen it before
 		const lastUpdate = localStorage.getItem("lastUpdate");
@@ -82,8 +68,7 @@ export default ({ children }) => {
 				setShowWhatsNew,
 				warpRealTime,
 				setWarpRealTime,
-				warpLibrary,
-				setWarpLibrary: changeWarpLibrary,
+
 				newUpdate,
 				setNewUpdate,
 				openCV,
