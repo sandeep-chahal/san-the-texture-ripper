@@ -7,6 +7,8 @@ import EngineSvg from "../components/svg/engine-svg";
 import ExportSvg from "../components/svg/export-svg";
 import ImportSvg from "../components/svg/import-svg";
 import InstallSvg from "./svg/install-svg";
+import OpencvSvg from "./svg/opencv-svg";
+import GithubSvg from "./svg/github-svg";
 
 const MobileNav = ({
 	handleFileChange,
@@ -15,8 +17,6 @@ const MobileNav = ({
 	handleReset,
 	setShowWhatsNew,
 	warpRealTime,
-	warpLibrary,
-	setWarpLibrary,
 	newUpdate,
 }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -81,20 +81,11 @@ const MobileNav = ({
 						<ExportSvg />
 						Export
 					</li>
+
 					<li
-						onClick={() => setWarpLibrary("glfx")}
-						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full ${
-							warpLibrary === "glfx" && "bg-primary2"
-						}`}
+						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full`}
 					>
-						GLFX
-					</li>
-					<li
-						onClick={() => setWarpLibrary("opencv")}
-						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full ${
-							warpLibrary === "opencv" && "bg-primary2"
-						}`}
-					>
+						<OpencvSvg />
 						OpenCV
 					</li>
 					<li
@@ -136,6 +127,17 @@ const MobileNav = ({
 						>
 							<MailSvg />
 							Contact
+						</a>
+					</li>
+					<li className="my-2 px-4 w-full">
+						{/* github icon */}
+						<a
+							className="cursor-pointer flex items-center"
+							href="https://github.com/sandeep-chahal/san-the-texture-ripper"
+							target="_blank"
+						>
+							<GithubSvg />
+							Github
 						</a>
 					</li>
 					<li className="my-2 px-4 w-full">

@@ -84,10 +84,15 @@ const CropBox = forwardRef(
 			// draw cropbox lines/grid
 			function updatePerspectiveGrid() {
 				const points = layers.current[activeLayer].points;
+				// TL -> BL
 				const verticalLines1 = getMidPointArray(points[0], points[3]);
+				// TR -> BR
 				const verticalLines2 = getMidPointArray(points[1], points[2]);
+				// TL -> TR
 				const horizontalLines1 = getMidPointArray(points[0], points[1]);
+				// BR -> BL
 				const horizontalLines2 = getMidPointArray(points[3], points[2]);
+
 				const linePoints1 = [...verticalLines1, ...horizontalLines1];
 				const linePoints2 = [...verticalLines2, ...horizontalLines2];
 				line.current._groups[0].forEach((line, index) => {

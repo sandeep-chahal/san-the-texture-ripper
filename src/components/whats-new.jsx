@@ -24,6 +24,7 @@ function WhatsNew() {
 				style={{ height: "90%" }}
 				className="relative bg-primary2 text-primary3 flex flex-col w-11/12 xl:w-3/4  animate-reveal rounded-lg"
 			>
+				{/* header */}
 				<div className="">
 					<h1 className="text-center mt-4 text-2xl md:text-4xl">
 						<span className="text-xl md:text-2xl">🎉✨</span> What's
@@ -36,8 +37,31 @@ function WhatsNew() {
 						<DeleteSvg setShowWhatsNew={setShowWhatsNew} />
 					</div>
 				</div>
+				{/* header ends */}
+				{/* updates container */}
 				<div className="w-11/12 md:w-4/5 mx-auto mt-4 overflow-auto scrollbar-none">
-					{/* updates */}
+					{/* updates header */}
+					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
+						<span className="text-base md:text-lg">🎁🎀</span> May
+						2022 <span className="text-base md:text-lg">🎁🎀</span>
+					</h2>
+					{/* updates list */}
+					<ul className="text-base md:text-2xl flex-wrap">
+						<li data-icon="📭 " className="">
+							<a
+								className="border-b-2 border-primary2"
+								target="_blank"
+								href="https://github.com/sandeep-chahal/san-the-texture-ripper"
+							>
+								Made opensource
+							</a>
+						</li>
+						<li data-icon="🌳 " className="">
+							Removed GLFX and made opencv default warp library
+						</li>
+					</ul>
+					{/* divider */}
+					<div className="h-1 bg-secondary1 w-full mt-4"></div>
 					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
 						<span className="text-base md:text-lg">🎁🎀</span>{" "}
 						January 2022{" "}
@@ -69,7 +93,7 @@ function WhatsNew() {
 					</ul>
 					{/* divider */}
 					<div className="h-1 bg-secondary1 w-full mt-4"></div>
-					{/* updates */}
+					{/* updates header */}
 					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
 						<span className="text-base md:text-lg">🎁🎀</span>{" "}
 						December 2021{" "}
@@ -125,6 +149,7 @@ function WhatsNew() {
 						future.
 					</div>
 				</div>
+				{/* updates container ends*/}
 			</div>
 		</div>
 	);

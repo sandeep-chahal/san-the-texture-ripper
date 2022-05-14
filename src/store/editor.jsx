@@ -6,8 +6,7 @@ const EditorStore = ({ children }) => {
 	const layers = useRef({});
 	const totalLayerCount = useRef(0);
 	const [activeLayer, setActiveLayer] = useState(null);
-	const glfxCanvas = useRef(null);
-	const texture = useRef(null);
+
 	const opencvImg = useRef(null);
 
 	return (
@@ -17,8 +16,6 @@ const EditorStore = ({ children }) => {
 				totalLayerCount,
 				activeLayer,
 				setActiveLayer,
-				glfxCanvas,
-				texture,
 				opencvImg,
 			}}
 		>

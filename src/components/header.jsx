@@ -11,8 +11,6 @@ const Header = ({ onExport, handleFileChange }) => {
 		warpRealTime,
 		setWarpRealTime,
 		setShowWhatsNew,
-		warpLibrary,
-		setWarpLibrary,
 		newUpdate,
 	} = useMainStore();
 	const { width, height } = useWindowSize();
@@ -54,8 +52,6 @@ const Header = ({ onExport, handleFileChange }) => {
 					setFile={setFile}
 					handleFileChange={handleFileChange}
 					importRef={importRef}
-					warpLibrary={warpLibrary}
-					setWarpLibrary={setWarpLibrary}
 					newUpdate={newUpdate}
 				/>
 			) : (
@@ -68,8 +64,6 @@ const Header = ({ onExport, handleFileChange }) => {
 					setFile={setFile}
 					importRef={importRef}
 					handleFileChange={handleFileChange}
-					warpLibrary={warpLibrary}
-					setWarpLibrary={setWarpLibrary}
 					newUpdate={newUpdate}
 				/>
 			)}
