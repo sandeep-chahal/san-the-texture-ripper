@@ -5,27 +5,24 @@ export const IMAGE_FORMATS = [
 	"image/webp",
 ];
 
-export const readImage = (file) => {
-	if (window.createImageBitmap) {
-		console.log("using bitmap");
-		return createImageBitmap(file);
-	} else
-		return new Promise((res) => {
-			console.log("using fileReader");
-			const reader = new FileReader();
-			reader.onload = function (e) {
-				const data = e.target.result;
-				res(data);
-			};
-			reader.readAsDataURL(file);
+// polyfill for createBitMap
+
+if (!("createImageBitmap" in window)) {
+	window.createImageBitmap = async function (blob) {
+		return new Promise((resolve, reject) => {
+			let img = document.createElement("img");
+			img.addEventListener("load", function () {
+				resolve(this);
+			});
+			img.src = URL.createObjectURL(blob);
 		});
-};
+	};
+}
 
 export const handleFileChange = async (file, setFile, cb) => {
 	try {
 		if (IMAGE_FORMATS.includes(file.type)) {
-			const data = await readImage(file);
-			const ts2 = Date.now();
+			const data = await window.createImageBitmap(file);
 			setFile(data);
 		} else {
 			console.log("FILE TYPE NOT SUPPORTED", file.type);

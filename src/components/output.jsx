@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toPng } from "html-to-image";
-import Resizable from "react-resizable-box";
+import { Resizable } from "re-resizable";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import { useMainStore } from "../store";
@@ -103,16 +103,14 @@ function Output({ onClose }) {
 							];
 							return (
 								<Resizable
-									width={width}
-									height={height}
-									maxHeight={height * 10}
-									maxWidth={width * 10}
-									className="export m-2 w-full h-full group"
 									key={index}
-									minHeight={200}
-									minWidth={200}
+									defaultSize={{
+										width,
+										height,
+									}}
+									className="export m-2 w-full h-full group"
 									lockAspectRatio={lockAR}
-									handlerClasses={{
+									handleClasses={{
 										bottomRight: `group-hover:opacity-20 bg-yellow-400 opacity-0`,
 										right: `group-hover:opacity-20 ${
 											!lockAR && "bg-yellow-400"

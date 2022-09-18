@@ -82,17 +82,16 @@ const MobileNav = ({
 						Export
 					</li>
 
-					<li
+					{/* <li
 						className={`my-2 px-4 h-full cursor-pointer flex items-center w-full`}
 					>
 						<OpencvSvg />
 						OpenCV
-					</li>
-					<li
+					</li> */}
+					{/* <li
 						onClick={() => setWarpRealTime((s) => !s)}
 						className="my-2 px-4 h-full cursor-pointer flex items-center w-full"
 					>
-						{/* engine icon */}
 						<EngineSvg />
 						Warp Real Time
 						<span
@@ -100,7 +99,7 @@ const MobileNav = ({
 								warpRealTime ? "bg-green-600" : "bg-primary2"
 							} w-3 h-3 ml-3 rounded-full`}
 						></span>
-					</li>
+					</li> */}
 					<li
 						onClick={handleReset}
 						className="my-2 px-4 h-full cursor-pointer flex items-center w-full"

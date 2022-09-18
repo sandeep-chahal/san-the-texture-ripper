@@ -42,8 +42,23 @@ function WhatsNew() {
 				<div className="w-11/12 md:w-4/5 mx-auto mt-4 overflow-auto scrollbar-none">
 					{/* updates header */}
 					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
-						<span className="text-base md:text-lg">🎁🎀</span> May
-						2022 <span className="text-base md:text-lg">🎁🎀</span>
+						<span className="text-base md:text-lg">🐲🐲</span> July
+						2022 <span className="text-base md:text-lg">🐲🐲</span>
+					</h2>
+					{/* updates list */}
+					<ul className="text-base md:text-2xl flex-wrap">
+						<li data-icon="🫡 " className="">
+							Better browser compatibility
+						</li>
+						<li data-icon="🤖 " className="">
+							Fixed grid bugs
+						</li>
+					</ul>
+					{/* divider */}
+					<div className="h-1 bg-secondary1 w-full mt-4"></div>
+					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
+						<span className="text-base md:text-lg">🐲🐲</span> May
+						2022 <span className="text-base md:text-lg">🐲🐲</span>
 					</h2>
 					{/* updates list */}
 					<ul className="text-base md:text-2xl flex-wrap">
@@ -63,9 +78,9 @@ function WhatsNew() {
 					{/* divider */}
 					<div className="h-1 bg-secondary1 w-full mt-4"></div>
 					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
-						<span className="text-base md:text-lg">🎁🎀</span>{" "}
+						<span className="text-base md:text-lg">🐲🐲</span>{" "}
 						January 2022{" "}
-						<span className="text-base md:text-lg">🎁🎀</span>
+						<span className="text-base md:text-lg">🐲🐲</span>
 					</h2>
 					{/* updates list */}
 					<ul className="text-base md:text-2xl flex-wrap">
@@ -95,9 +110,9 @@ function WhatsNew() {
 					<div className="h-1 bg-secondary1 w-full mt-4"></div>
 					{/* updates header */}
 					<h2 className="mb-2 text-xl md:text-3xl mt-2 text-center md:text-left">
-						<span className="text-base md:text-lg">🎁🎀</span>{" "}
+						<span className="text-base md:text-lg">🐲🐲</span>{" "}
 						December 2021{" "}
-						<span className="text-base md:text-lg">🎁🎀</span>
+						<span className="text-base md:text-lg">🐲🐲</span>
 					</h2>
 					{/* updates list */}
 					<ul className="text-base md:text-2xl flex-wrap">
@@ -117,15 +132,6 @@ function WhatsNew() {
 							Added Reset Warning Popup
 						</li>
 
-						<li data-icon="☕ " className="">
-							<a
-								className="border-b-2 border-primary2"
-								target="_blank"
-								href="https://www.buymeacoffee.com/sandeepchahal"
-							>
-								Fixed BuyMeACoffee link
-							</a>
-						</li>
 						<li data-icon="🌈 " className="">
 							Use + and - to zoom in and out
 						</li>
@@ -143,10 +149,9 @@ function WhatsNew() {
 							Zoom in board
 						</li>
 					</ul>{" "}
-					<div className="mb-4 italic">
-						Note: The application is in development, please report
-						any bug you find or feature you would like to see in the
-						future.
+					<div className="mb-4">
+						Note: Please report any bug you face with screenshot(if
+						possible) and your browser version
 					</div>
 				</div>
 				{/* updates container ends*/}

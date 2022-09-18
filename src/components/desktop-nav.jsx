@@ -23,22 +23,18 @@ const DesktopNav = ({
 }) => {
 	const [showMore, setShowMore] = useState(false);
 
-	const onDropDown = () => {
-		setShowMore((showMore) => !showMore);
-	};
-
-	useEffect(() => {
-		const handleClick = () => {
-			setShowMore(false);
-			document.removeEventListener("click", handleClick);
-		};
-		if (showMore) {
-			document.addEventListener("click", handleClick, false);
-		}
-		return () => {
-			document.removeEventListener("click", handleClick);
-		};
-	}, [showMore]);
+	// useEffect(() => {
+	// 	const handleClick = () => {
+	// 		setShowMore(false);
+	// 		document.removeEventListener("click", handleClick);
+	// 	};
+	// 	if (showMore) {
+	// 		document.addEventListener("click", handleClick);
+	// 	}
+	// 	return () => {
+	// 		document.removeEventListener("click", handleClick);
+	// 	};
+	// }, [showMore]);
 
 	return (
 		<ul className="bg-primary1 flex items-center">
@@ -54,7 +50,7 @@ const DesktopNav = ({
 					)
 				}
 			/>
-			<li className="w-min-20 px-4 h-full border-l-2 border-primary1">
+			<li className="w-min-20 px-4 h-full border-l-2 border-primary1 hover:underline">
 				<label
 					ref={importRef}
 					htmlFor="import-files"
@@ -69,24 +65,17 @@ const DesktopNav = ({
 			<li
 				onClick={onExport}
 				title="Export (E)"
-				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center  hover:underline"
 			>
 				{/* export icon */}
 				<ExportSvg />
 				Export
 			</li>
-			<li
-				title="Warping Library"
-				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-text flex items-center justify-center"
-			>
-				OpenCV
-			</li>
-			<li
+			{/* <li
 				onClick={() => setWarpRealTime((s) => !s)}
 				title="Turn On/Off Real Time Warping (W)"
 				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
 			>
-				{/* engine icon */}
 				<EngineSvg />
 				Warp Real Time
 				<span
@@ -94,11 +83,11 @@ const DesktopNav = ({
 						warpRealTime ? "bg-green-600" : "bg-primary2"
 					} w-3 h-3 ml-3 rounded-full`}
 				></span>
-			</li>
+			</li> */}
 			<li
 				onClick={handleReset}
 				title="Reset (R)"
-				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center"
+				className="w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex items-center justify-center  hover:underline"
 			>
 				{/* reset icon */}
 				<ResetSvg />
@@ -106,8 +95,8 @@ const DesktopNav = ({
 			</li>
 
 			<li
-				onClick={onDropDown}
-				className="relative w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex justify-center items-center"
+				onClick={() => setShowMore(!showMore)}
+				className="relative w-min-20 px-4 h-full border-l-2 border-primary1 cursor-pointer flex justify-center items-center  hover:underline"
 			>
 				{/* more icon */}
 				<MoreSvg />
@@ -122,7 +111,7 @@ const DesktopNav = ({
 							{/* coffee icon */}
 
 							<a
-								className="p-2 border-b-2 border-primary1 bg-primary3 text-primary1 cursor-pointer flex items-center"
+								className="p-2 border-b-2 border-primary1 bg-primary3 text-primary1 cursor-pointer flex items-center hover:underline"
 								href="https://www.buymeacoffee.com/sandeepchahal"
 								target="_blank"
 							>
@@ -134,7 +123,7 @@ const DesktopNav = ({
 							{/* mail icon */}
 
 							<a
-								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center"
+								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center  hover:underline"
 								href="mailto: 6sandripper9@gmail.com"
 							>
 								<MailSvg />
@@ -144,7 +133,7 @@ const DesktopNav = ({
 						<li>
 							{/* github icon */}
 							<a
-								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center"
+								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center hover:underline"
 								href="https://github.com/sandeep-chahal/san-the-texture-ripper"
 								target="_blank"
 							>
@@ -155,7 +144,7 @@ const DesktopNav = ({
 						<li>
 							{/* install icon */}
 							<a
-								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center"
+								className="p-2 border-b-2 border-primary1 cursor-pointer flex items-center hover:underline"
 								href="https://support.google.com/chrome/answer/9658361"
 								target="_blank"
 							>
@@ -165,7 +154,7 @@ const DesktopNav = ({
 						</li>
 						<li
 							onClick={() => setShowWhatsNew(true)}
-							className="p-2 cursor-pointer flex items-center"
+							className="p-2 cursor-pointer flex items-center hover:underline"
 						>
 							{/* whatsnew icon */}
 							<WhatsnewSvg />
