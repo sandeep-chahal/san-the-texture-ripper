@@ -8,7 +8,7 @@ function SplitScreen({
 	height,
 }) {
 	const isVertical = type === "vertical";
-	const [slide, setSlide] = useState((isVertical ? width : height) / 2);
+	const [slide, setSlide] = useState((isVertical ? width : height) / 4);
 	const splitter = useRef(null);
 
 	useEffect(() => {

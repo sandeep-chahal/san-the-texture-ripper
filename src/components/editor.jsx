@@ -72,26 +72,6 @@ const Editor = () => {
 		setActiveLayer(newLayer.id);
 	};
 
-	// delete layer
-	const handleDeleteLayer = (id) => {
-		const keys = Object.keys(layers.current);
-
-		// if there's only one layer then don't delete
-		if (keys.length === 1) return;
-
-		delete layers.current[id];
-		setResults((state) => {
-			const newState = { ...state };
-			delete newState[id];
-			return newState;
-		});
-		// if user deleted active layer then set active layer to first layer
-		// or to second if first layer is deleted
-		if (activeLayer === id) {
-			setActiveLayer(keys[keys[0] === id ? 1 : 0]);
-		}
-	};
-
 	const handleOnDragEnd = () => {
 		updateResultOpencv(activeLayer, layers, opencvImg, setResults);
 	};
@@ -133,17 +113,6 @@ const Editor = () => {
 
 	return (
 		<div className={`h-full dot-pattern`}>
-			<Tabs
-				tabs={Object.values(layers.current).map((tab) => ({
-					name: tab.name,
-					key: tab.id,
-				}))}
-				handleDeleteTab={handleDeleteLayer}
-				activeTab={activeLayer}
-				setActiveTab={setActiveLayer}
-				addTab={handleAddLayer}
-			/>
-
 			{/* pan and zoom components */}
 			<TransformWrapper
 				scale={scale.current}

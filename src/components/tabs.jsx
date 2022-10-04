@@ -12,7 +12,7 @@ const Tabs = ({
 }) => {
 	if (tabs.length === 0) return null;
 	return (
-		<div className="p-1 px-2 flex items-start text-primary2">
+		<div className="p-1 px-2 flex items-start text-primary2 bg-primary2 pb-2">
 			<div className="flex overflow-x-auto scroll-bar-1">
 				{tabs.map((tab, index) => (
 					<div

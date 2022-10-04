@@ -11,6 +11,8 @@ import { useMainStore } from "./store";
 import { useEditorStore } from "./store/editor";
 import WhatsNew from "./components/whats-new";
 import useWindowSize from "./hooks/useWinSize";
+import Tabs from "./components/tabs";
+import Sidebar from "./components/sidebar";
 
 function App() {
 	const [showOutput, setShowOutput] = useState(false);
@@ -38,6 +40,17 @@ function App() {
 		setFile(file);
 	};
 
+	const onFileDrop = (event) => {
+		setDropping(false);
+		const file = event.dataTransfer.files[0];
+		if (file) {
+			handleFileChange(file, setNewFile);
+		}
+	};
+	const onFileChange = (file, clearInput) => {
+		handleFileChange(file, setNewFile, clearInput);
+	};
+
 	useEffect(() => {
 		ReactGA.initialize(import.meta.env.VITE_TRACKING_ID);
 		ReactGA.pageview("/");
@@ -59,27 +72,17 @@ function App() {
 		<div className="font-squada animate-opacity">
 			<Header
 				onExport={() => setShowOutput(true)}
-				handleFileChange={(file, clearInput) =>
-					handleFileChange(file, setNewFile, clearInput)
-				}
+				handleFileChange={onFileChange}
 				newUpdate={newUpdate}
 				setNewUpdate={setNewUpdate}
 			/>
 			<FileDrop
-				onFrameDragEnter={(event) => {
-					setDropping(true);
-				}}
+				onFrameDragEnter={(event) => setDropping(true)}
 				onFrameDragLeave={(event) => setDropping(false)}
-				onFrameDrop={(event) => {
-					setDropping(false);
-					const file = event.dataTransfer.files[0];
-					if (file) {
-						handleFileChange(file, setNewFile);
-					}
-				}}
+				onFrameDrop={onFileDrop}
 			>
 				<section
-					className={`split-screen-parent overflow-hidden ${
+					className={`relative split-screen-parent overflow-hidden ${
 						dropping ? "opacity-90" : ""
 					}`}
 				>
@@ -87,6 +90,7 @@ function App() {
 						<Board />
 						<Editor />
 					</SplitScreen>
+					<Sidebar />
 				</section>
 			</FileDrop>
 			{showOutput && <Output onClose={() => setShowOutput(false)} />}
