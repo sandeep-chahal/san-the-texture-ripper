@@ -3,9 +3,11 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useMainStore } from "../store";
 import DeleteSvg from "../components/svg/delete-svg";
 import EmptySvg from "../components/svg/empty-svg";
+import { useEditorStore } from "../store/editor";
 
 const Board = () => {
 	const { results, setResults } = useMainStore();
+	const { activeLayer } = useEditorStore();
 	const parentRef = useRef(null);
 	const wrapperRef = useRef(null);
 	const isMouseOver = useRef(null);
@@ -80,7 +82,29 @@ const Board = () => {
 							contentClass="w-full min-h-screen"
 						>
 							<div className="max-w-full flex flex-wrap h-full">
-								{Object.keys(results).map((key, index) => (
+								{results[activeLayer] && (
+									<div
+										className="group relative m-2"
+										style={{
+											width: results[activeLayer].width,
+											height: results[activeLayer].height,
+										}}
+									>
+										<img
+											style={{
+												width: results[activeLayer]
+													.width,
+												height: results[activeLayer]
+													.height,
+											}}
+											width={results[activeLayer].width}
+											height={results[activeLayer].height}
+											src={results[activeLayer].result}
+											className="inline-block"
+										/>
+									</div>
+								)}
+								{/* {Object.keys(results).map((key, index) => (
 									<div
 										className="group relative m-2"
 										key={key}
@@ -114,7 +138,7 @@ const Board = () => {
 											</div>
 										</div>
 									</div>
-								))}
+								))} */}
 							</div>
 						</TransformComponent>
 					</TransformWrapper>
