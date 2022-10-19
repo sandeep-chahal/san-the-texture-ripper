@@ -2856,10 +2856,10 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-file-drop@^3.1.2:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/react-file-drop/-/react-file-drop-3.1.5.tgz#a54d748e76ffe4c81dc6cf53b8c70312537944fa"
-  integrity sha512-JPQh5mq3+b0Zae+ZUG2h5XxJRgFNUday+fEPcbxRHkEnMsSuvq/UhPVQIeJhIZSWRP6UZT4cNk1T8ORrH5Ve4A==
+react-file-drop@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/react-file-drop/-/react-file-drop-3.1.6.tgz#968abee56d03db6824af9a0038497330610e699f"
+  integrity sha512-G1IKKP5ql0FYlWl7X5+ZEDQfzeF5bT4meV6vg3wySs1+NvPOZgoNxTZxAqayENzW+zOf/WVQ81FPaK+yLuryuw==
   dependencies:
     prop-types "^15.7.2"
 
