@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"file-saver": "^2.0.5",
-		"html-to-image": "^1.9.0",
+		"html-to-image": "^1.10.9",
 		"jszip": "^3.7.1",
 		"konva": "^8.3.12",
 		"prop-types": "^15.7.2",
