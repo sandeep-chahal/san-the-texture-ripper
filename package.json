@@ -13,7 +13,7 @@
 		"jszip": "^3.7.1",
 		"konva": "^8.3.12",
 		"prop-types": "^15.7.2",
-		"re-resizable": "^6.9.9",
+		"re-resizable": "^6.11.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-file-drop": "^3.1.2",
